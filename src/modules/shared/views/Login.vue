@@ -94,7 +94,7 @@ export default Vue.extend({
         case 200:
           this.onLoginSuccess();
           break;
-        case 401:
+        case 500:
           this.onLoginUnauthorized();
           break;
       }
