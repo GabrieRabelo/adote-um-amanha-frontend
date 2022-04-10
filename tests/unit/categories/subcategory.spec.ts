@@ -22,14 +22,14 @@ describe("SubcategoryUtils", () => {
 
   describe("toObject", () => {
     const cases = [
-      [Subcategory.health, { name: "Saúde", value: "0" }],
+      [Subcategory.health, { name: "Saúde", value: 0 }],
       [
         Subcategory.professionalization,
-        { name: "Profissionalização", value: "1" },
+        { name: "Profissionalização", value: 1 },
       ],
-      [Subcategory.education, { name: "Educação", value: "2" }],
-      [Subcategory.food, { name: "Alimentação", value: "3" }],
-      [Subcategory.others, { name: "Outros", value: "4" }],
+      [Subcategory.education, { name: "Educação", value: 2 }],
+      [Subcategory.food, { name: "Alimentação", value: 3 }],
+      [Subcategory.others, { name: "Outros", value: 4 }],
     ];
     test.each(cases)(
       "given %p as argument, should return %p.",
@@ -44,14 +44,14 @@ describe("SubcategoryUtils", () => {
     it("should return a list containing all objects with plural strings", () => {
       const result = SubcategoryUtils.allObjects();
       const expected = [
-        { value: `${Subcategory.health}`, name: "Saúde" },
+        { value: Subcategory.health, name: "Saúde" },
         {
-          value: `${Subcategory.professionalization}`,
+          value: Subcategory.professionalization,
           name: "Profissionalização",
         },
-        { value: `${Subcategory.education}`, name: "Educação" },
-        { value: `${Subcategory.food}`, name: "Alimentação" },
-        { value: `${Subcategory.others}`, name: "Outros" },
+        { value: Subcategory.education, name: "Educação" },
+        { value: Subcategory.food, name: "Alimentação" },
+        { value: Subcategory.others, name: "Outros" },
       ];
       expect(result).toMatchObject(expected);
     });

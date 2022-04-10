@@ -1,29 +1,32 @@
-// TODO: Remover esta constante assim que for feita a integração com o backend.
-const FAKE_JWT = `eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY0ODM0MjY5MiwiaWF0IjoxNjQ4MzQyNjkyfQ.DMjUFiMU58Zsbhijk_bzn4fM5D71h6Az5GicWJTPYak`;
+import { HTTP } from "@/api/http-common";
+import { saveAccessToken } from "@/modules/shared/utils/AuthenticationManager";
 
-function login(email: string, password: string): Promise<HTTPResponse> {
-  // Método com implementação mocada enquanto não existe integração com o backend.
-  return new Promise((resolve) => {
-    const responseMock = {
-      status: 401,
-      data: {
-        token: FAKE_JWT,
-      },
-    };
-
-    setTimeout(() => {
-      return resolve(responseMock);
-    }, 500);
-  });
+async function login(email: string, password: string): Promise<HTTPResponse> {
+  return HTTP.post("public/autenticacao/login", { email, senha: password })
+    .then((response) => {
+      const httpResponse: HTTPResponse = {
+        data: response.data,
+        status: response.status,
+      };
+      saveAccessToken(response.data.accessToken);
+      return Promise.resolve(httpResponse);
+    })
+    .catch(() => {
+      const httpResponse: HTTPResponse = {
+        status: 500,
+      };
+      return Promise.resolve(httpResponse);
+    });
 }
 
 type HTTPResponse = {
   status: number;
-  data: LoginResponseData;
+  data?: LoginResponseData;
+  error?: Error;
 };
 
 type LoginResponseData = {
-  token: string;
+  accessToken: string;
 };
 
 export default {
