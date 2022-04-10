@@ -2,7 +2,7 @@
   <v-btn
     class="a-button v-application px-9 py-5"
     :class="{ disabled: $attrs.disabled }"
-    elevation="0"
+    :elevation="elevation"
     v-bind="$attrs"
     v-on="$listeners"
     rounded
@@ -15,13 +15,18 @@
   </v-btn>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 export default Vue.extend({
   props: {
     title: String,
     prependIcon: String,
     appendIcon: String,
+  },
+  computed: {
+    elevation() {
+      return this.$attrs.elevation || 0;
+    },
   },
 });
 </script>

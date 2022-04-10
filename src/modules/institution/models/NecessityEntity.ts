@@ -1,4 +1,5 @@
 import { Category } from "@/modules/shared/enums/Category";
+import { Status } from "@/modules/shared/enums/Status";
 import { Subcategory } from "@/modules/shared/enums/Subcategory";
 
 export type NecessityEntity = {
@@ -9,4 +10,5 @@ export type NecessityEntity = {
   subcategory: Subcategory;
   url: string;
   description: string;
+  status: Status;
 };

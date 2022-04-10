@@ -1,12 +1,30 @@
 <template>
-  <v-text-field class="a-input" outlined v-bind="$attrs" v-on="$listeners" />
+  <v-text-field
+    class="a-input"
+    :class="[variantClass, elevation]"
+    outlined
+    v-bind="$attrs"
+    v-on="$listeners"
+    :dense="variant == 'round'"
+  />
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 
 export default Vue.extend({
+  props: {
+    variant: String,
+  },
   inheritAttrs: false,
+  computed: {
+    variantClass() {
+      return this.variant || "";
+    },
+    elevation() {
+      return `elevation-${this.$attrs.elevation || 0}`;
+    },
+  },
 });
 </script>
 
@@ -18,6 +36,13 @@ export default Vue.extend({
     ::v-deep fieldset {
       border-color: var(--v-primary-base);
     }
+  }
+}
+
+.round {
+  border-radius: 25px;
+  ::v-deep fieldset {
+    border: none;
   }
 }
 </style>
