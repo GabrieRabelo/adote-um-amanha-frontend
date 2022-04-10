@@ -5,6 +5,7 @@ import Necessity from "../modules/institution/views/Necessity.vue";
 import Instituition from "../modules/institution/views/Instituition.vue";
 import SplashScreen from "../modules/shared/views/SplashScreen.vue";
 import EditNecessity from "../modules/institution/views/EditNecessity.vue";
+import Necessities from "../modules/shared/views/Necessities.vue";
 import { isAuthenticated } from "@/modules/shared/utils/AuthenticationManager";
 
 Vue.use(VueRouter);
@@ -20,11 +21,15 @@ const routes: Array<RouteConfig> = [
     component: Login,
   },
   {
+    path: "/home/",
+    name: "Necessities",
+    component: Necessities,
+  },
+  {
     path: "/necessity/:id",
     name: "Institution necessity",
     component: Necessity,
   },
-
   {
     path: "/institution/:id",
     name: "Instituition instituition",
