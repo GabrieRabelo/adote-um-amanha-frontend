@@ -1,4 +1,4 @@
 export interface EnumerableObject {
-  value: number;
+  value: string;
   name: string;
 }

@@ -1,11 +1,11 @@
 import { EnumerableObject } from "../types/EnumerableObject";
 
 export enum Subcategory {
-  health,
-  professionalization,
-  education,
-  food,
-  others,
+  health = "SAUDE",
+  professionalization = "PROFISSIONALIZACAO",
+  education = "EDUCACAO",
+  food = "ALIMENTACAO",
+  others = "OUTROS",
 }
 
 function toString(subcategory: Subcategory): string {
@@ -14,7 +14,7 @@ function toString(subcategory: Subcategory): string {
 
 function allObjects(): EnumerableObject[] {
   return Object.entries(subcategoryStrings).map(([value, name]) => ({
-    value: Number(value),
+    value: value,
     name,
   }));
 }

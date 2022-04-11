@@ -1,8 +1,8 @@
 import { EnumerableObject } from "../types/EnumerableObject";
 
 export enum Category {
-  asset,
-  service,
+  asset = "BEM",
+  service = "SERVIÇO",
 }
 
 /**
@@ -69,7 +69,7 @@ function toObject(
 
 function allObjects(categoryMap: CategoryMap): EnumerableObject[] {
   return Object.entries(categoryMap).map(([value, name]) => ({
-    value: Number(value),
+    value: value,
     name,
   }));
 }

@@ -43,7 +43,7 @@
             <v-radio
               v-for="category of allCategories"
               :key="category.value"
-              :value="parseInt(category.value)"
+              :value="category.value"
               :label="category.name"
             >
             </v-radio>
@@ -170,7 +170,7 @@ export default Vue.extend({
         this.isModalOpen = false;
         this.isModalLoading = false;
         this.$root.showSnackbar("Necessidade Excluída.");
-        this.$router.push("/necessities");
+        this.$router.push("/home");
       });
     },
     onSaveButtonClick() {
