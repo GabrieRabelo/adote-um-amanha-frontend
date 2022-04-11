@@ -30,13 +30,14 @@
         prependIcon="mdi-plus"
         color="primary"
         elevation="4"
+        @click="$router.push('/necessities/create')"
       />
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { getNecessities } from "@/modules/institution/necessityService";
+import { getNecessities } from "@/modules/institution/services/necessityService";
 import Vue from "vue";
 import Input from "../components/Input.vue";
 import NecessityCard from "../components/NecessityCard.vue";

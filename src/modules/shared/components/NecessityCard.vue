@@ -1,13 +1,21 @@
 <template>
-  <div class="card px-5 py-3" v-ripple @click="$emit('click')">
-    <v-col class="py-0 px-0">
+  <div
+    class="card px-5 py-3 d-flex flex-column"
+    v-ripple
+    @click="$emit('click')"
+  >
+    <div class="d-flex">
       <div class="card__title">{{ necessity.title }}</div>
-      <div class="card__subtitle">{{ subcategory }}</div>
-      <div class="card__subtitle">{{ necessity.createdDate | date }}</div>
-    </v-col>
-    <div class="status-container d-flex align-end">
-      <v-icon class="mr-1" :color="statusIconColor">{{ statusIcon }}</v-icon>
-      <div class="card__status card__subtitle">{{ status }}</div>
+    </div>
+    <div class="d-flex justify-space-between">
+      <div>
+        <div class="card__subtitle">{{ subcategory }}</div>
+        <div class="card__subtitle">{{ necessity.createdDate | date }}</div>
+      </div>
+      <div class="status-container d-flex align-end">
+        <v-icon class="mr-1" :color="statusIconColor">{{ statusIcon }}</v-icon>
+        <div class="card__status card__subtitle">{{ status }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -47,7 +55,7 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .card {
   border: 1px solid #ffc700;
   border-radius: 20px;

@@ -34,6 +34,7 @@
           color="primary"
           prependIcon="mdi-arrow-left"
           outlined
+          @click="$router.go(-1)"
         />
         <Button
           title="Editar"
@@ -50,7 +51,7 @@
 import Vue from "vue";
 import Category from "../../shared/enums/Category";
 import Subcategory from "../../shared/enums/Subcategory";
-import { getNecessity } from "../necessityService";
+import { getNecessity } from "../services/necessityService";
 import moment from "moment";
 import Button from "../../shared/components/Button.vue";
 import EmbeddedVideo from "../../shared/components/EmbeddedVideo.vue";

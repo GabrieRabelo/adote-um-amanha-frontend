@@ -43,7 +43,7 @@
             <v-radio
               v-for="category of allCategories"
               :key="category.value"
-              :value="parseInt(category.value)"
+              :value="category.value"
               :label="category.name"
             >
             </v-radio>
@@ -93,7 +93,7 @@ import {
   deleteNecessity,
   getNecessity,
   updateNecessity,
-} from "../necessityService";
+} from "../services/necessityService";
 import TextArea from "../../shared/components/TextArea.vue";
 import CategoryUtils from "../../shared/enums/Category";
 import SubcategoriesUtils from "../../shared/enums/Subcategory";
@@ -166,20 +166,30 @@ export default Vue.extend({
     },
     onDeleteConfirmed() {
       this.isModalLoading = true;
-      deleteNecessity(this.necessity.id).then(() => {
-        this.isModalOpen = false;
-        this.isModalLoading = false;
-        this.$root.showSnackbar("Necessidade Excluída.");
-        this.$router.push("/necessities");
-      });
+      deleteNecessity(this.necessity.id)
+        .then(() => {
+          this.isModalOpen = false;
+          this.isModalLoading = false;
+          this.$root.showSnackbar("Necessidade Excluída.");
+          this.$router.push("/home");
+        })
+        .catch(() => {
+          this.$root.showSnackbar("Erro Inesperado.");
+          this.isModalLoading = false;
+        });
     },
     onSaveButtonClick() {
       this.isSaveButtonLoading = true;
-      updateNecessity(this.necessity.id).then(() => {
-        this.isSaveButtonLoading = false;
-        this.$root.showSnackbar("Alterações salvas!.");
-        this.$router.go(-1);
-      });
+      updateNecessity(this.newNecessity)
+        .then(() => {
+          this.isSaveButtonLoading = false;
+          this.$root.showSnackbar("Alterações salvas!.");
+          this.$router.go(-1);
+        })
+        .catch(() => {
+          this.$root.showSnackbar("Erro Inesperado.");
+          this.isSaveButtonLoading = false;
+        });
     },
   },
 });

@@ -56,6 +56,8 @@ import Button from "../components/Button.vue";
 import loginService from "../../institution/services/LoginService";
 import InputValidations from "../utils/InputValidations";
 import Link from "../components/Link.vue";
+import { clearAccessToken } from "../utils/AuthenticationManager";
+import { Category } from "../enums/Category";
 
 export default Vue.extend({
   components: {
@@ -72,6 +74,9 @@ export default Vue.extend({
   }),
   mounted() {
     this.$root.hideToolbar();
+    clearAccessToken();
+    const cat = Category;
+    console.log(cat);
   },
   computed: {
     inputValidations() {
