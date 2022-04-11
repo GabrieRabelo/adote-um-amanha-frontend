@@ -9,6 +9,10 @@ export function getAccessToken(): string | null {
   return localStorage.getItem(ACCESS_TOKEN_KEY);
 }
 
+export function clearAccessToken(): void {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
+}
+
 export function isAuthenticated(): boolean {
   const token = getAccessToken();
   if (!token) {

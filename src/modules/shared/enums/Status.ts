@@ -1,6 +1,6 @@
 export enum Status {
-  peding,
-  resolved,
+  peding = "PENDENTE",
+  resolved = "FINALIZADA",
 }
 
 function toString(status: Status): string {
