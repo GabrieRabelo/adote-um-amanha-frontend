@@ -1,4 +1,4 @@
-import { getAccessToken } from "@/modules/shared/utils/AuthenticationManager";
+import { getAccessToken } from "../modules/shared/utils/AuthenticationManager";
 import axios from "axios";
 
 export const HTTP = axios.create({
