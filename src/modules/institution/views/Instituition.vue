@@ -4,7 +4,7 @@
       <v-row class="mt-3 mb-4">
         <div class="header">
           <img width="65px" src="../../../assets/img/instituition-logo.png" />
-          <div class="a-text__bold-title">{{ instituition.name }}</div>
+          <div class="a-text__bold-title py-0">{{ instituition.name }}</div>
         </div>
       </v-row>
       <v-row

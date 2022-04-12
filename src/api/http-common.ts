@@ -2,7 +2,7 @@ import { getAccessToken } from "../modules/shared/utils/AuthenticationManager";
 import axios from "axios";
 
 export const HTTP = axios.create({
-  baseURL: `http://localhost:8090/api/`,
+  baseURL: process.env.VUE_APP_API_BASEURL,
   headers: {
     "Content-Type": "application/json",
   },
