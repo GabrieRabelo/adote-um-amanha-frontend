@@ -1,6 +1,10 @@
 <template>
   <v-app>
-    <Toolbar :title="$root.toolbarTitle" :visible="$root.isToolbarVisible" />
+    <Toolbar
+      :title="$root.toolbarTitle"
+      :visible="$root.isToolbarVisible"
+      :buttonVisible="$root.isToolbarButtonVisible"
+    />
     <v-main>
       <router-view />
     </v-main>

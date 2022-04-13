@@ -56,7 +56,8 @@
       <v-row class="justify-center">
         <Button
           title="Excluir"
-          class="button--edit mr-6"
+          class="mr-6"
+          compact
           color="error"
           outlined
           @click="onDeleteClick"
@@ -67,7 +68,7 @@
           color="primary"
           :disabled="!isSaveButtonDisabled"
           prependIcon="mdi-content-save"
-          class="button--edit"
+          compact
           @click="onSaveButtonClick"
           :loading="isSaveButtonLoading"
         />
@@ -122,7 +123,7 @@ export default Vue.extend({
     isSaveButtonLoading: false,
   }),
   async mounted() {
-    this.$root.showToolbar("EDITAR NECESSIDADE");
+    this.$root.showToolbar("EDITAR");
     this.necessity = await getNecessity(this.$route.params.id);
     this.newNecessity = { ...this.necessity };
   },
@@ -204,9 +205,3 @@ export default Vue.extend({
   },
 });
 </script>
-
-<style scoped>
-.button--edit {
-  max-width: 120px;
-}
-</style>
