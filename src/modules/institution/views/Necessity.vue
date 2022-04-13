@@ -26,7 +26,7 @@
       </v-row>
     </v-container>
 
-    <v-container class="align-end">
+    <v-container class="align-end" v-if="necessity">
       <v-row class="justify-center">
         <Button
           class="mr-4"
@@ -34,12 +34,14 @@
           color="primary"
           prependIcon="mdi-arrow-left"
           outlined
+          compact
           @click="$router.go(-1)"
         />
         <Button
           title="Editar"
           color="primary"
           prependIcon="mdi-pencil"
+          compact
           @click="onEditButtonClick"
         />
       </v-row>
@@ -62,6 +64,7 @@ export default Vue.extend({
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
     this.necessity = await getNecessity(this.$route.params.id);
+    this.$root.showToolbarButton();
   },
   components: {
     EmbeddedVideo,

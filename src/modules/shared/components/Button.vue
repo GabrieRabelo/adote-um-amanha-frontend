@@ -1,7 +1,7 @@
 <template>
   <v-btn
     class="a-button v-application px-9 py-5"
-    :class="{ disabled: $attrs.disabled }"
+    :class="{ disabled: $attrs.disabled, compact: compact }"
     :elevation="elevation"
     v-bind="$attrs"
     v-on="$listeners"
@@ -22,6 +22,7 @@ export default Vue.extend({
     title: String,
     prependIcon: String,
     appendIcon: String,
+    compact: Boolean,
   },
   computed: {
     elevation() {
@@ -58,5 +59,10 @@ export default Vue.extend({
 
 .disabled {
   border: 2px solid rgba(0, 0, 0, 0) !important;
+}
+
+.compact {
+  padding-left: 9px !important;
+  padding-right: 9px !important;
 }
 </style>

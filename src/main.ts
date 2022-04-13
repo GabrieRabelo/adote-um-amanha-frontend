@@ -12,6 +12,7 @@ new Vue({
     isToolbarVisible: false,
     snackbarMessage: "",
     isSnackbarVisible: false,
+    isToolbarButtonVisible: false,
   }),
   methods: {
     showToolbar(title?: string) {
@@ -22,6 +23,12 @@ new Vue({
     },
     hideToolbar() {
       this.isToolbarVisible = false;
+    },
+    showToolbarButton() {
+      this.isToolbarButtonVisible = true;
+    },
+    hideToolbarButton() {
+      this.isToolbarButtonVisible = false;
     },
     showSnackbar(message: string) {
       this.snackbarMessage = message;

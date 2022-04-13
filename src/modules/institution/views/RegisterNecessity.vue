@@ -63,6 +63,7 @@
           prependIcon="mdi-arrow-left"
           outlined
           @click="onBackButtonClick"
+          compact
         />
         <Button
           :loading="isLoading"
@@ -72,6 +73,7 @@
           color="primary"
           :appendIcon="buttonIcon"
           @click="onNextButtonClick"
+          compact
         />
       </v-row>
     </v-col>
@@ -174,9 +176,6 @@ export default Vue.extend({
 <style scoped>
 .a-text {
   color: #0000;
-}
-.a-button {
-  max-width: 160px;
 }
 .align-center {
   align-items: center;
