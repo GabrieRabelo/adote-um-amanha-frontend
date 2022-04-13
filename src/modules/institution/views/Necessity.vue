@@ -42,6 +42,7 @@
           color="primary"
           prependIcon="mdi-pencil"
           compact
+          v-if="canEdit"
           @click="onEditButtonClick"
         />
       </v-row>
@@ -57,6 +58,7 @@ import { getNecessity } from "../services/necessityService";
 import moment from "moment";
 import Button from "../../shared/components/Button.vue";
 import EmbeddedVideo from "../../shared/components/EmbeddedVideo.vue";
+import { Status } from "@/modules/shared/enums/Status";
 export default Vue.extend({
   data: () => ({
     necessity: null,
@@ -86,6 +88,9 @@ export default Vue.extend({
           value: Subcategory.toString(this.necessity.subcategory),
         },
       ];
+    },
+    canEdit() {
+      return this.necessity.status === Status.peding;
     },
   },
   methods: {
