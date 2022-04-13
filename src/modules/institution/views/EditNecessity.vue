@@ -34,8 +34,9 @@
         <v-row>
           <Input
             prepend-inner-icon="mdi-link"
-            placeholder="URL"
-            v-model="newNecessity.url"
+            label="URL"
+            placeholder="youtube.com/watch"
+            v-model="necessityVideoURL"
           />
         </v-row>
         <v-row>
@@ -100,6 +101,7 @@ import SubcategoriesUtils from "../../shared/enums/Subcategory";
 import InputValidations from "../../shared/utils/InputValidations";
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
 import { areEqual } from "../../shared/utils/ObjectComparator";
+import YoutubeVideoParser from "../../shared/utils/YoutubeVideoParser";
 
 export default Vue.extend({
   components: {
@@ -155,6 +157,14 @@ export default Vue.extend({
     },
     inputValidations() {
       return InputValidations;
+    },
+    necessityVideoURL: {
+      get() {
+        return YoutubeVideoParser.toEmbeddedVideo(this.newNecessity.url);
+      },
+      set(val) {
+        this.newNecessity.url = YoutubeVideoParser.toEmbeddedVideo(val);
+      },
     },
   },
   methods: {

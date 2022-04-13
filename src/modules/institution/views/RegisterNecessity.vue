@@ -45,7 +45,7 @@
               label="URL"
               prepend-inner-icon="mdi-link"
               placeholder="youtube.com/watch"
-              v-model="necessity.url"
+              v-model="necessityVideoURL"
             />
           </v-form>
         </v-tab-item>
@@ -91,6 +91,7 @@ import TextArea from "../../shared/components/TextArea.vue";
 import InputValidations from "../../shared/utils/InputValidations";
 import { Subcategory } from "../../shared/enums/Subcategory";
 import { createNecessity } from "../services/necessityService";
+import YoutubeVideoParser from "@/modules/shared/utils/YoutubeVideoParser";
 export default Vue.extend({
   components: { Button, Stepper, SelectCardGroup, Input, TextArea },
   data: () => ({
@@ -102,7 +103,11 @@ export default Vue.extend({
       CategoryUtils.toSingularObject(Category.service),
     ],
     step2Options: SubcategoryUtils.allObjects(),
-    necessity: { category: Category.asset, subcategory: Subcategory.health },
+    necessity: {
+      category: Category.asset,
+      subcategory: Subcategory.health,
+      url: "",
+    },
   }),
   methods: {
     onNextButtonClick() {
@@ -123,7 +128,7 @@ export default Vue.extend({
       }
     },
     onBackButtonClick() {
-      if (this.tab > 0) this.tab--
+      if (this.tab > 0) this.tab--;
       else this.$router.push("/home");
     },
     onCategorySelected(category) {
@@ -153,6 +158,14 @@ export default Vue.extend({
         return true;
       }
       return this.validForm;
+    },
+    necessityVideoURL: {
+      get() {
+        return YoutubeVideoParser.toEmbeddedVideo(this.necessity.url || "");
+      },
+      set(val) {
+        this.necessity.url = YoutubeVideoParser.toEmbeddedVideo(val);
+      },
     },
   },
 });
