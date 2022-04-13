@@ -123,7 +123,8 @@ export default Vue.extend({
       }
     },
     onBackButtonClick() {
-      if (this.tab > 0) this.tab--;
+      if (this.tab > 0) this.tab--
+      else this.$router.push("/home");
     },
     onCategorySelected(category) {
       this.necessity.category = category;
