@@ -48,11 +48,14 @@ export function deleteNecessity(id: number): Promise<void> {
 }
 
 export function updateNecessity(necessity: NecessityEntity): Promise<void> {
-  return HTTP.put(`/pedidos/${necessity.id}`, {
+  const necessityToEdit: Partial<RequestNecessityEntity> = {
     assunto: necessity.title,
     descricao: necessity.description,
     categoria: necessity.category,
-  })
+    subcategoria: necessity.subcategory,
+    urlVideo: necessity.url,
+  };
+  return HTTP.put(`/pedidos/${necessity.id}`, necessityToEdit)
     .then(() => Promise.resolve())
     .catch(() => Promise.reject());
 }
