@@ -4,8 +4,8 @@
     elevation="0"
     v-on="$listeners"
     frameborder="0"
-    v-if="computedSource"
-    :src="computedSource"
+    v-if="src"
+    :src="src"
   >
   </iframe>
 </template>
@@ -15,14 +15,6 @@ import Vue from "vue";
 export default Vue.extend({
   props: {
     src: String,
-  },
-  computed: {
-    computedSource(): string | null {
-      if (!this.src.includes("https://")) {
-        return null;
-      }
-      return this.src;
-    },
   },
 });
 </script>
