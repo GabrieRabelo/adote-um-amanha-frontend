@@ -1,0 +1,23 @@
+// Neste arquivo poderão ser colocadas classes globais do projeto.
+
+.a-text {
+  color: $text-color;
+  font-weight: 400;
+
+  &__title {
+    font-size: 1.5rem;
+  }
+
+  &__bold-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  &__subtitle {
+    font-size: 1.3rem;
+  }
+
+  &.light {
+    color: $text-color--light;
+  }
+}
