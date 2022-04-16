@@ -15,11 +15,19 @@
         <div class="a-text">{{ attribute.key }}</div>
         <div class="a-text light">{{ attribute.value }}</div>
       </v-row>
-
+      <v-row>
+        <v-col class="px-0 py-0">
+          Site
+          <v-btn icon v-bind:href="getUrlSite" target="_blank">
+            <v-icon>mdi-open-in-new</v-icon>
+          </v-btn>
+          <div class="">{{ instituition.site }}</div>
+        </v-col>
+      </v-row>
       <v-row>
         <v-col class="px-0 py-0">
           Endereço
-          <v-btn icon v-bind:href="getUrl" target="_blank">
+          <v-btn icon v-bind:href="getUrlAddress" target="_blank">
             <v-icon>mdi-open-in-new</v-icon>
           </v-btn>
           <div class="">{{ instituition.address }}</div>
@@ -36,7 +44,6 @@
           prependIcon="mdi-arrow-left"
           outlined
         />
-        <Button title="Editar" color="primary" prependIcon="mdi-pencil" />
       </v-row>
     </v-container>
   </v-container>
@@ -69,13 +76,12 @@ export default Vue.extend({
           key: "Email",
           value: this.instituition.email,
         },
-        {
-          key: "Site",
-          value: this.instituition.site,
-        },
       ];
     },
-    getUrl() {
+    getUrlSite() {
+      return "https://" + this.instituition.site;
+    },
+    getUrlAddress() {
       return "https://www.google.com/maps/search/" + this.instituition.address;
     },
   },

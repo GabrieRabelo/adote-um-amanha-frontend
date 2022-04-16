@@ -40,7 +40,7 @@
     <v-container class="align-end">
       <v-col class="mt-10" align-self="stretch">
         <v-row class="d-flex justify-center">
-          <span>Ainda não tem conta?</span>&nbsp;
+          <span>Olá doador, gostaria de contribuir nesta causa?</span>&nbsp;
           <Link url="signup">Cadastre-se!</Link>
         </v-row>
       </v-col>

@@ -15,6 +15,17 @@
         </v-row>
         <v-row>
           <Select
+            :items="allCategories"
+            label="Categoria"
+            v-model="currentCategoryObject"
+            item-text="name"
+            item-value="value"
+            :rules="[inputValidations.required]"
+            :return-object="false"
+          />
+        </v-row>
+        <v-row>
+          <Select
             :items="allSubcategories"
             label="Subcategoria"
             v-model="currentSubcategoryObject"
@@ -38,17 +49,6 @@
             placeholder="youtube.com/watch"
             v-model="necessityVideoURL"
           />
-        </v-row>
-        <v-row>
-          <v-radio-group v-model="newNecessity.category">
-            <v-radio
-              v-for="category of allCategories"
-              :key="category.value"
-              :value="category.value"
-              :label="category.name"
-            >
-            </v-radio>
-          </v-radio-group>
         </v-row>
       </v-form>
     </v-container>
@@ -132,7 +132,7 @@ export default Vue.extend({
       return SubcategoriesUtils.allObjects();
     },
     allCategories() {
-      return CategoryUtils.allPluralObjects();
+      return CategoryUtils.allSingularObjects();
     },
     currentSubcategoryObject: {
       get() {
