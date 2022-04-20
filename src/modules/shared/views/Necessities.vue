@@ -8,10 +8,8 @@
           class="mr-2"
           variant="round"
           hide-details
-          @input="onFilter"
           elevation="3"
         />
-        {{ filter }}
       </v-col>
       <v-col cols="3" class="d-flex flex-column align-end px-0 py-0">
         <v-btn fab color="primary"
@@ -20,7 +18,7 @@
       </v-col>
     </v-row>
     <v-row
-      v-for="necessity in filtered"
+      v-for="necessity in necessities"
       :key="necessity.id"
       class="justify-center mx-2 mb-2"
     >
@@ -53,7 +51,6 @@ export default Vue.extend({
   components: { Input, NecessityCard, Button },
   data: () => ({
     necessities: [],
-    filter: "",
   }),
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
@@ -66,12 +63,6 @@ export default Vue.extend({
   methods: {
     onNecessityClick(necessity) {
       this.$router.push(`/necessity/${necessity.id}`);
-    },
-    onFilter(value) {
-      if (!value) {
-        return;
-      }
-      this.necessities = await getNecessities({ǹame: value})
     },
   },
 });
