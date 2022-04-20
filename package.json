@@ -32,6 +32,7 @@
     "@vue/cli-service": "~4.5.13",
     "@vue/eslint-config-typescript": "^7.0.0",
     "@vue/test-utils": "^1.0.3",
+    "cypress": "^9.5.4",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "node-sass": "^4.12.0",
