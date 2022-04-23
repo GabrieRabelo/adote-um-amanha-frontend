@@ -1,8 +1,21 @@
 const ACCESS_TOKEN_KEY = "access_token";
+import Router from "../../../router/index";
+import { getUser } from "../services/UserService";
+import { saveUserData } from "./LoggedUserManager";
 
 export function saveAccessToken(accessToken: string): void {
   const token = accessToken.split(" ")[1];
   localStorage.setItem(ACCESS_TOKEN_KEY, token);
+  saveUserFromToken(token);
+}
+
+async function saveUserFromToken(token: string) {
+  const encodedPayload = token.split(".")[1];
+  const payloadData = JSON.parse(atob(encodedPayload));
+  const userId = payloadData.sub ?? -1;
+
+  const currentUserData = await getUser(userId);
+  saveUserData(currentUserData);
 }
 
 export function getAccessToken(): string | null {

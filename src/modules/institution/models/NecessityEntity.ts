@@ -1,7 +1,6 @@
 import { Category } from "@/modules/shared/enums/Category";
 import { Status } from "@/modules/shared/enums/Status";
 import { Subcategory } from "@/modules/shared/enums/Subcategory";
-import { InstitutionEntity } from "./InstitutionEntity";
 
 export type NecessityEntity = {
   id: number;
