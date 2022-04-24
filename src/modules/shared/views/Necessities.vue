@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { getNecessities } from "@/modules/institution/services/necessityService";
+import { getNecessities } from "@/modules/shared/services/necessityService";
 import Vue from "vue";
 import Input from "../components/Input.vue";
 import NecessityCard from "../components/NecessityCard.vue";
@@ -49,6 +49,7 @@ import Button from "../components/Button.vue";
 import BottomSheetMixin from "../mixins/BottomSheetMixin";
 import { getUserData } from "../utils/LoggedUserManager";
 import { UserRole } from "../enums/UserRole";
+import { Status } from "../enums/Status";
 
 export default Vue.extend({
   mixins: [BottomSheetMixin],
@@ -63,6 +64,7 @@ export default Vue.extend({
   },
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
+    this.necessities = await this.getNecessities();
     this.$root.hideToolbarButton();
     this.$root.startLoader();
     console.log(this.$root.isLoading);
@@ -74,6 +76,16 @@ export default Vue.extend({
     this.$root.showToolbarButton();
   },
   methods: {
+    async getNecessities() {
+      const user = getUserData();
+      debugger;
+      const params = {
+        direcao: "DESC",
+        ordenacao: "dataHora",
+        status: user.role === UserRole.institution ? null : `${Status.pending}`,
+      };
+      return getNecessities(params);
+    },
     onNecessityClick(necessity) {
       this.$router.push(`/necessity/${necessity.id}`);
     },

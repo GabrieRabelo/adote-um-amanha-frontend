@@ -7,8 +7,8 @@ import SplashScreen from "../modules/shared/views/SplashScreen.vue";
 import EditNecessity from "../modules/institution/views/EditNecessity.vue";
 import RegisterNecessity from "../modules/institution/views/RegisterNecessity.vue";
 import Home from "../modules/shared/views/Home.vue";
-import { isAuthenticated } from "@/modules/shared/utils/AuthenticationManager";
 import Necessities from "../modules/shared/views/Necessities.vue";
+import { isAuthenticated } from "@/modules/shared/utils/AuthenticationManager";
 
 Vue.use(VueRouter);
 
