@@ -1,5 +1,5 @@
 export enum Status {
-  peding = "PENDENTE",
+  pending = "PENDENTE",
   resolved = "FINALIZADA",
 }
 
@@ -8,7 +8,7 @@ function toString(status: Status): string {
 }
 
 const statusStrings = {
-  [Status.peding]: "Pendente",
+  [Status.pending]: "Pendente",
   [Status.resolved]: "Atendida",
 };
 

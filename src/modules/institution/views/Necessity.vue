@@ -90,7 +90,7 @@ export default Vue.extend({
       ];
     },
     canEdit() {
-      return this.necessity.status === Status.peding;
+      return this.necessity.status === Status.pending;
     },
   },
   methods: {

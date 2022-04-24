@@ -19,6 +19,6 @@ export async function getUser(id: number): Promise<UserEntity> {
     "user@email.com",
     "www.userexample.com",
     address,
-    UserRole.institution
+    UserRole.donator
   );
 }
