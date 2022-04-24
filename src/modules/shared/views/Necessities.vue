@@ -65,12 +65,10 @@ export default Vue.extend({
   },
   methods: {
     async getNecessities() {
-      const user = getUserData();
-      debugger;
       const params = {
         direcao: "DESC",
         ordenacao: "dataHora",
-        status: user.role === UserRole.institution ? null : `${Status.pending}`,
+        status: Status.pending,
       };
       return getNecessities(params);
     },

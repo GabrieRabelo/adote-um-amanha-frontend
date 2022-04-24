@@ -27,7 +27,6 @@ export function getNecessities(
   queryParam: NecessitiesRequestParams
 ): Promise<NecessityEntity[]> {
   const params = mountQueryString(queryParam);
-  debugger;
   return HTTP.get(`public/necessidades?${params}`)
     .then((response) => {
       const data = response.data;
