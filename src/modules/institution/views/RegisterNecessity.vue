@@ -15,7 +15,7 @@
           </v-container>
         </v-tab-item>
         <v-tab-item key="2">
-          <div class="a-text__subtitle">No que você precisa de ajuda?</div>
+          <div class="a-text__subtitle">No que você {{ tab2 }}?</div>
           <v-container class="card-group mt-2">
             <SelectCardGroup
               :options="step2Options"
@@ -42,6 +42,7 @@
               :rules="[inputValidations.required]"
             />
             <Input
+              v-if="isURLVisible"
               label="URL"
               prepend-inner-icon="mdi-link"
               placeholder="youtube.com/watch"
@@ -95,7 +96,7 @@ import { Subcategory } from "../../shared/enums/Subcategory";
 import { createNecessity } from "../services/necessityService";
 import YoutubeVideoParser from "@/modules/shared/utils/YoutubeVideoParser";
 import { UserRole } from "@/modules/shared/enums/UserRole";
-import { getUserData } from "../utils/LoggedUserManager";
+import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 export default Vue.extend({
   components: { Button, Stepper, SelectCardGroup, Input, TextArea },
   data: () => ({
@@ -143,7 +144,7 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.$root.showToolbar("CADASTRAR NECESSIDADE");
+    this.$root.showToolbar("Cadastrar");
   },
   computed: {
     buttonTitle() {
@@ -176,7 +177,33 @@ export default Vue.extend({
         [UserRole.institution]: "necessidade",
         [UserRole.donator]: "doação",
       };
-
+      const currentUser = getUserData();
+      const role = currentUser.role;
+      return user[role];
+    },
+    tab2() {
+      const user = {
+        [UserRole.institution]: "precisa de ajuda",
+        [UserRole.donator]: "gostaria de ajudar",
+      };
+      const currentUser = getUserData();
+      const role = currentUser.role;
+      return user[role];
+    },
+    toolbarRole() {
+      const user = {
+        [UserRole.institution]: "Cadastrar Necessidade",
+        [UserRole.donator]: "Cadastrar Doação",
+      };
+      const currentUser = getUserData();
+      const role = currentUser.role;
+      return user[role];
+    },
+    isURLVisible() {
+      const user = {
+        [UserRole.institution]: true,
+        [UserRole.donator]: false,
+      };
       const currentUser = getUserData();
       const role = currentUser.role;
       return user[role];
