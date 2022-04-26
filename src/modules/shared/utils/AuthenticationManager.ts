@@ -1,16 +1,20 @@
 const ACCESS_TOKEN_KEY = "access_token";
-import Router from "../../../router/index";
+import { UserEntity } from "../models/UserEntity";
 import { getLoggedUser } from "../services/UserService";
 import { saveUserData } from "./LoggedUserManager";
 
-export function saveAccessToken(accessToken: string): void {
+export async function saveAccessToken(accessToken: string): Promise<void> {
   const token = accessToken.split(" ")[1];
   localStorage.setItem(ACCESS_TOKEN_KEY, token);
-  saveUserFromToken();
+  await saveUserFromToken().catch((err) => {
+    throw err;
+  });
 }
 
 async function saveUserFromToken() {
-  const currentUserData = await getLoggedUser();
+  const currentUserData = await getLoggedUser().catch((err) => {
+    throw err;
+  });
   saveUserData(currentUserData);
 }
 

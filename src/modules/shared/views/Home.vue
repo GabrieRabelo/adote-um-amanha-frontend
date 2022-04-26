@@ -19,12 +19,9 @@ export default Vue.extend({
     currentComponent() {
       const viewMap = {
         [UserRole.institution]: "Necessities",
-        [UserRole.donator]: "HomeScreenDonator",
+        [UserRole.donator]: "Necessities",
         [UserRole.admin]: "Necessities",
       };
-
-      debugger;
-
       const currentUser = getUserData();
       const role = currentUser.role;
       return viewMap[role];
