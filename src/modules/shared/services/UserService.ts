@@ -1,24 +1,10 @@
+import { HTTP } from "@/api/http-common";
 import { AddressDTO } from "@/modules/institution/dtos/InstitutionDetailDTO";
 import { UserRole } from "../enums/UserRole";
 import { UserEntity } from "../models/UserEntity";
 
-export async function getUser(id: number): Promise<UserEntity> {
-  const address: AddressDTO = {
-    rua: "Example",
-    bairro: "Example",
-    numero: "Example",
-    complemento: "Example",
-    cidade: "Example",
-    estado: "Example",
-    cep: "Example",
-  };
-  return new UserEntity(
-    id,
-    "Usuário Mock",
-    "5112345678",
-    "user@email.com",
-    "www.userexample.com",
-    address,
-    UserRole.institution
-  );
+export async function getLoggedUser(): Promise<Partial<UserEntity>> {
+  const response = await HTTP.get(`/usuario`);
+  const user = response.data as Partial<UserEntity>;
+  return user;
 }

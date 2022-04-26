@@ -95,7 +95,7 @@ import { Subcategory } from "../../shared/enums/Subcategory";
 import { createNecessity } from "../services/necessityService";
 import YoutubeVideoParser from "@/modules/shared/utils/YoutubeVideoParser";
 import { UserRole } from "@/modules/shared/enums/UserRole";
-import { getUserData } from "../utils/LoggedUserManager";
+import { getUserData } from "../../shared/utils/LoggedUserManager";
 export default Vue.extend({
   components: { Button, Stepper, SelectCardGroup, Input, TextArea },
   data: () => ({
