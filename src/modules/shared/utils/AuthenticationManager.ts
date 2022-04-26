@@ -1,5 +1,4 @@
 const ACCESS_TOKEN_KEY = "access_token";
-import { UserEntity } from "../models/UserEntity";
 import { getLoggedUser } from "../services/UserService";
 import { saveUserData } from "./LoggedUserManager";
 
