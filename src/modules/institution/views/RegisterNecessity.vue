@@ -144,7 +144,7 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.$root.showToolbar("Cadastrar");
+    this.$root.showToolbar(`Cadastrar ${this.toolbarRole}`);
   },
   computed: {
     buttonTitle() {
@@ -192,8 +192,8 @@ export default Vue.extend({
     },
     toolbarRole() {
       const user = {
-        [UserRole.institution]: "Cadastrar Necessidade",
-        [UserRole.donator]: "Cadastrar Doação",
+        [UserRole.institution]: "Necessidade",
+        [UserRole.donator]: "Doação",
       };
       const currentUser = getUserData();
       const role = currentUser.role;
