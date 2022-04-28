@@ -1,6 +1,6 @@
 import { UserEntity } from "../models/UserEntity";
 
-export function saveUserData(userData: UserEntity): void {
+export function saveUserData(userData: Partial<UserEntity>): void {
   localStorage.setItem("current-logged-user", JSON.stringify(userData));
 }
 
