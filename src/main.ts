@@ -11,8 +11,13 @@ new Vue({
     toolbarTitle: "",
     isToolbarVisible: false,
     snackbarMessage: "",
-    isSnackbarVisible: false,
     isToolbarButtonVisible: false,
+    snackbar: {
+      color: "",
+      text: "",
+      title: "",
+      visible: false,
+    }
   }),
   methods: {
     showToolbar(title?: string) {
@@ -30,10 +35,14 @@ new Vue({
     hideToolbarButton() {
       this.isToolbarButtonVisible = false;
     },
-    showSnackbar(message: string) {
-      this.snackbarMessage = message;
-      this.isSnackbarVisible = true;
-    },
+    showSnackbar(title: string, text: string, color: string) {
+      this.snackbar = {
+        color: color,
+        text: text,
+        title: title,
+        visible: true
+      };
+    }
   },
   router,
   vuetify,

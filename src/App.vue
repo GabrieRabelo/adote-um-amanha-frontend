@@ -8,9 +8,18 @@
     <v-main>
       <router-view />
     </v-main>
-    <v-snackbar v-model="$root.isSnackbarVisible">{{
-      $root.snackbarMessage
-    }}</v-snackbar>
+    <v-snackbar v-model="$root.snackbar.visible" :color="$root.snackbar.color">
+      <v-layout align-center>
+        <v-layout column>
+          <div>
+            <strong>{{ $root.snackbar.title }}</strong>
+          </div>
+          <div>
+            {{ $root.snackbar.text }}
+          </div>
+        </v-layout>
+      </v-layout>
+    </v-snackbar>
   </v-app>
 </template>
 

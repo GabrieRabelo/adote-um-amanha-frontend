@@ -40,6 +40,7 @@
             name="input-descricao"
             label="Descrição"
             v-model="newNecessity.description"
+            maxlength="255"
           ></TextArea>
         </v-row>
         <v-row>
@@ -181,11 +182,11 @@ export default Vue.extend({
         .then(() => {
           this.isModalOpen = false;
           this.isModalLoading = false;
-          this.$root.showSnackbar("Necessidade Excluída.");
+          this.$root.showSnackbar("NECESSIDADE EXCLUÍDA!", "Sua necessidade foi excluída da lista de necessidades.", "#4caf50");
           this.$router.push("/home");
         })
         .catch(() => {
-          this.$root.showSnackbar("Erro Inesperado.");
+          this.$root.showSnackbar("ERRO INESPERADO!", "Ocorreu um erro inesperado ao tentar registrar sua solicitação... Tente novamente!", "#ff5252");
           this.isModalLoading = false;
         });
     },
@@ -194,11 +195,11 @@ export default Vue.extend({
       updateNecessity(this.newNecessity)
         .then(() => {
           this.isSaveButtonLoading = false;
-          this.$root.showSnackbar("Alterações salvas!.");
+          this.$root.showSnackbar("ALTERAÇÕES SALVAS!", "Alterações salvas com sucesso.", "#4caf50");
           this.$router.go(-1);
         })
         .catch(() => {
-          this.$root.showSnackbar("Erro Inesperado.");
+          this.$root.showSnackbar("ERRO INESPERADO", "Ocorreu um erro inesperado ao tentar registrar sua solicitação... Tente novamente!", "#ff5252");
           this.isSaveButtonLoading = false;
         });
     },

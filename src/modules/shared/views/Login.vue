@@ -108,7 +108,7 @@ export default Vue.extend({
       this.$router.push("home");
     },
     onLoginUnauthorized() {
-      this.$root.showSnackbar("Usuário e/ou senha incorretos.");
+      this.$root.showSnackbar("Usuário e/ou senha incorretos.", "", "#ff5252");
     },
   },
 });
