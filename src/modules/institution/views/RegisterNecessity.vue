@@ -78,6 +78,14 @@
         />
       </v-row>
     </v-col>
+    <ConfirmationModal
+      v-model="isModalOpen"
+      :title="confirmationTitle"
+      :message="confirmationMessage"
+      @cancel="isModalOpen = false"
+      @confirm="onCreationConfirmed"
+      :loading="isModalLoading"
+    />
   </v-container>
 </template>
 
@@ -97,8 +105,16 @@ import { createNecessity } from "../services/necessityService";
 import YoutubeVideoParser from "@/modules/shared/utils/YoutubeVideoParser";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import { getUserData } from "../../shared/utils/LoggedUserManager";
+import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
 export default Vue.extend({
-  components: { Button, Stepper, SelectCardGroup, Input, TextArea },
+  components: {
+    Button,
+    Stepper,
+    SelectCardGroup,
+    Input,
+    TextArea,
+    ConfirmationModal,
+  },
   data: () => ({
     isLoading: false,
     tab: 0,
@@ -113,7 +129,14 @@ export default Vue.extend({
       subcategory: Subcategory.health,
       url: "",
     },
+    confirmationTitle: "",
+    confirmationMessage: "",
+    isModalOpen: false,
+    isModalLoading: false,
   }),
+  mounted() {
+    this.$root.showToolbar(`Cadastrar ${this.toolbarRole}`);
+  },
   methods: {
     onNextButtonClick() {
       if (this.tab < 2) {
@@ -142,34 +165,52 @@ export default Vue.extend({
     onSubcategorySelected(subcategory) {
       this.necessity.subcategory = subcategory;
     },
-  },
-  mounted() {
-    this.$root.showToolbar(`Cadastrar ${this.toolbarRole}`);
+    onConfirmClick() {
+        this.confirmationTitle = "Sua doação foi enviada, obrigado!";
+        this.confirmationMessage =
+          "Assim que sua doação for avaliada, entraremos em contato para mais informações.";
+        this.isModalOpen = true;
+      },
+      onCreationConfirmed() {
+        this.isModalLoading = true;
+        createNecessity(this.necessity.id)
+          .then(() => {
+            this.isModalOpen = false;
+            this.isModalLoading = false;
+            this.$root.showSnackbar("Necessidade Criada.");
+            this.$router.push("/home");
+          })
+          .catch(() => {
+            this.$root.showSnackbar("Erro Inesperado.");
+            this.isModalLoading = false;
+          });
+      },
   },
   computed: {
     buttonTitle() {
       if (this.tab == 2) return "Confirmar";
       return "Continuar";
     },
-    buttonIcon() {
-      if (this.tab == 2) return "mdi-check";
-      else return "mdi-arrow-right";
-    },
-    inputValidations() {
-      return InputValidations;
-    },
-    isButtonValid() {
-      if (this.tab < 2) {
-        return true;
-      }
-      return this.validForm;
-    },
-    necessityVideoURL: {
-      get() {
-        return YoutubeVideoParser.toEmbeddedVideo(this.necessity.url || "");
+      buttonIcon() {
+        if (this.tab == 2) return "mdi-check";
+        else return "mdi-arrow-right";
       },
-      set(val) {
-        this.necessity.url = YoutubeVideoParser.toEmbeddedVideo(val);
+      inputValidations() {
+        return InputValidations;
+      },
+      isButtonValid() {
+        if (this.tab < 2) {
+          return true;
+        }
+        return this.validForm;
+      },
+      necessityVideoURL: {
+        get() {
+          return YoutubeVideoParser.toEmbeddedVideo(this.necessity.url || "");
+        },
+        set(val) {
+          this.necessity.url = YoutubeVideoParser.toEmbeddedVideo(val);
+        },
       },
     },
     tab1() {

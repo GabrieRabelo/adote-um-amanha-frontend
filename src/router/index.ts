@@ -46,6 +46,11 @@ const routes: Array<RouteConfig> = [
     name: "",
     component: RegisterNecessity,
   },
+  {
+    path: "/donation/create",
+    name: "",
+    component: RegisterNecessity,
+  },
 ];
 
 const router = new VueRouter({
