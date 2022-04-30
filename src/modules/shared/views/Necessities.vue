@@ -46,8 +46,10 @@ import Vue from "vue";
 import Input from "../components/Input.vue";
 import NecessityCard from "../components/NecessityCard.vue";
 import Button from "../components/Button.vue";
+import BottomSheetMixin from "../mixins/BottomSheetMixin";
 
 export default Vue.extend({
+  mixins: [BottomSheetMixin],
   components: { Input, NecessityCard, Button },
   data: () => ({
     necessities: [],

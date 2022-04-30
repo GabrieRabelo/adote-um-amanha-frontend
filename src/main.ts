@@ -3,6 +3,7 @@ import App from "./App.vue";
 import "./registerServiceWorker";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
+import { BottomSheetMenuItem } from "./modules/shared/types/BottomSheetMenuItem";
 
 Vue.config.productionTip = false;
 
@@ -13,6 +14,8 @@ new Vue({
     snackbarMessage: "",
     isSnackbarVisible: false,
     isToolbarButtonVisible: false,
+    isBottomSheetVisible: false,
+    bottomSheetItems: [] as BottomSheetMenuItem[],
   }),
   methods: {
     showToolbar(title?: string) {
@@ -33,6 +36,15 @@ new Vue({
     showSnackbar(message: string) {
       this.snackbarMessage = message;
       this.isSnackbarVisible = true;
+    },
+    showBottomSheet() {
+      this.isBottomSheetVisible = true;
+    },
+    hideBottomSheet() {
+      this.isBottomSheetVisible = false;
+    },
+    setBottomSheetItems(items: BottomSheetMenuItem[]) {
+      this.bottomSheetItems = items;
     },
   },
   router,

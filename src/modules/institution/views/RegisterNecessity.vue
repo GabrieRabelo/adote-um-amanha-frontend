@@ -94,6 +94,7 @@ import InputValidations from "../../shared/utils/InputValidations";
 import { Subcategory } from "../../shared/enums/Subcategory";
 import { createNecessity } from "../services/necessityService";
 import YoutubeVideoParser from "@/modules/shared/utils/YoutubeVideoParser";
+
 export default Vue.extend({
   components: { Button, Stepper, SelectCardGroup, Input, TextArea },
   data: () => ({
