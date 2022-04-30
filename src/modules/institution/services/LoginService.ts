@@ -3,13 +3,14 @@ import { saveAccessToken } from "@/modules/shared/utils/AuthenticationManager";
 
 async function login(email: string, password: string): Promise<HTTPResponse> {
   return HTTP.post("public/autenticacao/login", { email, senha: password })
-    .then((response) => {
+    .then(async (response) => {
       const httpResponse: HTTPResponse = {
         data: response.data,
         status: response.status,
       };
-      saveAccessToken(response.data.accessToken);
-      return Promise.resolve(httpResponse);
+      return saveAccessToken(response.data.accessToken).then(() =>
+        Promise.resolve(httpResponse)
+      );
     })
     .catch(() => {
       const httpResponse: HTTPResponse = {
