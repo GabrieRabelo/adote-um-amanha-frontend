@@ -142,17 +142,31 @@ export default Vue.extend({
       if (this.tab < 2) {
         this.tab++;
       } else {
-        this.isLoading = true;
-        createNecessity(this.necessity)
-          .then(() => {
-            this.$root.showSnackbar("Necessidade criada");
-            this.$router.push("/home");
-            this.isLoading = false;
-          })
-          .catch(() => {
-            this.isLoading = false;
-            this.$root.showSnackbar("Erro inesperado");
-          });
+        if (UserRole.institution) {
+          this.isLoading = true;
+          createNecessity(this.necessity)
+            .then(() => {
+              this.$root.showSnackbar("Necessidade criada");
+              this.$router.push("/home");
+              this.isLoading = false;
+            })
+            .catch(() => {
+              this.isLoading = false;
+              this.$root.showSnackbar("Erro inesperado");
+            });
+        } else {
+          this.isLoading = true;
+          createDonation(this.donation)
+            .then(() => {
+              this.isModalOpen = true;
+              this.$router.push("/home");
+              this.isLoading = false;
+            })
+            .catch(() => {
+              this.isLoading = false;
+              this.$root.showSnackbar("Erro inesperado");
+            });
+        }
       }
     },
     onBackButtonClick() {
@@ -166,51 +180,50 @@ export default Vue.extend({
       this.necessity.subcategory = subcategory;
     },
     onConfirmClick() {
-        this.confirmationTitle = "Sua doação foi enviada, obrigado!";
-        this.confirmationMessage =
-          "Assim que sua doação for avaliada, entraremos em contato para mais informações.";
-        this.isModalOpen = true;
-      },
-      onCreationConfirmed() {
-        this.isModalLoading = true;
-        createNecessity(this.necessity.id)
-          .then(() => {
-            this.isModalOpen = false;
-            this.isModalLoading = false;
-            this.$root.showSnackbar("Necessidade Criada.");
-            this.$router.push("/home");
-          })
-          .catch(() => {
-            this.$root.showSnackbar("Erro Inesperado.");
-            this.isModalLoading = false;
-          });
-      },
+      this.confirmationTitle = "Sua doação foi enviada, obrigado!";
+      this.confirmationMessage =
+        "Assim que sua doação for avaliada, entraremos em contato para mais informações.";
+      this.isModalOpen = true;
+    },
+    onCreationConfirmed() {
+      this.isModalLoading = true;
+      createDonation(this.donation.id)
+        .then(() => {
+          this.isModalOpen = false;
+          this.isModalLoading = false;
+          this.$root.showSnackbar("Necessidade Criada.");
+          this.$router.push("/home");
+        })
+        .catch(() => {
+          this.$root.showSnackbar("Erro Inesperado.");
+          this.isModalLoading = false;
+        });
+    },
   },
   computed: {
     buttonTitle() {
       if (this.tab == 2) return "Confirmar";
       return "Continuar";
     },
-      buttonIcon() {
-        if (this.tab == 2) return "mdi-check";
-        else return "mdi-arrow-right";
+    buttonIcon() {
+      if (this.tab == 2) return "mdi-check";
+      else return "mdi-arrow-right";
+    },
+    inputValidations() {
+      return InputValidations;
+    },
+    isButtonValid() {
+      if (this.tab < 2) {
+        return true;
+      }
+      return this.validForm;
+    },
+    necessityVideoURL: {
+      get() {
+        return YoutubeVideoParser.toEmbeddedVideo(this.necessity.url || "");
       },
-      inputValidations() {
-        return InputValidations;
-      },
-      isButtonValid() {
-        if (this.tab < 2) {
-          return true;
-        }
-        return this.validForm;
-      },
-      necessityVideoURL: {
-        get() {
-          return YoutubeVideoParser.toEmbeddedVideo(this.necessity.url || "");
-        },
-        set(val) {
-          this.necessity.url = YoutubeVideoParser.toEmbeddedVideo(val);
-        },
+      set(val) {
+        this.necessity.url = YoutubeVideoParser.toEmbeddedVideo(val);
       },
     },
     tab1() {
