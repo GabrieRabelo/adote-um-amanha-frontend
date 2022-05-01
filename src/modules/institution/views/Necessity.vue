@@ -92,14 +92,10 @@ export default Vue.extend({
       ];
     },
     canEdit() {
-<<<<<<< HEAD
       return (
         this.necessity.status === Status.peding &&
         getUserData().role == UserRole.institution
       );
-=======
-      return this.necessity.status === Status.pending;
->>>>>>> 678bd79 (US03)
     },
   },
   methods: {
