@@ -8,6 +8,7 @@ import EditNecessity from "../modules/institution/views/EditNecessity.vue";
 import RegisterNecessity from "../modules/institution/views/RegisterNecessity.vue";
 import Home from "../modules/shared/views/Home.vue";
 import { isAuthenticated } from "@/modules/shared/utils/AuthenticationManager";
+import Necessities from "../modules/shared/views/Necessities.vue";
 
 Vue.use(VueRouter);
 
@@ -45,6 +46,11 @@ const routes: Array<RouteConfig> = [
     path: "/necessities/create",
     name: "",
     component: RegisterNecessity,
+  },
+  {
+    path: "/necessities",
+    name: "List necessities",
+    component: Necessities,
   },
 ];
 

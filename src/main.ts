@@ -9,6 +9,7 @@ Vue.config.productionTip = false;
 
 new Vue({
   data: () => ({
+    isLoading: false,
     toolbarTitle: "",
     isToolbarVisible: false,
     snackbarMessage: "",
@@ -23,6 +24,12 @@ new Vue({
       if (title) {
         this.toolbarTitle = title;
       }
+    },
+    startLoader() {
+      this.isLoading = true;
+    },
+    stopLoader() {
+      this.isLoading = false;
     },
     hideToolbar() {
       this.isToolbarVisible = false;
