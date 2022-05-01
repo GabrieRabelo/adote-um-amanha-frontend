@@ -106,6 +106,7 @@ import YoutubeVideoParser from "@/modules/shared/utils/YoutubeVideoParser";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import { getUserData } from "../../shared/utils/LoggedUserManager";
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
+import createDonation from "../../donationService";
 export default Vue.extend({
   components: {
     Button,
@@ -191,7 +192,7 @@ export default Vue.extend({
         .then(() => {
           this.isModalOpen = false;
           this.isModalLoading = false;
-          this.$root.showSnackbar("Necessidade Criada.");
+          this.$root.showSnackbar("Doação Criada.");
           this.$router.push("/home");
         })
         .catch(() => {
