@@ -54,11 +54,13 @@
 import Vue from "vue";
 import Category from "../../shared/enums/Category";
 import Subcategory from "../../shared/enums/Subcategory";
-import { getNecessity } from "../services/necessityService";
+import { getNecessity } from "../../shared/services/necessityService";
 import moment from "moment";
 import Button from "../../shared/components/Button.vue";
 import EmbeddedVideo from "../../shared/components/EmbeddedVideo.vue";
 import { Status } from "@/modules/shared/enums/Status";
+import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
+import { UserRole } from "@/modules/shared/enums/UserRole";
 export default Vue.extend({
   data: () => ({
     necessity: null,
@@ -90,7 +92,10 @@ export default Vue.extend({
       ];
     },
     canEdit() {
-      return this.necessity.status === Status.peding;
+      return (
+        this.necessity.status === Status.pending &&
+        getUserData().role == UserRole.institution
+      );
     },
   },
   methods: {

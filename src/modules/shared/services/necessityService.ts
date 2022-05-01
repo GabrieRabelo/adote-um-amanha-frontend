@@ -1,9 +1,11 @@
 import { HTTP } from "@/api/http-common";
 import { fromRequestFormat } from "@/modules/shared/utils/NecessityMapper";
+import { Status } from "../enums/Status";
 import {
   NecessityEntity,
   RequestNecessityEntity,
 } from "../models/NecessityEntity";
+import { mountQueryString } from "../utils/QueryParamBuilder";
 
 export function createNecessity(necessity: NecessityEntity): Promise<void> {
   return HTTP.post("/pedidos", {
@@ -22,11 +24,10 @@ export function createNecessity(necessity: NecessityEntity): Promise<void> {
 }
 
 export function getNecessities(
-  { page, size }: NecessitiesRequestParams = { page: 0, size: 5 }
+  queryParam: NecessitiesRequestParams
 ): Promise<NecessityEntity[]> {
-  return HTTP.get(
-    `public/necessidades?direcao=DESC&ordenacao=dataHora&pagina=${page}&tamanho=${size}`
-  )
+  const params = mountQueryString(queryParam);
+  return HTTP.get(`public/necessidades?${params}`)
     .then((response) => {
       const data = response.data;
       const serviceNecessities = data.conteudo as RequestNecessityEntity[];
@@ -61,6 +62,9 @@ export function updateNecessity(necessity: NecessityEntity): Promise<void> {
 }
 
 interface NecessitiesRequestParams {
-  page: number;
-  size: number;
+  pagina?: number;
+  tamanho?: number;
+  direcao?: string;
+  ordenacao?: string;
+  status?: Status;
 }

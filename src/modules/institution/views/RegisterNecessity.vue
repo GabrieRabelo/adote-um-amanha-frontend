@@ -4,7 +4,7 @@
       <v-tabs-items v-model="tab">
         <v-tab-item key="1">
           <div class="a-text__subtitle">
-            Sua solicitação refere-se a um bem ou a um serviço?
+            Sua {{ tab1 }} refere-se a um bem ou a um serviço?
           </div>
           <v-container class="card-group mt-8">
             <SelectCardGroup
@@ -92,9 +92,10 @@ import Input from "../../shared/components/Input.vue";
 import TextArea from "../../shared/components/TextArea.vue";
 import InputValidations from "../../shared/utils/InputValidations";
 import { Subcategory } from "../../shared/enums/Subcategory";
-import { createNecessity } from "../services/necessityService";
+import { createNecessity } from "../../shared/services/necessityService";
 import YoutubeVideoParser from "@/modules/shared/utils/YoutubeVideoParser";
-
+import { UserRole } from "@/modules/shared/enums/UserRole";
+import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 export default Vue.extend({
   components: { Button, Stepper, SelectCardGroup, Input, TextArea },
   data: () => ({
@@ -169,6 +170,16 @@ export default Vue.extend({
       set(val) {
         this.necessity.url = YoutubeVideoParser.toEmbeddedVideo(val);
       },
+    },
+    tab1() {
+      const user = {
+        [UserRole.institution]: "necessidade",
+        [UserRole.donator]: "doação",
+      };
+
+      const currentUser = getUserData();
+      const role = currentUser.role;
+      return user[role];
     },
   },
 });

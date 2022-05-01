@@ -6,6 +6,12 @@
       :buttonVisible="$root.isToolbarButtonVisible"
     />
     <v-main>
+      <v-progress-linear
+        height="6"
+        indeterminate
+        absolute
+        v-if="$root.isLoading"
+      />
       <router-view />
     </v-main>
     <v-snackbar v-model="$root.isSnackbarVisible">{{

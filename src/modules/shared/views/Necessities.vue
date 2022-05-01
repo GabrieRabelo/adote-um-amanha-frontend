@@ -27,7 +27,7 @@
         @click="onNecessityClick(necessity)"
       />
     </v-row>
-    <v-row class="justify-end mr-6">
+    <v-row class="justify-end mr-6" v-if="isInstitution">
       <Button
         class="a-fab"
         title="Criar"
@@ -41,12 +41,15 @@
 </template>
 
 <script>
-import { getNecessities } from "@/modules/institution/services/necessityService";
+import { getNecessities } from "@/modules/shared/services/necessityService";
 import Vue from "vue";
 import Input from "../components/Input.vue";
 import NecessityCard from "../components/NecessityCard.vue";
 import Button from "../components/Button.vue";
 import BottomSheetMixin from "../mixins/BottomSheetMixin";
+import { getUserData } from "../utils/LoggedUserManager";
+import { UserRole } from "../enums/UserRole";
+import { Status } from "../enums/Status";
 
 export default Vue.extend({
   mixins: [BottomSheetMixin],
@@ -54,15 +57,30 @@ export default Vue.extend({
   data: () => ({
     necessities: [],
   }),
+  computed: {
+    isInstitution() {
+      return getUserData().role == UserRole.institution;
+    },
+  },
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
+    this.$root.startLoader();
+
     this.necessities = await getNecessities();
-    this.$root.hideToolbarButton();
+    this.$root.stopLoader();
   },
   unmounted() {
     this.$root.showToolbarButton();
   },
   methods: {
+    async getNecessities() {
+      const params = {
+        direcao: "DESC",
+        ordenacao: "dataHora",
+        status: Status.pending,
+      };
+      return getNecessities(params);
+    },
     onNecessityClick(necessity) {
       this.$router.push(`/necessity/${necessity.id}`);
     },
