@@ -93,7 +93,7 @@ export default Vue.extend({
     },
     canEdit() {
       return (
-        this.necessity.status === Status.peding &&
+        this.necessity.status === Status.pending &&
         getUserData().role == UserRole.institution
       );
     },
