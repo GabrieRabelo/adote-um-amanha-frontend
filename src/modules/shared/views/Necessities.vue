@@ -66,7 +66,6 @@ export default Vue.extend({
     this.$root.showToolbar("NECESSIDADES");
     this.$root.hideToolbarButton();
     this.$root.startLoader();
-    console.log(this.$root.isLoading);
 
     this.necessities = await getNecessities();
     this.$root.stopLoader();
