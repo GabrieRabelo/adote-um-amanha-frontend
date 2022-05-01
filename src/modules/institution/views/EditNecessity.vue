@@ -182,11 +182,11 @@ export default Vue.extend({
         .then(() => {
           this.isModalOpen = false;
           this.isModalLoading = false;
-          this.$root.showSnackbar("NECESSIDADE EXCLUÍDA!", "Sua necessidade foi excluída da lista de necessidades.", "#4caf50");
+          this.$root.showSnackbar({title:"NECESSIDADE EXCLUÍDA!", body:"Sua necessidade foi excluída da lista de necessidades.", color:"success"});
           this.$router.push("/home");
         })
         .catch(() => {
-          this.$root.showSnackbar("ERRO INESPERADO!", "Ocorreu um erro inesperado ao tentar registrar sua solicitação... Tente novamente!", "#ff5252");
+          this.$root.showSnackbar({title:"ERRO INESPERADO!", body:"Ocorreu um erro inesperado ao tentar realizar sua solicitação... Tente novamente!", color:"error"});
           this.isModalLoading = false;
         });
     },
@@ -195,11 +195,11 @@ export default Vue.extend({
       updateNecessity(this.newNecessity)
         .then(() => {
           this.isSaveButtonLoading = false;
-          this.$root.showSnackbar("ALTERAÇÕES SALVAS!", "Alterações salvas com sucesso.", "#4caf50");
+          this.$root.showSnackbar({title:"ALTERAÇÕES SALVAS!", body:"Alterações salvas com sucesso.", color:"success"});
           this.$router.go(-1);
         })
         .catch(() => {
-          this.$root.showSnackbar("ERRO INESPERADO", "Ocorreu um erro inesperado ao tentar registrar sua solicitação... Tente novamente!", "#ff5252");
+          this.$root.showSnackbar({title:"ERRO INESPERADO", body:"Ocorreu um erro inesperado ao tentar realizar sua solicitação... Tente novamente!", color:"error"});
           this.isSaveButtonLoading = false;
         });
     },

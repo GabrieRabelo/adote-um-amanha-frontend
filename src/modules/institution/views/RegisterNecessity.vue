@@ -120,13 +120,13 @@ export default Vue.extend({
         this.isLoading = true;
         createNecessity(this.necessity)
           .then(() => {
-            this.$root.showSnackbar("NECESSIDADE CRIADA!", "Sua necessidade foi criada e adicionada na lista de necessidades!", "#4caf50");
+            this.$root.showSnackbar({title:"NECESSIDADE CRIADA!", body:"Sua necessidade foi criada e adicionada na lista de necessidades!", color:"success"});
             this.$router.push("/home");
             this.isLoading = false;
           })
           .catch(() => {
             this.isLoading = false;
-            this.$root.showSnackbar("ERRO INESPERADO", "Ocorreu um erro inesperado ao tentar registrar sua solicitação... Tente novamente!", "#ff5252");
+            this.$root.showSnackbar({title:"ERRO INESPERADO", body:"Ocorreu um erro inesperado ao tentar realizar sua solicitação... Tente novamente!", color:"error"});
           });
       }
     },

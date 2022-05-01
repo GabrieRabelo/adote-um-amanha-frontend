@@ -15,7 +15,7 @@
             <strong>{{ $root.snackbar.title }}</strong>
           </div>
           <div>
-            {{ $root.snackbar.text }}
+            {{ $root.snackbar.body }}
           </div>
         </v-layout>
       </v-layout>

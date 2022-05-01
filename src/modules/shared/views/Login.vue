@@ -40,7 +40,7 @@
     <v-container class="align-end">
       <v-col class="mt-10" align-self="stretch">
         <v-row class="d-flex justify-center">
-          <span>Olá doador, gostaria de contribuir nesta causa?</span>&nbsp;
+          <span>Ainda não tem conta?</span>&nbsp;
           <Link url="signup">Cadastre-se!</Link>
         </v-row>
       </v-col>
@@ -108,7 +108,7 @@ export default Vue.extend({
       this.$router.push("home");
     },
     onLoginUnauthorized() {
-      this.$root.showSnackbar("Usuário e/ou senha incorretos.", "", "#ff5252");
+      this.$root.showSnackbar({title:"Usuário e/ou senha incorretos.", color:"error"});
     },
   },
 });
