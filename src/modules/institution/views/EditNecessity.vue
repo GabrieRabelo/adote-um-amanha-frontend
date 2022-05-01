@@ -95,7 +95,7 @@ import {
   deleteNecessity,
   getNecessity,
   updateNecessity,
-} from "../services/necessityService";
+} from "../../shared/services/necessityService";
 import TextArea from "../../shared/components/TextArea.vue";
 import CategoryUtils from "../../shared/enums/Category";
 import SubcategoriesUtils from "../../shared/enums/Subcategory";

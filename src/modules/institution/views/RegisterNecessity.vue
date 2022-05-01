@@ -92,7 +92,7 @@ import Input from "../../shared/components/Input.vue";
 import TextArea from "../../shared/components/TextArea.vue";
 import InputValidations from "../../shared/utils/InputValidations";
 import { Subcategory } from "../../shared/enums/Subcategory";
-import { createNecessity } from "../services/necessityService";
+import { createNecessity } from "../../shared/services/necessityService";
 import YoutubeVideoParser from "@/modules/shared/utils/YoutubeVideoParser";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
