@@ -64,7 +64,6 @@ export default Vue.extend({
   },
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
-    this.$root.hideToolbarButton();
     this.$root.startLoader();
 
     this.necessities = await getNecessities();
