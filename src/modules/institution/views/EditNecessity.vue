@@ -15,6 +15,17 @@
         </v-row>
         <v-row>
           <Select
+            :items="allCategories"
+            label="Categoria"
+            v-model="currentCategoryObject"
+            item-text="name"
+            item-value="value"
+            :rules="[inputValidations.required]"
+            :return-object="false"
+          />
+        </v-row>
+        <v-row>
+          <Select
             :items="allSubcategories"
             label="Subcategoria"
             v-model="currentSubcategoryObject"
@@ -29,6 +40,7 @@
             name="input-descricao"
             label="Descrição"
             v-model="newNecessity.description"
+            maxlength="255"
           ></TextArea>
         </v-row>
         <v-row>
@@ -38,17 +50,6 @@
             placeholder="youtube.com/watch"
             v-model="necessityVideoURL"
           />
-        </v-row>
-        <v-row>
-          <v-radio-group v-model="newNecessity.category">
-            <v-radio
-              v-for="category of allCategories"
-              :key="category.value"
-              :value="category.value"
-              :label="category.name"
-            >
-            </v-radio>
-          </v-radio-group>
         </v-row>
       </v-form>
     </v-container>
@@ -132,7 +133,7 @@ export default Vue.extend({
       return SubcategoriesUtils.allObjects();
     },
     allCategories() {
-      return CategoryUtils.allPluralObjects();
+      return CategoryUtils.allSingularObjects();
     },
     currentSubcategoryObject: {
       get() {
@@ -181,11 +182,11 @@ export default Vue.extend({
         .then(() => {
           this.isModalOpen = false;
           this.isModalLoading = false;
-          this.$root.showSnackbar("Necessidade Excluída.");
+          this.$root.showSnackbar({title:"NECESSIDADE EXCLUÍDA!", body:"Sua necessidade foi excluída da lista de necessidades.", color:"success"});
           this.$router.push("/home");
         })
         .catch(() => {
-          this.$root.showSnackbar("Erro Inesperado.");
+          this.$root.showSnackbar({title:"ERRO INESPERADO!", body:"Ocorreu um erro inesperado ao tentar realizar sua solicitação... Tente novamente!", color:"error"});
           this.isModalLoading = false;
         });
     },
@@ -194,11 +195,11 @@ export default Vue.extend({
       updateNecessity(this.newNecessity)
         .then(() => {
           this.isSaveButtonLoading = false;
-          this.$root.showSnackbar("Alterações salvas!.");
+          this.$root.showSnackbar({title:"ALTERAÇÕES SALVAS!", body:"Alterações salvas com sucesso.", color:"success"});
           this.$router.go(-1);
         })
         .catch(() => {
-          this.$root.showSnackbar("Erro Inesperado.");
+          this.$root.showSnackbar({title:"ERRO INESPERADO", body:"Ocorreu um erro inesperado ao tentar realizar sua solicitação... Tente novamente!", color:"error"});
           this.isSaveButtonLoading = false;
         });
     },

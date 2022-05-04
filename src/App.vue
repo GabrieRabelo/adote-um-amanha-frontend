@@ -14,9 +14,18 @@
       />
       <router-view />
     </v-main>
-    <v-snackbar v-model="$root.isSnackbarVisible">{{
-      $root.snackbarMessage
-    }}</v-snackbar>
+    <v-snackbar v-model="$root.snackbar.visible" :color="$root.snackbar.color">
+      <v-layout align-center>
+        <v-layout column>
+          <div>
+            <strong>{{ $root.snackbar.title }}</strong>
+          </div>
+          <div>
+            {{ $root.snackbar.body }}
+          </div>
+        </v-layout>
+      </v-layout>
+    </v-snackbar>
     <BottomSheetMenu
       :items="$root.bottomSheetItems"
       v-model="$root.isBottomSheetVisible"

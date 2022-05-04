@@ -40,6 +40,7 @@
               v-model="necessity.description"
               required
               :rules="[inputValidations.required]"
+              maxlength="255"
             />
             <Input
               label="URL"
@@ -121,13 +122,13 @@ export default Vue.extend({
         this.isLoading = true;
         createNecessity(this.necessity)
           .then(() => {
-            this.$root.showSnackbar("Necessidade criada");
+            this.$root.showSnackbar({title:"NECESSIDADE CRIADA!", body:"Sua necessidade foi criada e adicionada na lista de necessidades!", color:"success"});
             this.$router.push("/home");
             this.isLoading = false;
           })
           .catch(() => {
             this.isLoading = false;
-            this.$root.showSnackbar("Erro inesperado");
+            this.$root.showSnackbar({title:"ERRO INESPERADO", body:"Ocorreu um erro inesperado ao tentar realizar sua solicitação... Tente novamente!", color:"error"});
           });
       }
     },

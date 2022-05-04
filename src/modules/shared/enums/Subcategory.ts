@@ -4,7 +4,6 @@ export enum Subcategory {
   health = "SAUDE",
   professionalization = "PROFISSIONALIZACAO",
   education = "EDUCACAO",
-  food = "ALIMENTACAO",
   others = "OUTROS",
 }
 
@@ -32,7 +31,6 @@ const subcategoryStrings = {
   [Subcategory.health]: "Saúde",
   [Subcategory.professionalization]: "Profissionalização",
   [Subcategory.education]: "Educação",
-  [Subcategory.food]: "Alimentação",
   [Subcategory.others]: "Outros",
 };
 
@@ -40,7 +38,6 @@ const subcategoryIcons = {
   [Subcategory.health]: "mdi-heart",
   [Subcategory.professionalization]: "mdi-book",
   [Subcategory.education]: "mdi-book-open-variant",
-  [Subcategory.food]: "mdi-silverware-variant",
   [Subcategory.others]: "mdi-dots-horizontal",
 };
 
