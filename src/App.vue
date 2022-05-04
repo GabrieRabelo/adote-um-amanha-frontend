@@ -6,6 +6,12 @@
       :buttonVisible="$root.isToolbarButtonVisible"
     />
     <v-main>
+      <v-progress-linear
+        height="6"
+        indeterminate
+        absolute
+        v-if="$root.isLoading"
+      />
       <router-view />
     </v-main>
     <v-snackbar v-model="$root.snackbar.visible" :color="$root.snackbar.color">
@@ -20,11 +26,17 @@
         </v-layout>
       </v-layout>
     </v-snackbar>
+    <BottomSheetMenu
+      :items="$root.bottomSheetItems"
+      v-model="$root.isBottomSheetVisible"
+      @wantsToClose="$root.hideBottomSheet"
+    />
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import BottomSheetMenu from "./modules/shared/components/BottomSheet/BottomSheetMenu.vue";
 import Toolbar from "./modules/shared/components/Toolbar.vue";
 
 export default Vue.extend({
@@ -32,6 +44,7 @@ export default Vue.extend({
   data: () => ({}),
   components: {
     Toolbar,
+    BottomSheetMenu,
   },
 });
 </script>

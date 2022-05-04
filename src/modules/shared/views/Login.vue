@@ -19,6 +19,7 @@
             :rules="[inputValidations.email, inputValidations.required]"
           />
           <PasswordInput
+            @keyup.enter="onLoginButtonClick"
             class="mx-6"
             label="Senha"
             v-model="password"

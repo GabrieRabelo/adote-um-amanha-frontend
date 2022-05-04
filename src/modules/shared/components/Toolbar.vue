@@ -5,10 +5,17 @@
         <v-icon>mdi-arrow-left</v-icon>
       </v-app-bar-nav-icon></v-col
     >
-    <v-toolbar-title class="font-weight-black flex text-center">
+    <v-toolbar-title class="font-weight-medium flex text-center">
       {{ title }}
     </v-toolbar-title>
-    <v-col class="px-0" cols="2"></v-col>
+    <v-col class="px-0 mr-2" cols="1">
+      <v-app-bar-nav-icon
+        v-if="$root.bottomSheetItems.length"
+        @click="$root.showBottomSheet()"
+      >
+        <v-icon>mdi-dots-vertical</v-icon>
+      </v-app-bar-nav-icon>
+    </v-col>
   </v-app-bar>
 </template>
 
