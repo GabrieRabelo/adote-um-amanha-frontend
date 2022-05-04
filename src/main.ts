@@ -45,7 +45,6 @@ new Vue({
     hideToolbarButton() {
       this.isToolbarButtonVisible = false;
     },
-<<<<<<< src/main.ts
     showSnackbar({title = "Sucesso", body = "", color = "sucess"}: SnackbarProperties) {
       this.snackbar = {
         color: color,
@@ -53,11 +52,6 @@ new Vue({
         title: title,
         visible: true
       };
-    }
-=======
-    showSnackbar(message: string) {
-      this.snackbarMessage = message;
-      this.isSnackbarVisible = true;
     },
     showBottomSheet() {
       this.isBottomSheetVisible = true;
@@ -68,7 +62,6 @@ new Vue({
     setBottomSheetItems(items: BottomSheetMenuItem[]) {
       this.bottomSheetItems = items;
     },
->>>>>>> src/main.ts
   },
   router,
   vuetify,
