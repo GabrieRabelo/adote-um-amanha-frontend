@@ -44,8 +44,8 @@ describe("Necessities", () => {
       .parent()
       .parent()
       .click();
-
     cy.get(".a-text__bold-title").should("contain", "Caixa de luvas");
+    cy.url().should("contain", "/necessity/");
   });
 
   it("Edit a necessity", () => {
