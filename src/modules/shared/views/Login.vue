@@ -19,6 +19,7 @@
             :rules="[inputValidations.email, inputValidations.required]"
           />
           <PasswordInput
+            @keyup.enter="onLoginButtonClick"
             class="mx-6"
             label="Senha"
             v-model="password"
@@ -108,7 +109,7 @@ export default Vue.extend({
       this.$router.push("home");
     },
     onLoginUnauthorized() {
-      this.$root.showSnackbar("Usuário e/ou senha incorretos.");
+      this.$root.showSnackbar({title:"Usuário e/ou senha incorretos.", color:"error"});
     },
   },
 });
