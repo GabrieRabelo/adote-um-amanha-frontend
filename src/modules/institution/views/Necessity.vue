@@ -61,14 +61,15 @@ import EmbeddedVideo from "../../shared/components/EmbeddedVideo.vue";
 import { Status } from "@/modules/shared/enums/Status";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
+import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
 export default Vue.extend({
+  mixins: [ToolbarNavigationMixin],
   data: () => ({
     necessity: null,
   }),
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
     this.necessity = await getNecessity(this.$route.params.id);
-    this.$root.showToolbarButton();
   },
   components: {
     EmbeddedVideo,

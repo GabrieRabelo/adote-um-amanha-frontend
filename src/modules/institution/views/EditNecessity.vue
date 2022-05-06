@@ -104,6 +104,7 @@ import InputValidations from "../../shared/utils/InputValidations";
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
 import { areEqual } from "../../shared/utils/ObjectComparator";
 import YoutubeVideoParser from "../../shared/utils/YoutubeVideoParser";
+import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
 
 export default Vue.extend({
   components: {
@@ -113,6 +114,7 @@ export default Vue.extend({
     TextArea,
     ConfirmationModal,
   },
+  mixins: [ToolbarNavigationMixin],
   data: () => ({
     necessity: {},
     newNecessity: null,

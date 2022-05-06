@@ -1,5 +1,5 @@
 export interface EnumerableObject {
-  value: string;
+  value: string | number;
   name: string;
   icon?: string;
 }

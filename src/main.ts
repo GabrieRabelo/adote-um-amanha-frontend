@@ -22,6 +22,7 @@ new Vue({
     },
     isBottomSheetVisible: false,
     bottomSheetItems: [] as BottomSheetMenuItem[],
+    onToolbarNavButtonClick: null,
   }),
   methods: {
     showToolbar(title?: string) {
