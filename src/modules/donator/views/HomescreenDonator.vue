@@ -55,10 +55,10 @@
 import Vue from "vue";
 import Button from "@/modules/shared/components/Button.vue";
 import "@/modules/shared/views/Necessities";
-import BottomSheetMixin from "../../shared/mixins/BottomSheetMixin";
+import ToolbarMenuMixin from "../../shared/mixins/ToolbarMenuMixin";
 
 export default Vue.extend({
-  mixins: [BottomSheetMixin],
+  mixins: [ToolbarMenuMixin],
   components: {
     Button,
   },
