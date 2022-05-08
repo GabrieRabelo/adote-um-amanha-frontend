@@ -5,7 +5,7 @@ import Necessity from "../modules/institution/views/Necessity.vue";
 import Instituition from "../modules/institution/views/Instituition.vue";
 import SplashScreen from "../modules/shared/views/SplashScreen.vue";
 import EditNecessity from "../modules/institution/views/EditNecessity.vue";
-import RegisterNecessity from "../modules/institution/views/RegisterNecessity.vue";
+import RegisterRequest from "../modules/shared/views/RegisterRequest.vue";
 import Home from "../modules/shared/views/Home.vue";
 import Necessities from "../modules/shared/views/Necessities.vue";
 import { isAuthenticated } from "@/modules/shared/utils/AuthenticationManager";
@@ -45,12 +45,17 @@ const routes: Array<RouteConfig> = [
   {
     path: "/necessities/create",
     name: "",
-    component: RegisterNecessity,
+    component: RegisterRequest,
   },
   {
     path: "/necessities",
     name: "List necessities",
     component: Necessities,
+  },
+  {
+    path: "/donation/create",
+    name: "",
+    component: RegisterRequest,
   },
 ];
 

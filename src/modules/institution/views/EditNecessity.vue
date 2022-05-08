@@ -83,6 +83,7 @@
       @cancel="isModalOpen = false"
       @confirm="onDeleteConfirmed"
       :loading="isModalLoading"
+      :isButtonOn="true"
     />
   </v-container>
 </template>
