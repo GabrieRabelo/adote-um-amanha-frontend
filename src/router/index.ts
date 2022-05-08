@@ -6,6 +6,7 @@ import Instituition from "../modules/institution/views/Instituition.vue";
 import SplashScreen from "../modules/shared/views/SplashScreen.vue";
 import EditNecessity from "../modules/institution/views/EditNecessity.vue";
 import RegisterNecessity from "../modules/institution/views/RegisterNecessity.vue";
+import NecessityDescription from "../modules/donator/views/NecessityDescription.vue";
 import Home from "../modules/shared/views/Home.vue";
 import Necessities from "../modules/shared/views/Necessities.vue";
 import { isAuthenticated } from "@/modules/shared/utils/AuthenticationManager";
@@ -51,6 +52,11 @@ const routes: Array<RouteConfig> = [
     path: "/necessities",
     name: "List necessities",
     component: Necessities,
+  },
+  {
+    path: "/necessityDescription/:id",
+    name: "Donator necessity description",
+    component: NecessityDescription,
   },
 ];
 
