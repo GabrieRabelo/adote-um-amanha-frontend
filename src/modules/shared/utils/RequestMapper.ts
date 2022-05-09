@@ -19,7 +19,7 @@ export function fromBackendFormat(
     url: request.urlVideo,
     description: request.descricao,
     status: request.status as Status,
-    user: { name: request.nomeUsuario, id: request.idUsuario },
+    user: { name: request.nomeUsuario, id: request.id },
     type: request.tipo,
   };
 }
@@ -33,10 +33,6 @@ export function toBackendFormat(request: RequestEntity): RequestBackendEntity {
     subcategoria: request.subcategory,
     data: request.createdDate.toLocaleDateString("pt-br"),
     status: request.status,
-    idCasa: request.institution?.id,
-    nomeCasa: request.institution?.name,
-    idDoador: request.donator?.id,
-    nomeDoador: request.donator?.name,
     urlVideo: request.url,
     tipo: request.type,
   };
