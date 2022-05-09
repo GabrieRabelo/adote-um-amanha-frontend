@@ -8,7 +8,6 @@ import EditNecessity from "../modules/institution/views/EditNecessity.vue";
 import RegisterNecessity from "../modules/institution/views/RegisterNecessity.vue";
 import Home from "../modules/shared/views/Home.vue";
 import Necessities from "../modules/shared/views/Necessities.vue";
-import Filter from "../modules/shared/views/Filter.vue";
 import { isAuthenticated } from "@/modules/shared/utils/AuthenticationManager";
 
 Vue.use(VueRouter);

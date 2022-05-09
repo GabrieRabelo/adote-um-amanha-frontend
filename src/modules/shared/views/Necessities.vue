@@ -10,7 +10,6 @@
           hide-details
           elevation="3"
         />
-        {{ filter }}
       </v-col>
       <v-col cols="3" class="d-flex flex-column align-end px-0 py-0">
         <v-btn fab color="primary"
