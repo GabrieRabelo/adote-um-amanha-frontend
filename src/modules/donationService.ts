@@ -18,7 +18,7 @@ export function createDonation(donation: RequestEntity): Promise<void> {
 export function createDonationFromNecessity(
   donation: RequestEntity
 ): Promise<void> {
-  return HTTP.post("/pedidos", {
+  return HTTP.post("/match/{id}", {
     assunto: donation.title,
     descricao: donation.description,
     categoria: donation.category,
