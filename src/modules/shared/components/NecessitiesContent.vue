@@ -90,11 +90,10 @@ export default Vue.extend({
       const params = {
         direcao: "DESC",
         ordenacao: "dataHora",
-        categoria: this.filters.categories,
-        subcategoria: this.filters.subcategories,
-        status: this.filters.status,
-        dataCriacao: this.filters.startDate,
-        titulo: this.filters.name,
+        categorias: this.filters.categories.join(","),
+        subcategorias: this.filters.subcategories.join(","),
+        status: this.filters.status.join(","),
+        textoBusca: this.filters.name,
       };
       return getNecessities(params);
     },

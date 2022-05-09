@@ -12,22 +12,13 @@
 import Vue from "vue";
 import NecessitiesFilter from "../components/NecessitiesFilter.vue";
 import NecessitiesContent from "../components/NecessitiesContent.vue";
-import { Category } from "../enums/Category";
-import { Subcategory } from "../enums/Subcategory";
-import { Status } from "../enums/Status";
-import { DateFilter } from "../enums/DateFilter";
+import { getNecessitiesFilters } from "../utils/UserPreferences";
 
 export default Vue.extend({
   components: { NecessitiesFilter, NecessitiesContent },
   data: () => ({
     filterActive: false,
-    filters: {
-      categories: [Category.asset, Category.service],
-      subcategories: [Subcategory.food],
-      status: [Status.pending],
-      startDate: DateFilter.sixMonths,
-      name: "",
-    },
+    filters: getNecessitiesFilters(),
   }),
   methods: {
     onNecessityClick(necessity) {

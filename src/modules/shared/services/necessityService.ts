@@ -5,7 +5,11 @@ import {
   NecessityEntity,
   RequestNecessityEntity,
 } from "../models/NecessityEntity";
-import { RequestBackendEntity, RequestEntity } from "../models/RequestEntity";
+import {
+  RequestBackendEntity,
+  RequestEntity,
+  RequestType,
+} from "../models/RequestEntity";
 import { mountQueryString } from "../utils/QueryParamBuilder";
 
 export function createNecessity(necessity: NecessityEntity): Promise<void> {
@@ -25,10 +29,24 @@ export function createNecessity(necessity: NecessityEntity): Promise<void> {
 }
 
 export function getNecessities(
-  queryParam: NecessitiesRequestParams
+  queryParams: NecessitiesRequestParams
 ): Promise<RequestEntity[]> {
-  const params = mountQueryString(queryParam);
-  return HTTP.get(`public/necessidades?${params}`)
+  return getNecessitiesWithURL(queryParams, "pedidos");
+}
+
+export function getPublicNecessities(
+  queryParams: NecessitiesRequestParams
+): Promise<RequestEntity[]> {
+  return getNecessitiesWithURL(queryParams, "public/necessidades");
+}
+
+function getNecessitiesWithURL(
+  queryParams: NecessitiesRequestParams = {},
+  url: string
+): Promise<RequestEntity[]> {
+  queryParams.tipoPedido = RequestType.necessity;
+  const params = mountQueryString(queryParams);
+  return HTTP.get(`${url}?${params}`)
     .then((response) => {
       const data = response.data;
       const serviceNecessities = data.conteudo as RequestBackendEntity[];
@@ -38,13 +56,12 @@ export function getNecessities(
 }
 
 export function getNecessity(id: number): Promise<RequestEntity> {
-  return HTTP.get(`public/necessidades/${id}`)
+  return HTTP.get(`pedidos/${id}?tipoPedido=${RequestType.necessity}`)
     .then(({ data }) => fromBackendFormat(data))
     .catch((err) => Promise.reject(err));
 }
-
 export function deleteNecessity(id: number): Promise<void> {
-  return HTTP.delete(`/pedidos/${id}`)
+  return HTTP.delete(`/pedidos/${id}?tipoPedido="${RequestType.necessity}"`)
     .then(() => Promise.resolve())
     .catch(() => Promise.reject());
 }
@@ -68,4 +85,5 @@ interface NecessitiesRequestParams {
   direcao?: string;
   ordenacao?: string;
   status?: Status;
+  tipoPedido?: RequestType;
 }

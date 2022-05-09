@@ -166,7 +166,7 @@ export default Vue.extend({
       return SubcategoryUtils.allObjects();
     },
     allStatus() {
-      return StatusUtils.allObjects();
+      return StatusUtils.allObjects().slice(0, -1);
     },
     allDates() {
       return DateFilter.allObjects();
