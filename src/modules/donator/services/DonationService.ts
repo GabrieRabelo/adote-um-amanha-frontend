@@ -1,6 +1,27 @@
 import { HTTP } from "@/api/http-common";
 import { NecessityEntity } from "@/modules/institution/models/NecessityEntity";
-import { RequestType } from "@/modules/shared/models/RequestEntity";
+import {
+  RequestBackendEntity,
+  RequestEntity,
+  RequestType,
+} from "@/modules/shared/models/RequestEntity";
+import { NecessitiesRequestParams } from "@/modules/shared/types/NecessityRequestParams";
+import { mountQueryString } from "@/modules/shared/utils/QueryParamBuilder";
+import { fromBackendFormat } from "@/modules/shared/utils/RequestMapper";
+
+export function getDonations(
+  queryParams: NecessitiesRequestParams = {}
+): Promise<RequestEntity[] | unknown> {
+  queryParams.tipoPedido = RequestType.donation;
+  const params = mountQueryString(queryParams);
+  return HTTP.get(`pedidos/?${params}`)
+    .then((response) => {
+      const data = response.data;
+      const serviceNecessities = data.conteudo as RequestBackendEntity[];
+      return Promise.resolve(serviceNecessities.map(fromBackendFormat));
+    })
+    .catch((err) => Promise.reject(err));
+}
 
 export function getDonation(id: number): Promise<unknown> {
   return HTTP.get(`pedidos/${id}?tipoPedido=${RequestType.donation}`)
@@ -33,4 +54,19 @@ export async function updateDonation(donation: NecessityEntity): Promise<void> {
   return HTTP.put(`/pedidos/${donation.id}`, donationToEdit)
     .then(() => Promise.resolve())
     .catch(() => Promise.reject());
+}
+
+export function createDonation(donation: RequestEntity): Promise<void> {
+  return HTTP.post("/pedidos", {
+    assunto: donation.title,
+    descricao: donation.description,
+    categoria: donation.category,
+    subcategoria: donation.subcategory,
+  })
+    .then(() => {
+      return Promise.resolve();
+    })
+    .catch((error) => {
+      return Promise.reject(error);
+    });
 }

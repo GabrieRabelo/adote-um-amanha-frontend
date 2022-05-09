@@ -1,6 +1,5 @@
 import { HTTP } from "@/api/http-common";
 import { fromBackendFormat } from "@/modules/shared/utils/RequestMapper";
-import { Status } from "../enums/Status";
 import {
   NecessityEntity,
   RequestNecessityEntity,
@@ -10,6 +9,7 @@ import {
   RequestEntity,
   RequestType,
 } from "../models/RequestEntity";
+import { NecessitiesRequestParams } from "../types/NecessityRequestParams";
 import { mountQueryString } from "../utils/QueryParamBuilder";
 
 export function createNecessity(necessity: NecessityEntity): Promise<void> {
@@ -77,13 +77,4 @@ export function updateNecessity(necessity: NecessityEntity): Promise<void> {
   return HTTP.put(`/pedidos/${necessity.id}`, necessityToEdit)
     .then(() => Promise.resolve())
     .catch(() => Promise.reject());
-}
-
-interface NecessitiesRequestParams {
-  pagina?: number;
-  tamanho?: number;
-  direcao?: string;
-  ordenacao?: string;
-  status?: Status;
-  tipoPedido?: RequestType;
 }
