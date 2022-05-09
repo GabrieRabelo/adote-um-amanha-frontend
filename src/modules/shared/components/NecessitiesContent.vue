@@ -79,7 +79,6 @@ export default Vue.extend({
     this.onInputChange = lodash.debounce(this.onInputChange, 500);
   },
   async mounted() {
-    console.log(this.requestType);
     this.$root.showToolbar(
       this.shouldLoadNecessities ? "NECESSIDADES" : "DOAÇÕES"
     );
@@ -96,6 +95,7 @@ export default Vue.extend({
       this.$router.push(route);
     },
     async getNecessities() {
+      this.$root.startLoader();
       const params = {
         direcao: "DESC",
         ordenacao: "dataHora",
@@ -105,7 +105,9 @@ export default Vue.extend({
         textoBusca: this.filters.name,
       };
       const getter = this.shouldLoadNecessities ? getNecessities : getDonations;
-      return getter(params);
+      const response = await getter(params);
+      this.$root.stopLoader();
+      return response;
     },
     loadFilters() {
       const filters = getNecessitiesFilters();
@@ -113,10 +115,8 @@ export default Vue.extend({
         this.$emit("change", filters);
       }
     },
-    async onInputChange(text) {
-      console.log(text);
+    async onInputChange() {
       this.necessities = await this.getNecessities();
-      console.log(this.filters);
     },
   },
   computed: {
