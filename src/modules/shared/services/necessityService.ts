@@ -1,10 +1,11 @@
 import { HTTP } from "@/api/http-common";
-import { fromRequestFormat } from "@/modules/shared/utils/NecessityMapper";
+import { fromBackendFormat } from "@/modules/shared/utils/RequestMapper";
 import { Status } from "../enums/Status";
 import {
   NecessityEntity,
   RequestNecessityEntity,
 } from "../models/NecessityEntity";
+import { RequestBackendEntity, RequestEntity } from "../models/RequestEntity";
 import { mountQueryString } from "../utils/QueryParamBuilder";
 
 export function createNecessity(necessity: NecessityEntity): Promise<void> {
@@ -25,20 +26,20 @@ export function createNecessity(necessity: NecessityEntity): Promise<void> {
 
 export function getNecessities(
   queryParam: NecessitiesRequestParams
-): Promise<NecessityEntity[]> {
+): Promise<RequestEntity[]> {
   const params = mountQueryString(queryParam);
   return HTTP.get(`public/necessidades?${params}`)
     .then((response) => {
       const data = response.data;
-      const serviceNecessities = data.conteudo as RequestNecessityEntity[];
-      return Promise.resolve(serviceNecessities.map(fromRequestFormat));
+      const serviceNecessities = data.conteudo as RequestBackendEntity[];
+      return Promise.resolve(serviceNecessities.map(fromBackendFormat));
     })
     .catch((err) => Promise.reject(err));
 }
 
-export function getNecessity(id: number): Promise<NecessityEntity> {
+export function getNecessity(id: number): Promise<RequestEntity> {
   return HTTP.get(`public/necessidades/${id}`)
-    .then(({ data }) => fromRequestFormat(data))
+    .then(({ data }) => fromBackendFormat(data))
     .catch((err) => Promise.reject(err));
 }
 

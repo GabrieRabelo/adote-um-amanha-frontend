@@ -46,12 +46,16 @@ new Vue({
     hideToolbarButton() {
       this.isToolbarButtonVisible = false;
     },
-    showSnackbar({title = "Sucesso", body = "", color = "sucess"}: SnackbarProperties) {
+    showSnackbar({
+      title = "",
+      body = "",
+      color = "success",
+    }: SnackbarProperties) {
       this.snackbar = {
         color: color,
         body: body,
         title: title,
-        visible: true
+        visible: true,
       };
     },
     showBottomSheet() {
@@ -70,7 +74,7 @@ new Vue({
 }).$mount("#app");
 
 interface SnackbarProperties {
-  title: string,
-  body: string,
-  color: string
+  title: string;
+  body: string;
+  color: string;
 }

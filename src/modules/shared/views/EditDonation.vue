@@ -1,7 +1,7 @@
 <template>
   <v-container
     class="px-8 px-sm-4 d-flex align-start"
-    v-if="newNecessity"
+    v-if="newDonation"
     fill-height
   >
     <v-container class="px-0">
@@ -9,7 +9,7 @@
         <v-row class="mt-8">
           <Input
             label="Assunto"
-            v-model="newNecessity.title"
+            v-model="newDonation.title"
             :rules="[inputValidations.required]"
           />
         </v-row>
@@ -39,17 +39,9 @@
           <TextArea
             name="input-descricao"
             label="Descrição"
-            v-model="newNecessity.description"
+            v-model="newDonation.description"
             maxlength="255"
           ></TextArea>
-        </v-row>
-        <v-row>
-          <Input
-            prepend-inner-icon="mdi-link"
-            label="URL"
-            placeholder="youtube.com/watch"
-            v-model="necessityVideoURL"
-          />
         </v-row>
       </v-form>
     </v-container>
@@ -83,7 +75,6 @@
       @cancel="isModalOpen = false"
       @confirm="onDeleteConfirmed"
       :loading="isModalLoading"
-      :isButtonOn="true"
     />
   </v-container>
 </template>
@@ -94,20 +85,22 @@ import Input from "../../shared/components/Input.vue";
 import Button from "../../shared/components/Button.vue";
 import Select from "../../shared/components/Select.vue";
 import {
-  deleteNecessity,
-  getNecessity,
-  updateNecessity,
-} from "../../shared/services/necessityService";
+  deleteDonation,
+  getDonation,
+  updateDonation,
+} from "../../donator/services/DonationService";
 import TextArea from "../../shared/components/TextArea.vue";
 import CategoryUtils from "../../shared/enums/Category";
 import SubcategoriesUtils from "../../shared/enums/Subcategory";
 import InputValidations from "../../shared/utils/InputValidations";
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
 import { areEqual } from "../../shared/utils/ObjectComparator";
-import YoutubeVideoParser from "../../shared/utils/YoutubeVideoParser";
-import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
+import ToolbarMenuMixin from "../mixins/ToolbarMenuMixin";
+import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
+import BottomSheetDefaultItems from "../utils/BottomSheetDefaultItems";
 
 export default Vue.extend({
+  mixins: [ToolbarMenuMixin, ToolbarNavigationMixin],
   components: {
     Input,
     Button,
@@ -115,21 +108,32 @@ export default Vue.extend({
     TextArea,
     ConfirmationModal,
   },
-  mixins: [ToolbarNavigationMixin],
-  data: () => ({
-    necessity: {},
-    newNecessity: null,
-    isFormValid: true,
-    confirmationTitle: "",
-    confirmationMessage: "",
-    isModalOpen: false,
-    isModalLoading: false,
-    isSaveButtonLoading: false,
-  }),
+  data() {
+    return {
+      donation: {},
+      newDonation: null,
+      isFormValid: true,
+      confirmationTitle: "",
+      confirmationMessage: "",
+      isModalOpen: false,
+      isModalLoading: false,
+      isSaveButtonLoading: false,
+      menuBottomSheetItems: [
+        {
+          title: "Excluir",
+          icon: "mdi-delete",
+          onClick: this.onDeleteClick.bind(this),
+        },
+        BottomSheetDefaultItems.logoutMenuItem,
+      ],
+    };
+  },
   async mounted() {
-    this.$root.showToolbar("EDITAR");
-    this.necessity = await getNecessity(this.$route.params.id);
-    this.newNecessity = { ...this.necessity };
+    this.$root.showToolbar("EDITAR DOAÇÃO");
+    this.$root.startLoader();
+    this.donation = await getDonation(this.$route.params.id);
+    this.$root.stopLoader();
+    this.newDonation = { ...this.donation };
   },
   computed: {
     allSubcategories() {
@@ -140,36 +144,28 @@ export default Vue.extend({
     },
     currentSubcategoryObject: {
       get() {
-        return SubcategoriesUtils.toObject(this.newNecessity.subcategory);
+        return SubcategoriesUtils.toObject(this.newDonation.subcategory);
       },
       set(value) {
-        this.newNecessity.subcategory = value;
+        this.newDonation.subcategory = value;
       },
     },
     currentCategoryObject: {
       get() {
-        return CategoryUtils.toSingularObject(this.newNecessity.category);
+        return CategoryUtils.toSingularObject(this.newDonation.category);
       },
       set(value) {
-        this.newNecessity.category = value;
+        this.newDonation.category = value;
       },
     },
     isSaveButtonDisabled() {
-      return this.necessityHasChanged && this.isFormValid;
+      return this.donationHasChanged && this.isFormValid;
     },
-    necessityHasChanged() {
-      return !areEqual(this.necessity, this.newNecessity);
+    donationHasChanged() {
+      return !areEqual(this.donation, this.newDonation);
     },
     inputValidations() {
       return InputValidations;
-    },
-    necessityVideoURL: {
-      get() {
-        return YoutubeVideoParser.toEmbeddedVideo(this.newNecessity.url);
-      },
-      set(val) {
-        this.newNecessity.url = YoutubeVideoParser.toEmbeddedVideo(val);
-      },
     },
   },
   methods: {
@@ -181,28 +177,44 @@ export default Vue.extend({
     },
     onDeleteConfirmed() {
       this.isModalLoading = true;
-      deleteNecessity(this.necessity.id)
+      deleteDonation(this.donation.id)
         .then(() => {
           this.isModalOpen = false;
           this.isModalLoading = false;
-          this.$root.showSnackbar({title:"NECESSIDADE EXCLUÍDA!", body:"Sua necessidade foi excluída da lista de necessidades.", color:"success"});
+          this.$root.showSnackbar({
+            title: "DOAÇÃO EXCLUÍDA!",
+            body: "Sua necessidade foi excluída da lista de necessidades.",
+            color: "success",
+          });
           this.$router.push("/home");
         })
         .catch(() => {
-          this.$root.showSnackbar({title:"ERRO INESPERADO!", body:"Ocorreu um erro inesperado ao tentar realizar sua solicitação... Tente novamente!", color:"error"});
+          this.$root.showSnackbar({
+            title: "ERRO INESPERADO!",
+            body: "Ocorreu um erro inesperado ao tentar realizar sua solicitação... Tente novamente!",
+            color: "error",
+          });
           this.isModalLoading = false;
         });
     },
     onSaveButtonClick() {
       this.isSaveButtonLoading = true;
-      updateNecessity(this.newNecessity)
+      updateDonation(this.newDonation)
         .then(() => {
           this.isSaveButtonLoading = false;
-          this.$root.showSnackbar({title:"ALTERAÇÕES SALVAS!", body:"Alterações salvas com sucesso.", color:"success"});
+          this.$root.showSnackbar({
+            title: "ALTERAÇÕES SALVAS!",
+            body: "Alterações salvas com sucesso.",
+            color: "success",
+          });
           this.$router.go(-1);
         })
         .catch(() => {
-          this.$root.showSnackbar({title:"ERRO INESPERADO", body:"Ocorreu um erro inesperado ao tentar realizar sua solicitação... Tente novamente!", color:"error"});
+          this.$root.showSnackbar({
+            title: "ERRO INESPERADO",
+            body: "Ocorreu um erro inesperado ao tentar realizar sua solicitação... Tente novamente!",
+            color: "error",
+          });
           this.isSaveButtonLoading = false;
         });
     },
