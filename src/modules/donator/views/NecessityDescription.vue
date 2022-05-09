@@ -20,14 +20,7 @@
       </v-row>
     </v-container>
 
-    <v-container v-if="necessity">
-      <v-row class="align-start ml-1 mt-1 align-center">
-        <img width="60px" src="../../../assets/img/institution-logo.png" />
-        <div class="a-text ml-3 text-decoration-underline">
-          {{ necessity.institutionName }}
-        </div>
-      </v-row>
-    </v-container>
+    <UserCard :userRole="userRole" :userName="necessity.institutionName" />
 
     <v-container v-if="necessity">
       <v-row class="justify-center">
@@ -71,11 +64,13 @@ import { Status } from "@/modules/shared/enums/Status";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
+import UserCard from "../../shared/components/UserCard.vue"
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({
     necessity: null,
+    userRole: UserRole.institution,
   }),
   async mounted() {
     this.$root.showToolbar("SOLICITAÇÃO");
@@ -84,6 +79,7 @@ export default Vue.extend({
   components: {
     EmbeddedVideo,
     Button,
+    UserCard,
   },
   computed: {
     attributes() {
