@@ -32,10 +32,10 @@
         @click="onNecessityClick(necessity)"
       />
     </v-row>
-    <v-row class="justify-end mr-6" v-if="isInstitution">
+    <v-row class="justify-end mr-6" v-if="shouldShowCreateButton">
       <Button
         class="a-fab"
-        title="Criar"
+        :title="shouldLoadNecessities ? 'Criar' : 'Doar'"
         prependIcon="mdi-plus"
         color="primary"
         elevation="4"
@@ -120,8 +120,15 @@ export default Vue.extend({
     },
   },
   computed: {
-    isInstitution() {
-      return getUserData().role == UserRole.institution;
+    shouldShowCreateButton() {
+      return (
+        (getUserData().role == UserRole.institution &&
+          this.shouldLoadNecessities) ||
+        (getUserData().role === UserRole.donator && !this.shouldLoadNecessities)
+      );
+    },
+    shouldLoadNecessities() {
+      return this.requestType === RequestType.necessity;
     },
     shouldLoadNecessities() {
       return this.requestType === RequestType.necessity;
@@ -132,9 +139,9 @@ export default Vue.extend({
 
 <style scoped>
 .a-fab {
-  max-width: 120px;
   position: fixed;
   bottom: 12px;
+  max-width: 120px;
 }
 .container {
   height: 100%;
