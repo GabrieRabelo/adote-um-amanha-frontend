@@ -11,8 +11,9 @@ export type RequestEntity = {
   subcategory: Subcategory;
   description: string;
   status: Status;
-  donator?: Partial<UserEntity>;
-  institution?: Partial<UserEntity>;
+  user?: Partial<UserEntity>;
+  // donator?: Partial<UserEntity>;
+  //  institution?: Partial<UserEntity>;
   url?: string;
   type: RequestType;
 };
@@ -25,12 +26,9 @@ export type RequestBackendEntity = {
   subcategoria: string;
   data: string;
   status: string;
-  idDoador?: number;
-  idCasa?: number;
   urlVideo?: string;
-  nomeDoador?: string;
   tipo: RequestType;
-  nomeCasa?: string;
+  nomeUsuario?: string;
 };
 
 export enum RequestType {

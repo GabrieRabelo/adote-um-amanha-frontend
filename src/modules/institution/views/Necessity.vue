@@ -40,17 +40,9 @@
         <Button
           title="Editar"
           color="primary"
-          prependIcon="mdi-pencil"
-          compact
-          v-if="canEdit"
-          @click="onEditButtonClick"
-        />
-        <Button
-          class="mr-7"
-          title="Doar"
-          color="primary"
           prependIcon="mdi-hand-heart-outline"
           compact
+          v-if="canEdit"
           @click="onDonateButtonClick"
         />
       </v-row>
@@ -60,7 +52,7 @@
       :title="confirmationTitle"
       :message="confirmationMessage"
       @cancel="isModalOpen = false"
-      @confirm="onDeleteConfirmed"
+      @confirm="onConfirmButtonClick()"
       :loading="isModalLoading"
     />
   </v-container>
@@ -72,6 +64,7 @@ import Category from "../../shared/enums/Category";
 import Subcategory from "../../shared/enums/Subcategory";
 import { getNecessity } from "../../shared/services/necessityService";
 import moment from "moment";
+
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
 import Button from "../../shared/components/Button.vue";
 import EmbeddedVideo from "../../shared/components/EmbeddedVideo.vue";
@@ -79,6 +72,7 @@ import { Status } from "@/modules/shared/enums/Status";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
+import { updateDonation } from "@/modules/donator/services/DonationService";
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({
@@ -92,7 +86,7 @@ export default Vue.extend({
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
     this.necessity = await getNecessity(this.$route.params.id);
-    console.log(this.necessity);
+    console.log("Necessidade.vue", this.necessity.user.name);
   },
   components: {
     EmbeddedVideo,
@@ -124,14 +118,36 @@ export default Vue.extend({
     },
   },
   methods: {
+    onConfirmButtonClick() {
+      this.isModelLoading = true;
+      console.log(this.necessity);
+      updateDonation(this.necessity)
+        .then(() => {
+          this.isModalOpen = false;
+          this.isModalLoading = false;
+          this.$root.showSnackbar({
+            title: "Suadoação foi enviada, muito obrigado!",
+            body: "Assim que sua doação for avaliada, entraremos em contato para mais informações.",
+            color: "success",
+          });
+          this.$router.push("/home");
+        })
+        .catch(() => {
+          this.$root.showSnackbar({
+            title: "ERRO INESPERADO!",
+            body: "Ocorreu um erro inesperado ao tentar realizar sua doação... Tente novamente!",
+            color: "error",
+          });
+          this.isModalLoading = false;
+        });
+    },
     onEditButtonClick() {
       this.$router.push(`/necessity/${this.necessity.id}/edit`);
     },
     onDonateButtonClick() {
       this.confirmationTitle = "CONFIRMAR DOAÇÂO";
-      this.confirmationMessage = `Deseja confirmar a doação para ${this.necessity.institutionName}`;
+      this.confirmationMessage = `Deseja confirmar a doação para ${this.necessity.user.name}`;
       this.isModalOpen = true;
-      this.$route.push();
     },
   },
 });
