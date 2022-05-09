@@ -11,17 +11,17 @@
 
 <script>
 import Vue from "vue";
-import NecessitiesFilter from "../components/NecessitiesFilter.vue";
-import NecessitiesContent from "../components/NecessitiesContent.vue";
-import { getNecessitiesFilters } from "../utils/UserPreferences";
-import { RequestType } from "../models/RequestEntity";
+import NecessitiesFilter from "../../shared/components/NecessitiesFilter.vue";
+import NecessitiesContent from "../../shared/components/NecessitiesContent.vue";
+import { getDonationsFilters } from "../../shared/utils/UserPreferences";
+import { RequestType } from "@/modules/shared/models/RequestEntity";
 
 export default Vue.extend({
   components: { NecessitiesFilter, NecessitiesContent },
   data: () => ({
     filterActive: false,
-    filters: getNecessitiesFilters(),
-    requestType: RequestType.necessity,
+    filters: getDonationsFilters(),
+    requestType: RequestType.donation,
   }),
   methods: {
     onNecessityClick(necessity) {

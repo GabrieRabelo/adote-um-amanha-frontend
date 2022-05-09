@@ -54,7 +54,6 @@
 import Vue from "vue";
 import Category from "../../shared/enums/Category";
 import Subcategory from "../../shared/enums/Subcategory";
-import { getNecessity } from "../../shared/services/necessityService";
 import moment from "moment";
 import Button from "../../shared/components/Button.vue";
 import EmbeddedVideo from "../../shared/components/EmbeddedVideo.vue";
@@ -62,6 +61,7 @@ import { Status } from "@/modules/shared/enums/Status";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
+import { getNecessity } from "@/modules/shared/services/NecessityService";
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({

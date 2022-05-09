@@ -64,6 +64,7 @@ export default Vue.extend({
   },
   mounted() {
     this.$root.showToolbar("MENU PRINCIPAL");
+    this.$root.stopLoader();
   },
   methods: {
     onNecessitiesButtonClick() {

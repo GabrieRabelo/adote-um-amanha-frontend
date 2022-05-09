@@ -102,12 +102,13 @@ import Input from "../components/Input.vue";
 import TextArea from "../components/TextArea.vue";
 import InputValidations from "../utils/InputValidations";
 import { Subcategory } from "../enums/Subcategory";
-import { createNecessity } from "../services/necessityService";
+import { createNecessity } from "../services/NecessityService";
 import YoutubeVideoParser from "@/modules/shared/utils/YoutubeVideoParser";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import ConfirmationModal from "../components/ConfirmationModal.vue";
-import { createDonation } from "../../donationService";
+import { createDonation } from "../../donator/services/DonationService";
+import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
 export default Vue.extend({
   components: {
     Button,
@@ -117,6 +118,7 @@ export default Vue.extend({
     TextArea,
     ConfirmationModal,
   },
+  mixins: [ToolbarNavigationMixin],
   data: () => ({
     isLoading: false,
     tab: 0,
