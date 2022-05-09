@@ -130,9 +130,6 @@ export default Vue.extend({
     shouldLoadNecessities() {
       return this.requestType === RequestType.necessity;
     },
-    shouldLoadNecessities() {
-      return this.requestType === RequestType.necessity;
-    },
   },
 });
 </script>
