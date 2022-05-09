@@ -45,8 +45,24 @@
           v-if="canEdit"
           @click="onEditButtonClick"
         />
+        <Button
+          class="mr-7"
+          title="Doar"
+          color="primary"
+          prependIcon="mdi-hand-heart-outline"
+          compact
+          @click="onDonateButtonClick"
+        />
       </v-row>
     </v-container>
+    <ConfirmationModal
+      v-model="isModalOpen"
+      :title="confirmationTitle"
+      :message="confirmationMessage"
+      @cancel="isModalOpen = false"
+      @confirm="onDeleteConfirmed"
+      :loading="isModalLoading"
+    />
   </v-container>
 </template>
 
@@ -56,6 +72,7 @@ import Category from "../../shared/enums/Category";
 import Subcategory from "../../shared/enums/Subcategory";
 import { getNecessity } from "../../shared/services/necessityService";
 import moment from "moment";
+import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
 import Button from "../../shared/components/Button.vue";
 import EmbeddedVideo from "../../shared/components/EmbeddedVideo.vue";
 import { Status } from "@/modules/shared/enums/Status";
@@ -66,14 +83,21 @@ export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({
     necessity: null,
+    confirmationTitle: "",
+    confirmationMessage: "",
+    isModalOpen: false,
+    isModalLoading: false,
+    isSaveButtonLoading: false,
   }),
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
     this.necessity = await getNecessity(this.$route.params.id);
+    console.log(this.necessity);
   },
   components: {
     EmbeddedVideo,
     Button,
+    ConfirmationModal,
   },
   computed: {
     attributes() {
@@ -102,6 +126,12 @@ export default Vue.extend({
   methods: {
     onEditButtonClick() {
       this.$router.push(`/necessity/${this.necessity.id}/edit`);
+    },
+    onDonateButtonClick() {
+      this.confirmationTitle = "CONFIRMAR DOAÇÂO";
+      this.confirmationMessage = `Deseja confirmar a doação para ${this.necessity.institutionName}`;
+      this.isModalOpen = true;
+      this.$route.push();
     },
   },
 });
