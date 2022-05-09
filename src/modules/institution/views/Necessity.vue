@@ -54,6 +54,7 @@
       @cancel="isModalOpen = false"
       @confirm="onConfirmButtonClick()"
       :loading="isModalLoading"
+      :isCancelButtonOn="true"
     />
   </v-container>
 </template>
@@ -87,6 +88,7 @@ export default Vue.extend({
     this.$root.showToolbar("NECESSIDADES");
     this.necessity = await getNecessity(this.$route.params.id);
     console.log("Necessidade.vue", this.necessity.user.name);
+    //institution: { name: request.nomeCasa, id: request.idCasa },
   },
   components: {
     EmbeddedVideo,
@@ -121,12 +123,12 @@ export default Vue.extend({
     onConfirmButtonClick() {
       this.isModelLoading = true;
       console.log(this.necessity);
-      updateDonation(this.necessity)
+      updateDonation(this.necessity.id)
         .then(() => {
           this.isModalOpen = false;
           this.isModalLoading = false;
           this.$root.showSnackbar({
-            title: "Suadoação foi enviada, muito obrigado!",
+            title: "Sua doação foi enviada, muito obrigado!",
             body: "Assim que sua doação for avaliada, entraremos em contato para mais informações.",
             color: "success",
           });
