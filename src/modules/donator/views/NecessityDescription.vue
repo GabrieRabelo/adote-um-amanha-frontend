@@ -56,7 +56,7 @@
 import Vue from "vue";
 import Category from "../../shared/enums/Category";
 import Subcategory from "../../shared/enums/Subcategory";
-import { getNecessity } from "../../shared/services/necessityService";
+import { getNecessity } from "../../shared/services/NecessityService";
 import moment from "moment";
 import Button from "../../shared/components/Button.vue";
 import EmbeddedVideo from "../../shared/components/EmbeddedVideo.vue";

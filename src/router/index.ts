@@ -5,11 +5,13 @@ import Necessity from "../modules/institution/views/Necessity.vue";
 import Instituition from "../modules/institution/views/Instituition.vue";
 import SplashScreen from "../modules/shared/views/SplashScreen.vue";
 import EditNecessity from "../modules/institution/views/EditNecessity.vue";
-import RegisterNecessity from "../modules/institution/views/RegisterNecessity.vue";
 import NecessityDescription from "../modules/donator/views/NecessityDescription.vue";
+import RegisterRequest from "../modules/shared/views/RegisterRequest.vue";
 import Home from "../modules/shared/views/Home.vue";
 import Necessities from "../modules/shared/views/Necessities.vue";
 import { isAuthenticated } from "@/modules/shared/utils/AuthenticationManager";
+import EditDonation from "../modules/shared/views/EditDonation.vue";
+import Donations from "../modules/donator/views/Donations.vue";
 
 Vue.use(VueRouter);
 
@@ -46,7 +48,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/necessities/create",
     name: "",
-    component: RegisterNecessity,
+    component: RegisterRequest,
   },
   {
     path: "/necessities",
@@ -57,6 +59,21 @@ const routes: Array<RouteConfig> = [
     path: "/necessityDescription/:id",
     name: "Donator necessity description",
     component: NecessityDescription,
+  },
+  {
+    path: "/donations",
+    name: "Donations",
+    component: Donations,
+  },
+  {
+    path: "/donations/:id/edit",
+    name: "Edit Donation",
+    component: EditDonation,
+  },
+  {
+    path: "/donation/create",
+    name: "",
+    component: RegisterRequest,
   },
 ];
 
