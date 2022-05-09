@@ -32,10 +32,10 @@
         @click="onNecessityClick(necessity)"
       />
     </v-row>
-    <v-row class="justify-end mr-6" v-if="isInstitution">
+    <v-row class="justify-end mr-6" v-if="shouldShowCreateButton">
       <Button
         class="a-fab"
-        title="Criar"
+        :title="shouldLoadNecessities ? 'Criar' : 'Doar'"
         prependIcon="mdi-plus"
         color="primary"
         elevation="4"
@@ -50,7 +50,7 @@ import Vue from "vue";
 import Input from "./Input.vue";
 import NecessityCard from "./NecessityCard.vue";
 import Button from "./Button.vue";
-import { getNecessities } from "../services/necessityService";
+import { getNecessities } from "../services/NecessityService";
 import { getUserData } from "../utils/LoggedUserManager";
 import { UserRole } from "../enums/UserRole";
 import ToolbarMenuMixin from "../mixins/ToolbarMenuMixin";
@@ -58,12 +58,15 @@ import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
 import InputChips from "./InputChips.vue";
 import { getNecessitiesFilters } from "../utils/UserPreferences";
 import lodash from "lodash";
+import { RequestType } from "../models/RequestEntity";
+import { getDonations } from "@/modules/donator/services/DonationService";
 
 export default Vue.extend({
   mixins: [ToolbarMenuMixin, ToolbarNavigationMixin],
   components: { Input, NecessityCard, Button, InputChips },
   props: {
     filters: Object,
+    requestType: String,
   },
   model: {
     prop: "filters",
@@ -76,7 +79,10 @@ export default Vue.extend({
     this.onInputChange = lodash.debounce(this.onInputChange, 500);
   },
   async mounted() {
-    this.$root.showToolbar("NECESSIDADES");
+    console.log(this.requestType);
+    this.$root.showToolbar(
+      this.shouldLoadNecessities ? "NECESSIDADES" : "DOAÇÕES"
+    );
     this.$root.startLoader();
     this.loadFilters();
     this.necessities = await this.getNecessities();
@@ -84,7 +90,10 @@ export default Vue.extend({
   },
   methods: {
     onNecessityClick(necessity) {
-      this.$router.push(`/necessity/${necessity.id}`);
+      const route = this.shouldLoadNecessities
+        ? `/necessity/${necessity.id}`
+        : `/donations/${necessity.id}`;
+      this.$router.push(route);
     },
     async getNecessities() {
       const params = {
@@ -95,7 +104,8 @@ export default Vue.extend({
         status: this.filters.status.join(","),
         textoBusca: this.filters.name,
       };
-      return getNecessities(params);
+      const getter = this.shouldLoadNecessities ? getNecessities : getDonations;
+      return getter(params);
     },
     loadFilters() {
       const filters = getNecessitiesFilters();
@@ -110,8 +120,15 @@ export default Vue.extend({
     },
   },
   computed: {
-    isInstitution() {
-      return getUserData().role == UserRole.institution;
+    shouldShowCreateButton() {
+      return (
+        (getUserData().role == UserRole.institution &&
+          this.shouldLoadNecessities) ||
+        (getUserData().role === UserRole.donator && !this.shouldLoadNecessities)
+      );
+    },
+    shouldLoadNecessities() {
+      return this.requestType === RequestType.necessity;
     },
   },
 });
@@ -119,9 +136,9 @@ export default Vue.extend({
 
 <style scoped>
 .a-fab {
-  max-width: 120px;
   position: fixed;
   bottom: 12px;
+  max-width: 120px;
 }
 .container {
   height: 100%;
