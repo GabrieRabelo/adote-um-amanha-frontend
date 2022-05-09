@@ -10,6 +10,7 @@ import Home from "../modules/shared/views/Home.vue";
 import Necessities from "../modules/shared/views/Necessities.vue";
 import { isAuthenticated } from "@/modules/shared/utils/AuthenticationManager";
 import EditDonation from "../modules/shared/views/EditDonation.vue";
+import Donations from "../modules/donator/views/Donations.vue";
 
 Vue.use(VueRouter);
 
@@ -52,6 +53,11 @@ const routes: Array<RouteConfig> = [
     path: "/necessities",
     name: "List necessities",
     component: Necessities,
+  },
+  {
+    path: "/donations",
+    name: "Donations",
+    component: Donations,
   },
   {
     path: "/donations/:id/edit",
