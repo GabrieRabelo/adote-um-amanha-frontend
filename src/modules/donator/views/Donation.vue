@@ -38,6 +38,14 @@
           compact
           @click="$router.go(-1)"
         />
+        <Button
+          title="Editar"
+          color="primary"
+          prependIcon="mdi-pencil"
+          compact
+          v-if="canEdit"
+          @click="onEditButtonClick"
+        />
       </v-row>
     </v-container>
   </v-container>
