@@ -65,7 +65,7 @@ const routes: Array<RouteConfig> = [
     component: EditDonation,
   },
   {
-    path: "/donation/create",
+    path: "/donations/create",
     name: "",
     component: RegisterRequest,
   },
