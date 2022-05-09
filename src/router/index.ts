@@ -9,6 +9,7 @@ import RegisterRequest from "../modules/shared/views/RegisterRequest.vue";
 import Home from "../modules/shared/views/Home.vue";
 import Necessities from "../modules/shared/views/Necessities.vue";
 import { isAuthenticated } from "@/modules/shared/utils/AuthenticationManager";
+import Donation from "../modules/donator/views/Donation.vue";
 import EditDonation from "../modules/shared/views/EditDonation.vue";
 
 Vue.use(VueRouter);
@@ -52,6 +53,11 @@ const routes: Array<RouteConfig> = [
     path: "/necessities",
     name: "List necessities",
     component: Necessities,
+  },
+  {
+    path: "/donations/:id",
+    name: "Donation",
+    component: Donation,
   },
   {
     path: "/donations/:id/edit",
