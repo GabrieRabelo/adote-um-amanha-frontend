@@ -108,6 +108,7 @@ import { UserRole } from "@/modules/shared/enums/UserRole";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import ConfirmationModal from "../components/ConfirmationModal.vue";
 import { createDonation } from "../../donationService";
+import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
 export default Vue.extend({
   components: {
     Button,
@@ -117,6 +118,7 @@ export default Vue.extend({
     TextArea,
     ConfirmationModal,
   },
+  mixins: [ToolbarNavigationMixin],
   data: () => ({
     isLoading: false,
     tab: 0,
