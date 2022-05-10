@@ -99,7 +99,6 @@ export default Vue.extend({
     },
     async getNecessities() {
       this.$root.startLoader();
-      console.log(this.filters);
       const params = {
         direcao: "DESC",
         ordenacao: "dataHora",
@@ -135,7 +134,6 @@ export default Vue.extend({
       );
     },
     isUserDonator() {
-      console.log(getUserData());
       return getUserData().role == UserRole.donator;
     },
   },
