@@ -42,13 +42,29 @@
         <Button
           title="Doar"
           color="primary"
-          prependIcon="mdi-gift"
+          prependIcon="mdi-hand-heart-outline"
           compact
           v-if="canDonate"
           @click="onDonateButtonClick"
         />
       </v-row>
     </v-container>
+    <ConfirmationModal
+      v-model="isModalOpen"
+      :title="confirmationTitle"
+      :message="confirmationMessage"
+      @cancel="isModalOpen = false"
+      @confirm="onConfirmButtonClick()"
+      :loading="isModalLoading"
+      :isCancelButtonOn="true"
+    />
+    <DonationDoneModal
+      v-model="isDonationDoneOpen"
+      :title="donatedTitle"
+      :message="donatedMessage"
+      @confirm="onConfirmMessage()"
+      :loading="isDonationDoneLoading"
+    />
   </v-container>
 </template>
 
@@ -64,13 +80,25 @@ import { Status } from "@/modules/shared/enums/Status";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
-import UserCard from "../../shared/components/UserCard.vue"
+import UserCard from "../../shared/components/UserCard.vue";
+import { matchDonation } from "../services/DonationService";
+import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
+import DonationDoneModal from "../../shared/components/DonationDoneModal.vue";
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({
     necessity: null,
     userRole: UserRole.institution,
+    isModalOpen: false,
+    isModalLoading: false,
+    isDonationDoneOpen: false,
+    isDonationDoneLoading: false,
+    confirmationTitle: "",
+    confirmationMessage: "",
+    donatedTitle: "Sua doação foi enviada, muito obrigado!",
+    donatedMessage:
+      "Assim que sua doação for avaliada, entraremos em contato para mais informações.",
   }),
   async mounted() {
     this.$root.showToolbar("SOLICITAÇÃO");
@@ -80,6 +108,8 @@ export default Vue.extend({
     EmbeddedVideo,
     Button,
     UserCard,
+    ConfirmationModal,
+    DonationDoneModal,
   },
   computed: {
     attributes() {
@@ -107,7 +137,30 @@ export default Vue.extend({
   },
   methods: {
     onDonateButtonClick() {
-      //this.$router.push(``);
+      this.confirmationTitle = "CONFIRMAR DOAÇÃO";
+      this.confirmationMessage = `Deseja confirmar a doação para <b>${this.necessity.user.name}</b>? <br/> <br/> <i>${this.necessity.description}</i>`;
+      this.isModalOpen = true;
+    },
+    onConfirmMessage() {
+      this.isDonationDoneOpen = false;
+      this.$router.push("/donations");
+    },
+    onConfirmButtonClick() {
+      this.isModelLoading = true;
+      matchDonation(this.necessity)
+        .then(() => {
+          this.isModalOpen = false;
+          this.isModalLoading = false;
+          this.isDonationDoneOpen = true;
+        })
+        .catch(() => {
+          this.$root.showSnackbar({
+            title: "ERRO INESPERADO!",
+            body: "Ocorreu um erro inesperado ao tentar realizar sua doação... Tente novamente!",
+            color: "error",
+          });
+          this.isModalLoading = false;
+        });
     },
   },
 });
