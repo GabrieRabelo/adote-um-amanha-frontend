@@ -2,7 +2,7 @@ import { EnumerableObject } from "../types/EnumerableObject";
 
 export enum Category {
   asset = "BEM",
-  service = "SERVIÇO",
+  service = "SERVICO",
 }
 
 /**

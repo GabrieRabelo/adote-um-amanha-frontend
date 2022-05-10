@@ -15,7 +15,6 @@ import Vue from "vue";
 export default Vue.extend({
   props: {
     variant: String,
-    chips: Array,
   },
   inheritAttrs: false,
   computed: {
@@ -31,7 +30,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .v-text-field {
-  border-radius: 10px;
+  border-radius: 40px;
 
   &--outlined {
     ::v-deep fieldset {

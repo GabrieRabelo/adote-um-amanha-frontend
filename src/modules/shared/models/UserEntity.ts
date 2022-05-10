@@ -10,17 +10,20 @@ export class UserEntity {
     public site: string,
     public addressDTO: AddressDTO,
     public role: UserRole
+   
   ) {}
 
   get address(): string {
-    const { rua, numero, bairro, cidade, estado, cep } = this.addressDTO;
+    const { rua, numero, bairro, cidade, estado, cep,complemento } = this.addressDTO;
     const fields = [
       this.getAddressPart(rua, ","),
       this.getAddressPart(numero, " -"),
+      complemento == undefined ? '' :  this.getAddressPart(complemento, ","),
       this.getAddressPart(bairro, ","),
       this.getAddressPart(cidade, " -"),
       this.getAddressPart(estado, ","),
       this.getAddressPart(cep, ""),
+    
     ];
     return fields.join(" ");
   }

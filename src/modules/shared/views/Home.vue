@@ -8,8 +8,10 @@ import Necessities from "./Necessities.vue";
 import { UserRole } from "../enums/UserRole";
 import { getUserData } from "../utils/LoggedUserManager";
 import HomeScreenDonator from "../../donator/views/HomescreenDonator.vue";
+import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
 
 export default Vue.extend({
+  mixins: [ToolbarNavigationMixin],
   components: {
     Necessities,
     HomeScreenDonator,
@@ -20,9 +22,6 @@ export default Vue.extend({
   mounted() {
     this.currentComponent = this.getCurrentComponent();
     this.$root.hideToolbarButton();
-  },
-  destroyed() {
-    this.$root.showToolbarButton();
   },
   methods: {
     getCurrentComponent() {
