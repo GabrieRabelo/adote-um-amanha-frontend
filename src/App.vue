@@ -15,7 +15,7 @@
       <router-view />
     </v-main>
     <v-snackbar v-model="$root.snackbar.visible" :color="$root.snackbar.color">
-      <v-layout align-center>
+      <v-layout align-center @click="$root.snackbar.visible=false">
         <v-layout column>
           <div>
             <strong>{{ $root.snackbar.title }}</strong>
@@ -34,7 +34,7 @@
   </v-app>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 import BottomSheetMenu from "./modules/shared/components/BottomSheet/BottomSheetMenu.vue";
 import Toolbar from "./modules/shared/components/Toolbar.vue";
