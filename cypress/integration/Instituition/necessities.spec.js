@@ -66,7 +66,15 @@ describe("Necessities", () => {
     })
       .first()
       .click();
-    cy.get("#list-item-89-1 > .v-list-item__content > .v-list-item__title", {
+    cy.contains('[class="v-list-item__title"]', "Serviço", {
+      timeout: Cypress.env("timeOut"),
+    }).click();
+    cy.get('[class="v-select__selection v-select__selection--comma"]', {
+      timeout: Cypress.env("timeOut"),
+    })
+      .last()
+      .click();
+    cy.contains('[class="v-list-item__title"]', "Educação", {
       timeout: Cypress.env("timeOut"),
     }).click();
     cy.get('textarea[name="input-descricao"]', {
