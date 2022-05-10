@@ -63,7 +63,9 @@ describe("Necessities", () => {
       .type("{selectall}{backspace}Aulas de Matemática");
     cy.get('[class="v-select__selection v-select__selection--comma"]', {
       timeout: Cypress.env("timeOut"),
-    }).click();
+    })
+      .first()
+      .click();
     cy.get("#list-item-89-1 > .v-list-item__content > .v-list-item__title", {
       timeout: Cypress.env("timeOut"),
     }).click();
