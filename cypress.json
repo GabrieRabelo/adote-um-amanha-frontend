@@ -1,0 +1,10 @@
+{
+  "baseUrl": "http://localhost:3000",
+  "env": {
+    "timeOut": 20000,
+    "longTimeOut": 40000,
+    "emailHouse": "lar_esperanca@email.com",
+    "emailDonator": "rabelo@gmail.com",
+    "password": "admin"
+  }
+}

@@ -4,7 +4,7 @@ describe("CategoryUtils", () => {
   describe("toString", () => {
     const pluralCases = [
       ["BEM", "Bens"],
-      ["SERVIÇO", "Serviços"],
+      ["SERVICO", "Serviços"],
     ];
     test.each(pluralCases)(
       "should return plural string for parameter",
@@ -16,7 +16,7 @@ describe("CategoryUtils", () => {
 
     const singularCases = [
       ["BEM", "Bem"],
-      ["SERVIÇO", "Serviço"],
+      ["SERVICO", "Serviço"],
     ];
     test.each(singularCases)(
       "should return singular string for parameter",
@@ -30,7 +30,7 @@ describe("CategoryUtils", () => {
   describe("toObject", () => {
     const pluralCases = [
       ["BEM", { name: "Bens", value: "BEM" }],
-      ["SERVIÇO", { name: "Serviços", value: "SERVIÇO" }],
+      ["SERVICO", { name: "Serviços", value: "SERVICO" }],
     ];
     test.each(pluralCases)(
       "should return object with plural string for parameter",
@@ -42,7 +42,7 @@ describe("CategoryUtils", () => {
 
     const singularCases = [
       ["BEM", { name: "Bem", value: "BEM" }],
-      ["SERVIÇO", { name: "Serviço", value: "SERVIÇO" }],
+      ["SERVICO", { name: "Serviço", value: "SERVICO" }],
     ];
     test.each(singularCases)(
       "should return singular string for parameter",
@@ -58,7 +58,7 @@ describe("CategoryUtils", () => {
       const result = CategoryUtils.allPluralObjects();
       const expected = [
         { value: "BEM", name: "Bens" },
-        { value: "SERVIÇO", name: "Serviços" },
+        { value: "SERVICO", name: "Serviços" },
       ];
       expect(result).toMatchObject(expected);
     });
@@ -67,7 +67,7 @@ describe("CategoryUtils", () => {
       const result = CategoryUtils.allSingularObjects();
       const expected = [
         { value: "BEM", name: "Bem" },
-        { value: "SERVIÇO", name: "Serviço" },
+        { value: "SERVICO", name: "Serviço" },
       ];
       expect(result).toMatchObject(expected);
     });

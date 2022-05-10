@@ -6,7 +6,6 @@ describe("SubcategoryUtils", () => {
   describe("toString", () => {
     const cases = [
       ["EDUCACAO", "Educação"],
-      ["ALIMENTACAO", "Alimentação"],
       ["SAUDE", "Saúde"],
       ["PROFISSIONALIZACAO", "Profissionalização"],
       ["OUTROS", "Outros"],
@@ -28,7 +27,6 @@ describe("SubcategoryUtils", () => {
         { name: "Profissionalização", value: "PROFISSIONALIZACAO" },
       ],
       ["EDUCACAO", { name: "Educação", value: "EDUCACAO" }],
-      ["ALIMENTACAO", { name: "Alimentação", value: "ALIMENTACAO" }],
       ["OUTROS", { name: "Outros", value: "OUTROS" }],
     ];
     test.each(cases)(
@@ -50,7 +48,6 @@ describe("SubcategoryUtils", () => {
           name: "Profissionalização",
         },
         { value: "EDUCACAO", name: "Educação" },
-        { value: "ALIMENTACAO", name: "Alimentação" },
         { value: "OUTROS", name: "Outros" },
       ];
       expect(result).toMatchObject(expected);
