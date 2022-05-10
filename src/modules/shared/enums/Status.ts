@@ -29,7 +29,7 @@ function allObjects(): EnumerableObject[] {
 const statusStrings = {
   [Status.pending]: "Pendente",
   [Status.resolved]: "Atendida",
-  [Status.match]: "Vinculada",
+  [Status.match]: "Correspondida",
 };
 
 const statusIcons = {
