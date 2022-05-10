@@ -78,7 +78,6 @@
 import Vue from "vue";
 import Category from "../../shared/enums/Category";
 import Subcategory from "../../shared/enums/Subcategory";
-import { getNecessity } from "../../shared/services/necessityService";
 import moment from "moment";
 
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
@@ -90,6 +89,7 @@ import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
 import { matchDonation } from "@/modules/donator/services/DonationService";
+import { getNecessity } from "@/modules/shared/services/NecessityService";
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({

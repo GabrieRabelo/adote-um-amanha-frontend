@@ -10,7 +10,7 @@ export type AddressDTO = {
     rua: string;
     bairro: string;
     numero: string;
-    complemento: string;
+    complemento?: string;
     cidade: string;
     estado: string;
     cep: string;
