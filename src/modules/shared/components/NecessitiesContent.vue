@@ -90,15 +90,16 @@ export default Vue.extend({
       var route = ``;
       if (this.isUserInstitution) {
         route = `/necessity/${necessity.id}`;
-      } else if(this.isUserDonator) {
+      } else if (this.isUserDonator) {
         route = this.shouldLoadNecessities
-        ? `/necessityDescription/${necessity.id}`
-        : `/donations/${necessity.id}`;
+          ? `/necessityDescription/${necessity.id}`
+          : `/donations/${necessity.id}`;
       }
       this.$router.push(route);
     },
     async getNecessities() {
       this.$root.startLoader();
+      console.log(this.filters);
       const params = {
         direcao: "DESC",
         ordenacao: "dataHora",
@@ -106,6 +107,7 @@ export default Vue.extend({
         subcategorias: this.filters.subcategories.join(","),
         status: this.filters.status.join(","),
         textoBusca: this.filters.name,
+        mesesCorte: this.filters.startDate.value,
       };
       const getter = this.shouldLoadNecessities ? getNecessities : getDonations;
       const response = await getter(params);
@@ -128,12 +130,14 @@ export default Vue.extend({
       return this.requestType === RequestType.necessity;
     },
     isUserInstitution() {
-      return getUserData().role == UserRole.institution && this.shouldLoadNecessities
+      return (
+        getUserData().role == UserRole.institution && this.shouldLoadNecessities
+      );
     },
     isUserDonator() {
-      console.log(getUserData())
-      return getUserData().role == UserRole.donator
-    }
+      console.log(getUserData());
+      return getUserData().role == UserRole.donator;
+    },
   },
 });
 </script>
