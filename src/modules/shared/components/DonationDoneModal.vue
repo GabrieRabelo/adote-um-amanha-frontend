@@ -1,28 +1,26 @@
 <template>
   <v-dialog max-width="330" v-bind="$attrs" v-on="$listeners">
     <v-card class="py-6 px-4">
-      <div class="d-flex justify-center pb-8">
+      <div class="d-flex justify-center pb-2">
         <span class="dialog--title">
           {{ title }}
         </span>
       </div>
 
-      <div class="d-flex justify-center pb-8">
-        <span class="dialog--body" v-html="message"> </span>
+      <div class="d-flex justify-center pb-2">
+        <v-icon color="green" x-large>mdi-check-circle-outline</v-icon>
+      </div>
+
+      <div class="d-flex justify-center pb-2">
+        <span class="dialog--body">
+          {{ message }}
+        </span>
       </div>
 
       <v-card-actions class="justify-center">
         <Button
-          class="button--confirm mr-2"
-          title="Cancelar"
-          color="primary"
-          @click="onCancelClick"
-          v-if="isCancelButtonOn"
-          outlined
-        />
-        <Button
           class="button--confirm"
-          title="Confirmar"
+          title="Ok"
           color="primary"
           @click="onConfirmClick"
           :loading="loading"
@@ -39,15 +37,11 @@ export default Vue.extend({
     title: String,
     message: String,
     loading: Boolean,
-    isCancelButtonOn: Boolean,
   },
   components: {
     Button,
   },
   methods: {
-    onCancelClick() {
-      this.$emit("cancel");
-    },
     onConfirmClick() {
       this.$emit("confirm");
     },

@@ -38,12 +38,20 @@
           @click="$router.go(-1)"
         />
         <Button
-          title="Editar"
+          title="Doar"
           color="primary"
           prependIcon="mdi-hand-heart-outline"
           compact
-          v-if="canEdit"
+          v-if="canDonate"
           @click="onDonateButtonClick"
+        />
+        <Button
+          title="Editar"
+          color="primary"
+          prependIcon="mdi-pencil"
+          compact
+          v-if="canEdit"
+          @click="onEditButtonClick"
         />
       </v-row>
     </v-container>
@@ -56,6 +64,13 @@
       :loading="isModalLoading"
       :isCancelButtonOn="true"
     />
+    <DonationDoneModal
+      v-model="isDonationDoneOpen"
+      :title="donatedTitle"
+      :message="donatedMessage"
+      @confirm="onConfirmMessage()"
+      :loading="isDonationDoneLoading"
+    />
   </v-container>
 </template>
 
@@ -67,21 +82,27 @@ import { getNecessity } from "../../shared/services/necessityService";
 import moment from "moment";
 
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
+import DonationDoneModal from "../../shared/components/DonationDoneModal.vue";
 import Button from "../../shared/components/Button.vue";
 import EmbeddedVideo from "../../shared/components/EmbeddedVideo.vue";
 import { Status } from "@/modules/shared/enums/Status";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
-import { updateDonation } from "@/modules/donator/services/DonationService";
+import { matchDonation } from "@/modules/donator/services/DonationService";
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({
     necessity: null,
+    donatedTitle: "Sua doação foi enviada, muito obrigado!",
+    donatedMessage:
+      "Assim que sua doação for avaliada, entraremos em contato para mais informações.",
     confirmationTitle: "",
     confirmationMessage: "",
     isModalOpen: false,
     isModalLoading: false,
+    isDonationDoneOpen: false,
+    isDonationDoneLoading: false,
     isSaveButtonLoading: false,
   }),
   async mounted() {
@@ -94,6 +115,7 @@ export default Vue.extend({
     EmbeddedVideo,
     Button,
     ConfirmationModal,
+    DonationDoneModal,
   },
   computed: {
     attributes() {
@@ -118,21 +140,22 @@ export default Vue.extend({
         getUserData().role == UserRole.institution
       );
     },
+    canDonate() {
+      return (
+        this.necessity.status === Status.pending &&
+        getUserData().role == UserRole.donator
+      );
+    },
   },
   methods: {
     onConfirmButtonClick() {
       this.isModelLoading = true;
       console.log(this.necessity);
-      updateDonation(this.necessity.id)
+      matchDonation(this.necessity)
         .then(() => {
           this.isModalOpen = false;
           this.isModalLoading = false;
-          this.$root.showSnackbar({
-            title: "Sua doação foi enviada, muito obrigado!",
-            body: "Assim que sua doação for avaliada, entraremos em contato para mais informações.",
-            color: "success",
-          });
-          this.$router.push("/home");
+          this.isDonationDoneOpen = true;
         })
         .catch(() => {
           this.$root.showSnackbar({
@@ -143,12 +166,16 @@ export default Vue.extend({
           this.isModalLoading = false;
         });
     },
+    onConfirmMessage() {
+      this.isDonationDoneOpen = false;
+      this.$router.push("/donations");
+    },
     onEditButtonClick() {
       this.$router.push(`/necessity/${this.necessity.id}/edit`);
     },
     onDonateButtonClick() {
-      this.confirmationTitle = "CONFIRMAR DOAÇÂO";
-      this.confirmationMessage = `Deseja confirmar a doação para ${this.necessity.user.name}`;
+      this.confirmationTitle = "CONFIRMAR DOAÇÃO";
+      this.confirmationMessage = `Deseja confirmar a doação para ${this.necessity.user.name}? <br/> <br/> ${this.necessity.description}`;
       this.isModalOpen = true;
     },
   },
