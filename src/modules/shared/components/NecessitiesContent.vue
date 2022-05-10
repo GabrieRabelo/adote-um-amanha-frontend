@@ -87,9 +87,14 @@ export default Vue.extend({
   },
   methods: {
     onNecessityClick(necessity) {
-      const route = this.shouldLoadNecessities
-        ? `/necessity/${necessity.id}`
+      var route = ``;
+      if (this.isUserInstitution) {
+        route = `/necessity/${necessity.id}`;
+      } else if(this.isUserDonator) {
+        route = this.shouldLoadNecessities
+        ? `/necessityDescription/${necessity.id}`
         : `/donations/${necessity.id}`;
+      }
       this.$router.push(route);
     },
     async getNecessities() {
@@ -122,6 +127,13 @@ export default Vue.extend({
     shouldLoadNecessities() {
       return this.requestType === RequestType.necessity;
     },
+    isUserInstitution() {
+      return getUserData().role == UserRole.institution && this.shouldLoadNecessities
+    },
+    isUserDonator() {
+      console.log(getUserData())
+      return getUserData().role == UserRole.donator
+    }
   },
 });
 </script>

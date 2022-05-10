@@ -108,8 +108,6 @@ export default Vue.extend({
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
     this.necessity = await getNecessity(this.$route.params.id);
-    console.log("Necessidade.vue", this.necessity.user.name);
-    //institution: { name: request.nomeCasa, id: request.idCasa },
   },
   components: {
     EmbeddedVideo,
@@ -150,7 +148,6 @@ export default Vue.extend({
   methods: {
     onConfirmButtonClick() {
       this.isModelLoading = true;
-      console.log(this.necessity);
       matchDonation(this.necessity)
         .then(() => {
           this.isModalOpen = false;
