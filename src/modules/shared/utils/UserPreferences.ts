@@ -47,7 +47,7 @@ const defaultNecessitiesFilters = {
 const defaultDonationsFilters = {
   categories: [],
   subcategories: [],
-  status: [Status.pending],
+  status: [Status.pending, Status.match],
   startDate: DateFilter.sixMonths,
   name: "",
 };

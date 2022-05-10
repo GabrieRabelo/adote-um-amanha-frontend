@@ -1,5 +1,5 @@
 <template>
-  <v-container class="container align-start" fill-height>
+  <v-container class="container align-start">
     <v-col class="pa-0">
       <div class="mx-2 my-6">
         <div class="font-weight-bold">Categoria</div>
@@ -39,7 +39,7 @@
 
       <v-divider></v-divider>
 
-      <div class="mx-2 my-6">
+      <div class="mx-2 my-6" v-if="shouldShowStatusFilter">
         <div class="font-weight-bold">Status</div>
         <v-row align="center">
           <div class="mt-4 align-left">
@@ -55,11 +55,11 @@
           </div>
         </v-row>
       </div>
-
-      <v-divider></v-divider>
     </v-col>
 
-    <v-row class="ml-0">
+    <v-divider v-if="shouldShowStatusFilter"></v-divider>
+
+    <v-row class="ml-0 mt-4">
       <v-col class="py-0">
         <div class="font-weight-bold">Data</div>
         <v-col class="px-0" cols="6" sm="6">
@@ -96,12 +96,18 @@ import StatusUtils from "../enums/Status";
 import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
 import Select from "./Select.vue";
 import DateFilter from "../enums/DateFilter";
-import { setNecessitiesFilters } from "../utils/UserPreferences";
+import {
+  setNecessitiesFilters,
+  setDonationsFilters,
+} from "../utils/UserPreferences";
+import { UserRole } from "../enums/UserRole";
+import { RequestType } from "../models/RequestEntity";
+import { getUserData } from "../utils/LoggedUserManager";
 
 export default Vue.extend({
   components: { Button, Select },
   mixins: [ToolbarNavigationMixin],
-  props: ["filters"],
+  props: ["filters", "requestType"],
   model: {
     prop: "filters",
     event: "change",
@@ -151,7 +157,11 @@ export default Vue.extend({
       this.saveFilterAndEmit();
     },
     saveFilterAndEmit() {
-      setNecessitiesFilters(this.filters);
+      const setter =
+        this.requestType === RequestType.necessity
+          ? setNecessitiesFilters
+          : setDonationsFilters;
+      setter(this.filters);
       this.$emit("change", this.filters);
     },
   },
@@ -166,10 +176,33 @@ export default Vue.extend({
       return SubcategoryUtils.allObjects();
     },
     allStatus() {
+      const currentUser = getUserData();
+      if (currentUser.role === UserRole.admin) {
+        return StatusUtils.allObjects();
+      }
+      if (
+        currentUser.role === UserRole.institution &&
+        this.requestType === RequestType.necessity
+      ) {
+        return StatusUtils.allObjects();
+      }
+      if (
+        currentUser.role === UserRole.donator &&
+        this.requestType === RequestType.donation
+      ) {
+        return StatusUtils.allObjects();
+      }
       return StatusUtils.allObjects().slice(0, -1);
     },
     allDates() {
       return DateFilter.allObjects();
+    },
+    shouldShowStatusFilter() {
+      const currentUser = getUserData();
+      return !(
+        currentUser.role === UserRole.donator &&
+        this.requestType === RequestType.necessity
+      );
     },
   },
 });

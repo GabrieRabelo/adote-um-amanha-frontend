@@ -89,7 +89,7 @@ import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
 import { matchDonation } from "@/modules/donator/services/DonationService";
-import { getNecessity } from "@/modules/shared/services/NecessityService";
+import { getNecessity } from "../../shared/services/NecessityService";
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({
@@ -175,7 +175,7 @@ export default Vue.extend({
     },
     onDonateButtonClick() {
       this.confirmationTitle = "CONFIRMAR DOAÇÃO";
-      this.confirmationMessage = `Deseja confirmar a doação para ${this.necessity.user.name}? <br/> <br/> ${this.necessity.description}`;
+      this.confirmationMessage = `Deseja confirmar a doação para <b>${this.necessity.user.name}</b>? <br/> <br/> <i>${this.necessity.description}</i>`;
       this.isModalOpen = true;
     },
   },

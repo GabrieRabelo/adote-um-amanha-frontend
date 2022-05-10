@@ -56,7 +56,6 @@ import { UserRole } from "../enums/UserRole";
 import ToolbarMenuMixin from "../mixins/ToolbarMenuMixin";
 import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
 import InputChips from "./InputChips.vue";
-import { getNecessitiesFilters } from "../utils/UserPreferences";
 import lodash from "lodash";
 import { RequestType } from "../models/RequestEntity";
 import { getDonations } from "@/modules/donator/services/DonationService";
@@ -83,7 +82,6 @@ export default Vue.extend({
       this.shouldLoadNecessities ? "NECESSIDADES" : "DOAÇÕES"
     );
     this.$root.startLoader();
-    this.loadFilters();
     this.necessities = await this.getNecessities();
     this.$root.stopLoader();
   },
@@ -108,12 +106,6 @@ export default Vue.extend({
       const response = await getter(params);
       this.$root.stopLoader();
       return response;
-    },
-    loadFilters() {
-      const filters = getNecessitiesFilters();
-      if (filters) {
-        this.$emit("change", filters);
-      }
     },
     async onInputChange() {
       this.necessities = await this.getNecessities();

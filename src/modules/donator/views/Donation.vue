@@ -97,12 +97,10 @@ export default Vue.extend({
       return StatusUtils.toString(this.donation.status);
     },
     statusIcon() {
-      return this.donation.status == Status.resolved
-        ? "mdi-checkbox-marked-circle-outline"
-        : "mdi-dots-horizontal-circle";
+      return StatusUtils.getIcon(this.donation.status);
     },
     statusIconColor() {
-      return this.donation.status == Status.resolved ? "#3BB54A" : "#FFAA5A";
+      return StatusUtils.getIconColor(this.donation.status);
     },
     canEdit() {
       return (
