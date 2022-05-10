@@ -108,9 +108,6 @@ export default Vue.extend({
   },
   data: () => ({}),
   methods: {
-    buttonClick() {
-      console.log("Click");
-    },
     onToolbarNavButtonClick() {
       this.$emit("filterToggle", false);
     },

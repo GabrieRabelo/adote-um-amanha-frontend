@@ -9,7 +9,6 @@ import { Subcategory } from "../enums/Subcategory";
 export function fromBackendFormat(
   request: RequestBackendEntity
 ): RequestEntity {
-  console.log(request);
   return {
     id: request.id,
     title: request.assunto,

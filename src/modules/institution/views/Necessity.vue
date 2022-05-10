@@ -89,7 +89,7 @@ import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
 import { matchDonation } from "@/modules/donator/services/DonationService";
-import { getNecessity } from "@/modules/shared/services/NecessityService";
+import { getNecessity } from "../../shared/services/NecessityService";
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({
@@ -108,8 +108,6 @@ export default Vue.extend({
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
     this.necessity = await getNecessity(this.$route.params.id);
-    console.log("Necessidade.vue", this.necessity.user.name);
-    //institution: { name: request.nomeCasa, id: request.idCasa },
   },
   components: {
     EmbeddedVideo,
@@ -150,7 +148,6 @@ export default Vue.extend({
   methods: {
     onConfirmButtonClick() {
       this.isModelLoading = true;
-      console.log(this.necessity);
       matchDonation(this.necessity)
         .then(() => {
           this.isModalOpen = false;

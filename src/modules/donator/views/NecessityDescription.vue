@@ -1,6 +1,6 @@
 <template>
-  <v-container class="align-start" fill-height>
-    <v-container class="align-start px-7" v-if="necessity">
+  <v-container class="align-start" fill-height v-if="necessity">
+    <v-container class="align-start px-7">
       <v-row class="mt-3 mb-4">
         <div class="a-text__bold-title">{{ necessity.title }}</div>
       </v-row>
@@ -20,7 +20,7 @@
       </v-row>
     </v-container>
 
-    <UserCard :userRole="userRole" :userName="necessity.institutionName" />
+    <UserCard :userRole="userRole" :userName="necessity.user.name" />
 
     <v-container v-if="necessity">
       <v-row class="justify-center">
