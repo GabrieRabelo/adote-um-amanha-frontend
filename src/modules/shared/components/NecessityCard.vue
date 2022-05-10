@@ -22,7 +22,6 @@
 
 <script>
 import Vue from "vue";
-import { Status } from "../enums/Status";
 import StatusUtils from "../enums/Status";
 import Subcategory from "../enums/Subcategory";
 import dateFormat from "../filters/dateFormat";
@@ -36,18 +35,14 @@ export default Vue.extend({
   },
   computed: {
     statusIcon() {
-      return this.necessity.status == Status.resolved
-        ? "mdi-checkbox-marked-circle-outline"
-        : "mdi-dots-horizontal-circle";
+      return StatusUtils.getIcon(this.necessity.status);
     },
     statusIconColor() {
-      return this.necessity.status == Status.resolved ? "#3BB54A" : "#FFAA5A";
+      return StatusUtils.getIconColor(this.necessity.status);
     },
-
     subcategory() {
       return Subcategory.toString(this.necessity.subcategory);
     },
-
     status() {
       return StatusUtils.toString(this.necessity.status);
     },
