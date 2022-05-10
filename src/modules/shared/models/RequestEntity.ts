@@ -12,8 +12,6 @@ export type RequestEntity = {
   description: string;
   status: Status;
   user?: Partial<UserEntity>;
-  // donator?: Partial<UserEntity>;
-  //  institution?: Partial<UserEntity>;
   url?: string;
   type: RequestType;
 };
