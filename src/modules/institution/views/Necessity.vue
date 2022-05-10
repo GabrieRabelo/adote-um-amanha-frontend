@@ -172,7 +172,7 @@ export default Vue.extend({
     },
     onDonateButtonClick() {
       this.confirmationTitle = "CONFIRMAR DOAÇÃO";
-      this.confirmationMessage = `Deseja confirmar a doação para ${this.necessity.user.name}? <br/> <br/> ${this.necessity.description}`;
+      this.confirmationMessage = `Deseja confirmar a doação para <b>${this.necessity.user.name}</b>? <br/> <br/> <i>${this.necessity.description}</i>`;
       this.isModalOpen = true;
     },
   },
