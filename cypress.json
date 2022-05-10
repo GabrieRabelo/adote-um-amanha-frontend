@@ -3,7 +3,8 @@
   "env": {
     "timeOut": 20000,
     "longTimeOut": 40000,
-    "email": "lar_esperanca@email.com",
-    "senha": "admin"
+    "emailHouse": "lar_esperanca@email.com",
+    "emailDonator": "rabelo@gmail.com",
+    "password": "admin"
   }
 }
