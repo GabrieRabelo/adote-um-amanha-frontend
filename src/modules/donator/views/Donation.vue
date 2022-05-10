@@ -15,8 +15,8 @@
       <v-row class="justify-space-between mb-3">
         <div class="a-text">Status</div>
         <div>
-          <span class="a-text light">{{ statusText }}</span>
           <v-icon :color="statusIconColor">{{ statusIcon }}</v-icon>
+          <span class="a-text light ml-2">{{ statusText }}</span>
         </div>
       </v-row>
       <v-row>
