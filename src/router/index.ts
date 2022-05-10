@@ -9,6 +9,7 @@ import RegisterRequest from "../modules/shared/views/RegisterRequest.vue";
 import Home from "../modules/shared/views/Home.vue";
 import Necessities from "../modules/shared/views/Necessities.vue";
 import { isAuthenticated } from "@/modules/shared/utils/AuthenticationManager";
+import Donation from "../modules/donator/views/Donation.vue";
 import EditDonation from "../modules/shared/views/EditDonation.vue";
 import Donations from "../modules/donator/views/Donations.vue";
 
@@ -55,6 +56,11 @@ const routes: Array<RouteConfig> = [
     component: Necessities,
   },
   {
+    path: "/donations/:id",
+    name: "Donation",
+    component: Donation,
+  },
+  {
     path: "/donations",
     name: "Donations",
     component: Donations,
@@ -65,7 +71,7 @@ const routes: Array<RouteConfig> = [
     component: EditDonation,
   },
   {
-    path: "/donation/create",
+    path: "/donations/create",
     name: "",
     component: RegisterRequest,
   },
