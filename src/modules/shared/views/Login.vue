@@ -42,7 +42,7 @@
       <v-col class="mt-10" align-self="stretch">
         <v-row class="d-flex justify-center">
           <span>Ainda não tem conta?</span>&nbsp;
-          <Link url="signup">Cadastre-se!</Link>
+          <Link url="/donator/create">Cadastre-se!</Link>
         </v-row>
       </v-col>
     </v-container>
