@@ -71,7 +71,13 @@ export default Vue.extend({
   }),
   async mounted() {
     this.$root.showToolbar("DOAÇÃO");
-    this.donation = await getDonation(this.$route.params.id);
+    this.donation = await getDonation(this.$route.params.id).catch(
+      ({ response }) => {
+        if (response.status === 404) {
+          this.onNotFound();
+        }
+      }
+    );
   },
   components: {
     Button,
@@ -110,6 +116,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    onNotFound() {
+      this.$router.push("/home");
+    },
     onEditButtonClick() {
       this.$router.push(`/donations/${this.donation.id}/edit/`);
     },

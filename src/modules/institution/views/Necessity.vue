@@ -107,7 +107,13 @@ export default Vue.extend({
   }),
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
-    this.necessity = await getNecessity(this.$route.params.id);
+    this.necessity = await getNecessity(this.$route.params.id).catch(
+      ({ response }) => {
+        if (response.status === 404) {
+          this.onNotFound();
+        }
+      }
+    );
   },
   components: {
     EmbeddedVideo,
@@ -146,6 +152,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    onNotFound() {
+      this.$router.push("/home");
+    },
     onConfirmButtonClick() {
       this.isModelLoading = true;
       matchDonation(this.necessity)
