@@ -18,7 +18,7 @@ export function fromBackendFormat(
     url: request.urlVideo,
     description: request.descricao,
     status: request.status as Status,
-    user: { name: request.nomeUsuario, id: request.id },
+    user: { name: request.nomeUsuario, id: request.idUsuario },
     type: request.tipo,
   };
 }

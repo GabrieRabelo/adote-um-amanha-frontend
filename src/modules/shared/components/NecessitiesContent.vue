@@ -125,6 +125,9 @@ export default Vue.extend({
     async onInputChange() {
       this.necessities = await this.getNecessities();
     },
+    onToolbarNavButtonClick() {
+      this.$router.push("/home");
+    },
   },
   computed: {
     isListEmpty() {
