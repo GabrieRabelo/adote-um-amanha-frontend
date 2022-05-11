@@ -164,6 +164,7 @@ export default Vue.extend({
   },
   async mounted() {
     this.$root.showToolbar("FILTRO DE PESQUISA");
+    this.$root.showToolbarButton();
   },
   computed: {
     allCategories() {
