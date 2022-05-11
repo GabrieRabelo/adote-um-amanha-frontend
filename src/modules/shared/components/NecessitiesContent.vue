@@ -32,16 +32,22 @@
         @click="onNecessityClick(necessity)"
       />
     </v-row>
-    <v-row class="justify-end mr-6" v-if="shouldShowCreateButton">
-      <Button
-        class="a-fab"
-        :title="shouldLoadNecessities ? 'Criar' : 'Doar'"
-        prependIcon="mdi-plus"
-        color="primary"
-        elevation="4"
-        @click="$router.push('/necessities/create')"
+    <v-row fluid>
+      <EmptyListError
+        :title="emptyListTitleText"
+        :body="emptyListBodyText"
+        class="mt-12 mx-2"
+        v-if="isListEmpty"
       />
     </v-row>
+    <Button
+      class="a-fab"
+      :title="shouldLoadNecessities ? 'Criar' : 'Doar'"
+      prependIcon="mdi-plus"
+      color="primary"
+      elevation="4"
+      @click="$router.push('/necessities/create')"
+    />
   </v-container>
 </template>
 
@@ -59,10 +65,11 @@ import InputChips from "./InputChips.vue";
 import lodash from "lodash";
 import { RequestType } from "../models/RequestEntity";
 import { getDonations } from "@/modules/donator/services/DonationService";
+import EmptyListError from "./EmptyListError.vue";
 
 export default Vue.extend({
   mixins: [ToolbarMenuMixin, ToolbarNavigationMixin],
-  components: { Input, NecessityCard, Button, InputChips },
+  components: { Input, NecessityCard, Button, InputChips, EmptyListError },
   props: {
     filters: Object,
     requestType: String,
@@ -73,6 +80,7 @@ export default Vue.extend({
   },
   data: () => ({
     necessities: [],
+    loaded: false,
   }),
   created() {
     this.onInputChange = lodash.debounce(this.onInputChange, 500);
@@ -84,6 +92,7 @@ export default Vue.extend({
     this.$root.startLoader();
     this.necessities = await this.getNecessities();
     this.$root.stopLoader();
+    this.loaded = true;
   },
   methods: {
     onNecessityClick(necessity) {
@@ -118,6 +127,19 @@ export default Vue.extend({
     },
   },
   computed: {
+    isListEmpty() {
+      return this.loaded && !this.necessities.length;
+    },
+    emptyListTitleText() {
+      const request =
+        this.requestType === RequestType.necessity ? "Necessidade" : "Doação";
+      return `Nenhuma ${request} encontrada!`;
+    },
+    emptyListBodyText() {
+      const request =
+        this.requestType === RequestType.necessity ? "necessidades" : "doações";
+      return `Quando criadas, as ${request} aparecerão aqui.`;
+    },
     shouldShowCreateButton() {
       return (
         (getUserData().role == UserRole.institution &&
@@ -143,8 +165,9 @@ export default Vue.extend({
 <style scoped>
 .a-fab {
   position: fixed;
-  bottom: 12px;
   max-width: 120px;
+  right: 36px;
+  bottom: 48px;
 }
 .container {
   height: 100%;

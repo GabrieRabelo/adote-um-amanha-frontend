@@ -84,6 +84,7 @@ import UserCard from "../../shared/components/UserCard.vue";
 import { matchDonation } from "../services/DonationService";
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
 import DonationDoneModal from "../../shared/components/DonationDoneModal.vue";
+import YoutubeVideoParser from "@/modules/shared/utils/YoutubeVideoParser";
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
@@ -102,7 +103,13 @@ export default Vue.extend({
   }),
   async mounted() {
     this.$root.showToolbar("SOLICITAÇÃO");
-    this.necessity = await getNecessity(this.$route.params.id);
+    this.necessity = await getNecessity(this.$route.params.id).catch(
+      ({ response }) => {
+        if (response.status === 404) {
+          this.onNotFound();
+        }
+      }
+    );
   },
   components: {
     EmbeddedVideo,
@@ -136,6 +143,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    onNotFound() {
+      this.$router.push("/home");
+    },
     onDonateButtonClick() {
       this.confirmationTitle = "CONFIRMAR DOAÇÃO";
       this.confirmationMessage = `Deseja confirmar a doação para <b>${this.necessity.user.name}</b>? <br/> <br/> <i>${this.necessity.description}</i>`;
