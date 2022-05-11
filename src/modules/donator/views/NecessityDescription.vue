@@ -20,7 +20,11 @@
       </v-row>
     </v-container>
 
-    <UserCard :userRole="userRole" :userName="necessity.user.name" />
+    <UserCard
+      :userRole="userRole"
+      :userName="necessity.user.name"
+      :userId="necessity.user.id"
+    />
 
     <v-container v-if="necessity">
       <v-row class="justify-center">
@@ -84,7 +88,6 @@ import UserCard from "../../shared/components/UserCard.vue";
 import { matchDonation } from "../services/DonationService";
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
 import DonationDoneModal from "../../shared/components/DonationDoneModal.vue";
-import YoutubeVideoParser from "@/modules/shared/utils/YoutubeVideoParser";
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
