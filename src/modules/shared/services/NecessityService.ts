@@ -1,9 +1,16 @@
 import { HTTP } from "@/api/http-common";
-import { fromRequestFormat } from "@/modules/shared/utils/NecessityMapper";
+import { fromBackendFormat } from "@/modules/shared/utils/RequestMapper";
 import {
   NecessityEntity,
   RequestNecessityEntity,
 } from "../models/NecessityEntity";
+import {
+  RequestBackendEntity,
+  RequestEntity,
+  RequestType,
+} from "../models/RequestEntity";
+import { NecessitiesRequestParams } from "../types/NecessityRequestParams";
+import { mountQueryString } from "../utils/QueryParamBuilder";
 
 export function createNecessity(necessity: NecessityEntity): Promise<void> {
   return HTTP.post("/pedidos", {
@@ -22,27 +29,39 @@ export function createNecessity(necessity: NecessityEntity): Promise<void> {
 }
 
 export function getNecessities(
-  { page, size }: NecessitiesRequestParams = { page: 0, size: 5 }
-): Promise<NecessityEntity[]> {
-  return HTTP.get(
-    `public/necessidades?direcao=DESC&ordenacao=dataHora&pagina=${page}&tamanho=${size}`
-  )
+  queryParams: NecessitiesRequestParams
+): Promise<RequestEntity[]> {
+  return getNecessitiesWithURL(queryParams, "pedidos");
+}
+
+export function getPublicNecessities(
+  queryParams: NecessitiesRequestParams
+): Promise<RequestEntity[]> {
+  return getNecessitiesWithURL(queryParams, "public/necessidades");
+}
+
+function getNecessitiesWithURL(
+  queryParams: NecessitiesRequestParams = {},
+  url: string
+): Promise<RequestEntity[]> {
+  queryParams.tipoPedido = RequestType.necessity;
+  const params = mountQueryString(queryParams);
+  return HTTP.get(`${url}?${params}`)
     .then((response) => {
       const data = response.data;
-      const serviceNecessities = data.conteudo as RequestNecessityEntity[];
-      return Promise.resolve(serviceNecessities.map(fromRequestFormat));
+      const serviceNecessities = data.conteudo as RequestBackendEntity[];
+      return Promise.resolve(serviceNecessities.map(fromBackendFormat));
     })
     .catch((err) => Promise.reject(err));
 }
 
-export function getNecessity(id: number): Promise<NecessityEntity> {
-  return HTTP.get(`public/necessidades/${id}`)
-    .then(({ data }) => fromRequestFormat(data))
+export function getNecessity(id: number): Promise<RequestEntity> {
+  return HTTP.get(`pedidos/${id}?tipoPedido=${RequestType.necessity}`)
+    .then(({ data }) => fromBackendFormat(data))
     .catch((err) => Promise.reject(err));
 }
-
 export function deleteNecessity(id: number): Promise<void> {
-  return HTTP.delete(`/pedidos/${id}`)
+  return HTTP.delete(`/pedidos/${id}?tipoPedido="${RequestType.necessity}"`)
     .then(() => Promise.resolve())
     .catch(() => Promise.reject());
 }
@@ -58,9 +77,4 @@ export function updateNecessity(necessity: NecessityEntity): Promise<void> {
   return HTTP.put(`/pedidos/${necessity.id}`, necessityToEdit)
     .then(() => Promise.resolve())
     .catch(() => Promise.reject());
-}
-
-interface NecessitiesRequestParams {
-  page: number;
-  size: number;
 }

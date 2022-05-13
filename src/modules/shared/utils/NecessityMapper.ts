@@ -6,7 +6,7 @@ import { Category } from "../enums/Category";
 import { Status } from "../enums/Status";
 import { Subcategory } from "../enums/Subcategory";
 
-export function fromRequestFormat(
+export function fromRequestFormat( // from front to back
   necessity: RequestNecessityEntity
 ): NecessityEntity {
   return {

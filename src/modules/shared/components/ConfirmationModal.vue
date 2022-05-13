@@ -8,9 +8,7 @@
       </div>
 
       <div class="d-flex justify-center pb-8">
-        <span class="dialog--body">
-          {{ message }}
-        </span>
+        <span class="dialog--body" v-html="message"> </span>
       </div>
 
       <v-card-actions class="justify-center">
@@ -19,6 +17,7 @@
           title="Cancelar"
           color="primary"
           @click="onCancelClick"
+          v-if="isCancelButtonOn"
           outlined
         />
         <Button
@@ -40,6 +39,7 @@ export default Vue.extend({
     title: String,
     message: String,
     loading: Boolean,
+    isCancelButtonOn: Boolean,
   },
   components: {
     Button,
@@ -64,6 +64,7 @@ export default Vue.extend({
   &--title {
     font-size: 18px;
     font-weight: 600;
+    text-align: center;
   }
 
   &--body {
