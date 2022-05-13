@@ -1,14 +1,24 @@
 <template>
   <v-app-bar app class="toolbar" v-if="visible">
     <v-col class="px-0" cols="2"
-      ><v-app-bar-nav-icon @click="$router.go(-1)" v-if="buttonVisible">
+      ><v-app-bar-nav-icon
+        @click="onToolbarNavButtonClick"
+        v-if="buttonVisible"
+      >
         <v-icon>mdi-arrow-left</v-icon>
       </v-app-bar-nav-icon></v-col
     >
-    <v-toolbar-title class="font-weight-black flex text-center">
+    <v-toolbar-title class="font-weight-medium flex text-center">
       {{ title }}
     </v-toolbar-title>
-    <v-col class="px-0" cols="2"></v-col>
+    <v-col class="px-0 mr-2" cols="1">
+      <v-app-bar-nav-icon
+        v-if="$root.bottomSheetItems.length"
+        @click="$root.showBottomSheet()"
+      >
+        <v-icon>mdi-dots-vertical</v-icon>
+      </v-app-bar-nav-icon>
+    </v-col>
   </v-app-bar>
 </template>
 
@@ -19,6 +29,12 @@ export default Vue.extend({
     title: String,
     visible: Boolean,
     buttonVisible: Boolean,
+  },
+  methods: {
+    onToolbarNavButtonClick() {
+      this.$root.onToolbarNavButtonClick &&
+        this.$root.onToolbarNavButtonClick();
+    },
   },
 });
 </script>

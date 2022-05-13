@@ -5,16 +5,22 @@
     v-on="$listeners"
     frameborder="0"
     v-if="src"
-    :src="src"
+    :src="embeddedVideo"
   >
   </iframe>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
+import YoutubeVideoParser from "../utils/YoutubeVideoParser";
 export default Vue.extend({
   props: {
     src: String,
+  },
+  computed: {
+    embeddedVideo() {
+      return YoutubeVideoParser.toEmbeddedVideo(this.src);
+    },
   },
 });
 </script>

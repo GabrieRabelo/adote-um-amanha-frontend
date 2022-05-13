@@ -19,6 +19,7 @@
             :rules="[inputValidations.email, inputValidations.required]"
           />
           <PasswordInput
+            @keyup.enter="onLoginButtonClick"
             class="mx-6"
             label="Senha"
             v-model="password"
@@ -41,7 +42,7 @@
       <v-col class="mt-10" align-self="stretch">
         <v-row class="d-flex justify-center">
           <span>Ainda não tem conta?</span>&nbsp;
-          <Link url="signup">Cadastre-se!</Link>
+          <Link url="/donator/create">Cadastre-se!</Link>
         </v-row>
       </v-col>
     </v-container>
@@ -57,7 +58,6 @@ import loginService from "../../institution/services/LoginService";
 import InputValidations from "../utils/InputValidations";
 import Link from "../components/Link.vue";
 import { clearAccessToken } from "../utils/AuthenticationManager";
-import { Category } from "../enums/Category";
 
 export default Vue.extend({
   components: {
@@ -75,8 +75,6 @@ export default Vue.extend({
   mounted() {
     this.$root.hideToolbar();
     clearAccessToken();
-    const cat = Category;
-    console.log(cat);
   },
   computed: {
     inputValidations() {
@@ -108,7 +106,7 @@ export default Vue.extend({
       this.$router.push("home");
     },
     onLoginUnauthorized() {
-      this.$root.showSnackbar("Usuário e/ou senha incorretos.");
+      this.$root.showSnackbar({title:"Usuário e/ou senha incorretos.", color:"error"});
     },
   },
 });

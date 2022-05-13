@@ -38,6 +38,14 @@
           @click="$router.go(-1)"
         />
         <Button
+          title="Doar"
+          color="primary"
+          prependIcon="mdi-hand-heart-outline"
+          compact
+          v-if="canDonate"
+          @click="onDonateButtonClick"
+        />
+        <Button
           title="Editar"
           color="primary"
           prependIcon="mdi-pencil"
@@ -47,6 +55,22 @@
         />
       </v-row>
     </v-container>
+    <ConfirmationModal
+      v-model="isModalOpen"
+      :title="confirmationTitle"
+      :message="confirmationMessage"
+      @cancel="isModalOpen = false"
+      @confirm="onConfirmButtonClick()"
+      :loading="isModalLoading"
+      :isCancelButtonOn="true"
+    />
+    <DonationDoneModal
+      v-model="isDonationDoneOpen"
+      :title="donatedTitle"
+      :message="donatedMessage"
+      @confirm="onConfirmMessage()"
+      :loading="isDonationDoneLoading"
+    />
   </v-container>
 </template>
 
@@ -54,23 +78,48 @@
 import Vue from "vue";
 import Category from "../../shared/enums/Category";
 import Subcategory from "../../shared/enums/Subcategory";
-import { getNecessity } from "../services/necessityService";
 import moment from "moment";
+
+import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
+import DonationDoneModal from "../../shared/components/DonationDoneModal.vue";
 import Button from "../../shared/components/Button.vue";
 import EmbeddedVideo from "../../shared/components/EmbeddedVideo.vue";
 import { Status } from "@/modules/shared/enums/Status";
+import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
+import { UserRole } from "@/modules/shared/enums/UserRole";
+import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
+import { matchDonation } from "@/modules/donator/services/DonationService";
+import { getNecessity } from "../../shared/services/NecessityService";
 export default Vue.extend({
+  mixins: [ToolbarNavigationMixin],
   data: () => ({
     necessity: null,
+    donatedTitle: "Sua doação foi enviada, muito obrigado!",
+    donatedMessage:
+      "Assim que sua doação for avaliada, entraremos em contato para mais informações.",
+    confirmationTitle: "",
+    confirmationMessage: "",
+    isModalOpen: false,
+    isModalLoading: false,
+    isDonationDoneOpen: false,
+    isDonationDoneLoading: false,
+    isSaveButtonLoading: false,
   }),
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
-    this.necessity = await getNecessity(this.$route.params.id);
-    this.$root.showToolbarButton();
+    this.necessity = await getNecessity(this.$route.params.id).catch(
+      ({ response }) => {
+        if (response.status === 404) {
+          this.onNotFound();
+        }
+      }
+    );
   },
   components: {
     EmbeddedVideo,
     Button,
+    ConfirmationModal,
+    DonationDoneModal,
   },
   computed: {
     attributes() {
@@ -90,12 +139,50 @@ export default Vue.extend({
       ];
     },
     canEdit() {
-      return this.necessity.status === Status.peding;
+      return (
+        this.necessity.status === Status.pending &&
+        getUserData().role == UserRole.institution
+      );
+    },
+    canDonate() {
+      return (
+        this.necessity.status === Status.pending &&
+        getUserData().role == UserRole.donator
+      );
     },
   },
   methods: {
+    onNotFound() {
+      this.$router.push("/home");
+    },
+    onConfirmButtonClick() {
+      this.isModelLoading = true;
+      matchDonation(this.necessity)
+        .then(() => {
+          this.isModalOpen = false;
+          this.isModalLoading = false;
+          this.isDonationDoneOpen = true;
+        })
+        .catch(() => {
+          this.$root.showSnackbar({
+            title: "ERRO INESPERADO!",
+            body: "Ocorreu um erro inesperado ao tentar realizar sua doação... Tente novamente!",
+            color: "error",
+          });
+          this.isModalLoading = false;
+        });
+    },
+    onConfirmMessage() {
+      this.isDonationDoneOpen = false;
+      this.$router.push("/donations");
+    },
     onEditButtonClick() {
       this.$router.push(`/necessity/${this.necessity.id}/edit`);
+    },
+    onDonateButtonClick() {
+      this.confirmationTitle = "CONFIRMAR DOAÇÃO";
+      this.confirmationMessage = `Deseja confirmar a doação para <b>${this.necessity.user.name}</b>? <br/> <br/> <i>${this.necessity.description}</i>`;
+      this.isModalOpen = true;
     },
   },
 });
