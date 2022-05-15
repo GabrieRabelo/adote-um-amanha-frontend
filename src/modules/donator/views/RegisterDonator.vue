@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height class="align-start">
+  <!-- <v-container fill-height class="align-start">
     <v-container class="align-start">
       <div class="a-text__title">Cadastro</div>
     </v-container>
@@ -131,7 +131,8 @@
         </v-row>
       </v-col>
     </v-container>
-  </v-container>
+  </v-container> -->
+  <SignupStepper v-model="donator"></SignupStepper>
 </template>
 
 <script>
@@ -145,11 +146,13 @@ import { createDonator } from "../services/DonatorService";
 import InputStates from "../../shared/components/InputStates.vue";
 import VueTheMask from "vue-the-mask";
 import LoginService from "@/modules/institution/services/LoginService";
+import SignupStepper from "../components/SignupStepper.vue";
 
 Vue.use(VueTheMask);
 
 export default Vue.extend({
-  components: { Button, Link, Input, PasswordInput, InputStates },
+  // components: { Button, Link, Input, PasswordInput, InputStates },
+  components: { SignupStepper },
   data: () => ({
     isFormValid: false,
     signUpButtonLoading: false,
