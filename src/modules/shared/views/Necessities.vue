@@ -16,6 +16,8 @@ import NecessitiesContent from "../components/NecessitiesContent.vue";
 import { getNecessitiesFilters } from "../utils/UserPreferences";
 import { RequestType } from "../models/RequestEntity";
 
+//Para admin, acredito que devemos mudar o NecessitiesContent caso for role admin
+
 export default Vue.extend({
   components: { NecessitiesFilter, NecessitiesContent },
   data: () => ({

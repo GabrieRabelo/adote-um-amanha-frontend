@@ -39,7 +39,7 @@
 
       <v-divider></v-divider>
 
-      <div class="mx-2 my-6">
+      <div class="mx-2 my-6" v-if="canFilterStatus">
         <div class="font-weight-bold">Status</div>
         <v-row align="center">
           <div class="mt-4 align-left">
@@ -97,6 +97,8 @@ import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
 import Select from "./Select.vue";
 import DateFilter from "../enums/DateFilter";
 import { setNecessitiesFilters } from "../utils/UserPreferences";
+import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
+import { UserRole } from "@/modules/shared/enums/UserRole";
 
 export default Vue.extend({
   components: { Button, Select },
@@ -108,6 +110,9 @@ export default Vue.extend({
   },
   data: () => ({}),
   methods: {
+    canFilterStatus() {
+      return getUserData().role == UserRole.admin;
+    },
     buttonClick() {
       console.log("Click");
     },
