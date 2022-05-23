@@ -1,8 +1,8 @@
 <template>
-  <v-container class="align-start" fill-height v-if="necessity">
+  <v-container class="align-start" fill-height v-if="admin">
     <v-container class="align-start px-7">
       <v-row class="mt-3 mb-4">
-        <div class="a-text__bold-title">{{ necessity.title }}</div>
+        <div class="a-text__bold-title">{{ admin.title }}</div>
       </v-row>
       <v-row
         class="justify-space-between mb-3"
@@ -16,39 +16,37 @@
         <div class="a-text">Descrição</div>
       </v-row>
       <v-row>
-        <div class="a-text light mt-1">{{ necessity.description }}</div>
+        <div class="a-text light mt-1">{{ admin.description }}</div>
       </v-row>
     </v-container>
 
     <UserCard
       :userRole="userRole"
-      :userName="necessity.user.name"
-      :userId="necessity.user.id"
+      :userName="admin.user.name"
+      :userId="admin.user.id"
+    />
+    <UserCard
+      :userRole="userRole"
+      :userName="admin.user.name"
+      :userId="admin.user.id"
     />
 
-    <v-container v-if="necessity">
-      <v-row class="justify-center">
-        <EmbeddedVideo :src="necessity.url" />
-      </v-row>
-    </v-container>
-
-    <v-container class="align-end" v-if="necessity">
+    <v-container class="align-end" v-if="admin">
       <v-row class="justify-center">
         <Button
           class="mr-4"
-          title="Voltar"
+          title="Recusar"
           color="primary"
-          prependIcon="mdi-arrow-left"
+          prependIcon="mdi-thumb-down-outline"
           outlined
           compact
           @click="$router.go(-1)"
         />
         <Button
-          title="Doar"
+          title="Aprovar"
           color="primary"
-          prependIcon="mdi-hand-heart-outline"
+          prependIcon="mdi-thumb-up"
           compact
-          v-if="canDonate"
           @click="onDonateButtonClick"
         />
       </v-row>
@@ -74,25 +72,24 @@
 
 <script>
 import Vue from "vue";
-import Category from "../../shared/enums/Category";
-import Subcategory from "../../shared/enums/Subcategory";
-import { getNecessity } from "../../shared/services/NecessityService";
+import Category from "../shared/enums/Category";
+import Subcategory from "../shared/enums/Subcategory";
+import { getNecessity } from "../shared/services/NecessityService";
 import moment from "moment";
 import Button from "../shared/components/Button.vue";
-import EmbeddedVideo from "../../shared/components/EmbeddedVideo.vue";
 import { Status } from "@/modules/shared/enums/Status";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
-import UserCard from "../../shared/components/UserCard.vue";
-import { matchDonation } from "../services/DonationService";
-import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
-import DonationDoneModal from "../../shared/components/DonationDoneModal.vue";
+import UserCard from "../shared/components/UserCard.vue";
+import { matchDonation } from "../donator/services/DonatorService";
+import ConfirmationModal from "../shared/components/ConfirmationModal.vue";
+import DonationDoneModal from "../shared/components/DonationDoneModal.vue";
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({
-    necessity: null,
+    admin: null,
     userRole: UserRole.institution,
     isModalOpen: false,
     isModalLoading: false,
@@ -105,8 +102,8 @@ export default Vue.extend({
       "Assim que sua doação for avaliada, entraremos em contato para mais informações.",
   }),
   async mounted() {
-    this.$root.showToolbar("SOLICITAÇÃO");
-    this.necessity = await getNecessity(this.$route.params.id).catch(
+    this.$root.showToolbar("MATCH");
+    this.admin = await getNecessity(this.$route.params.id).catch(
       ({ response }) => {
         if (response.status === 404) {
           this.onNotFound();
@@ -115,7 +112,6 @@ export default Vue.extend({
     );
   },
   components: {
-    EmbeddedVideo,
     Button,
     UserCard,
     ConfirmationModal,
@@ -126,21 +122,21 @@ export default Vue.extend({
       return [
         {
           key: "Data cadastro",
-          value: moment(this.necessity.createdDate).format("DD/MM/yyyy"),
+          value: moment(this.admin.createdDate).format("DD/MM/yyyy"),
         },
         {
           key: "Categoria",
-          value: Category.toSingularString(this.necessity.category),
+          value: Category.toSingularString(this.admin.category),
         },
         {
           key: "Subcategoria",
-          value: Subcategory.toString(this.necessity.subcategory),
+          value: Subcategory.toString(this.admin.subcategory),
         },
       ];
     },
     canDonate() {
       return (
-        this.necessity.status === Status.pending &&
+        this.admin.status === Status.pending &&
         getUserData().role == UserRole.donator
       );
     },
@@ -151,7 +147,7 @@ export default Vue.extend({
     },
     onDonateButtonClick() {
       this.confirmationTitle = "CONFIRMAR DOAÇÃO";
-      this.confirmationMessage = `Deseja confirmar a doação para <b>${this.necessity.user.name}</b>? <br/> <br/> <i>${this.necessity.description}</i>`;
+      this.confirmationMessage = `Deseja confirmar a doação para <b>${this.admin.user.name}</b>? <br/> <br/> <i>${this.admin.description}</i>`;
       this.isModalOpen = true;
     },
     onConfirmMessage() {
@@ -160,7 +156,7 @@ export default Vue.extend({
     },
     onConfirmButtonClick() {
       this.isModelLoading = true;
-      matchDonation(this.necessity)
+      matchDonation(this.admin)
         .then(() => {
           this.isModalOpen = false;
           this.isModalLoading = false;

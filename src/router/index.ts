@@ -89,7 +89,7 @@ const routes: Array<RouteConfig> = [
     component: RegisterDonator,
   },
   {
-    path: "/admin/matchDescription/:id",
+    path: "/admin/matches/:id",
     name: "Admin Match Description",
     component: MatchDescription,
   },
