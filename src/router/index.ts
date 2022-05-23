@@ -6,6 +6,7 @@ import Instituition from "../modules/institution/views/Instituition.vue";
 import SplashScreen from "../modules/shared/views/SplashScreen.vue";
 import EditNecessity from "../modules/institution/views/EditNecessity.vue";
 import NecessityDescription from "../modules/donator/views/NecessityDescription.vue";
+import NecessityDescriptionAdmin from "../modules/administrator/views/NecessityDescription.vue";
 import RegisterRequest from "../modules/shared/views/RegisterRequest.vue";
 import Home from "../modules/shared/views/Home.vue";
 import Necessities from "../modules/shared/views/Necessities.vue";
@@ -61,6 +62,11 @@ const routes: Array<RouteConfig> = [
     path: "/necessityDescription/:id",
     name: "Donator necessity description",
     component: NecessityDescription,
+  },
+  {
+    path: "/admin/necessities/:id",
+    name: "Administrator necessity description",
+    component: NecessityDescriptionAdmin,
   },
   {
     path: "/donations/:id",
