@@ -82,9 +82,11 @@ export default Vue.extend({
     isModalLoading: false,
     confirmationTitle: "",
     confirmationMessage: "",
+    loaded: false,
   }),
   async mounted() {
     this.$root.showToolbar("NECESSIDADE");
+    this.$root.startLoader();
     this.necessity = await getNecessity(this.$route.params.id).catch(
       ({ response }) => {
         if (response.status === 404) {
@@ -92,7 +94,8 @@ export default Vue.extend({
         }
       }
     );
-    this.newNecessity = { ...this.necessity };
+    this.$root.stopLoader();
+    this.loaded = true;
   },
   components: {
     Button,
@@ -125,7 +128,7 @@ export default Vue.extend({
   },
   methods: {
     onNotFound() {
-      this.$router.push("/home"); // nao deveria ir pra pagina de necessidade?
+      this.$router.push("/home");
     },
     onRefuseButtonClick() {
       this.confirmationTitle = "RECUSAR NECESSIDADE";
@@ -141,7 +144,7 @@ export default Vue.extend({
           this.isModalLoading = false;
           this.isDonationDoneOpen = true;
           this.$root.showSnackbar({
-            title: "NECESSIDADE EXCLUÍDA!",
+            title: "NECESSIDADE REJEITADA!",
             body: "A necessidade foi excluída da lista de necessidades.",
             color: "success",
           });

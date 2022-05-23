@@ -64,7 +64,7 @@ const routes: Array<RouteConfig> = [
     component: NecessityDescription,
   },
   {
-    path: "/necessityDescriptionAdmin/:id",
+    path: "/admin/necessities/:id",
     name: "Administrator necessity description",
     component: NecessityDescriptionAdmin,
   },
