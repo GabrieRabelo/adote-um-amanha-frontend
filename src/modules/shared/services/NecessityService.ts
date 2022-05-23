@@ -60,6 +60,7 @@ export function getNecessity(id: number): Promise<RequestEntity> {
     .then(({ data }) => fromBackendFormat(data))
     .catch((err) => Promise.reject(err));
 }
+
 export function deleteNecessity(id: number): Promise<void> {
   return HTTP.delete(`/pedidos/${id}?tipoPedido="${RequestType.necessity}"`)
     .then(() => Promise.resolve())
@@ -77,4 +78,19 @@ export function updateNecessity(necessity: NecessityEntity): Promise<void> {
   return HTTP.put(`/pedidos/${necessity.id}`, necessityToEdit)
     .then(() => Promise.resolve())
     .catch(() => Promise.reject());
+}
+
+export function refuseNecessity(
+  necessity: NecessityEntity,
+  refusalReason: string
+): Promise<void> {
+  return HTTP.patch(`/pedidos/${necessity.id}/recusar`, {
+    motivoRecusa: refusalReason,
+  })
+    .then(() => {
+      return Promise.resolve();
+    })
+    .catch((error) => {
+      return Promise.reject(error);
+    });
 }
