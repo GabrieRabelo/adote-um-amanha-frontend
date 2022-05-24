@@ -8,9 +8,7 @@
       </div>
 
       <div class="d-flex justify-center pb-8">
-        <span class="dialog--body">
-          {{ message }}
-        </span>
+        <span class="dialog--body" v-html="message"> </span>
       </div>
 
       <v-card-actions class="justify-center">

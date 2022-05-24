@@ -5,10 +5,14 @@ import Necessity from "../modules/institution/views/Necessity.vue";
 import Instituition from "../modules/institution/views/Instituition.vue";
 import SplashScreen from "../modules/shared/views/SplashScreen.vue";
 import EditNecessity from "../modules/institution/views/EditNecessity.vue";
+import NecessityDescription from "../modules/donator/views/NecessityDescription.vue";
+import NecessityDescriptionAdmin from "../modules/administrator/views/NecessityDescription.vue";
 import RegisterRequest from "../modules/shared/views/RegisterRequest.vue";
 import Home from "../modules/shared/views/Home.vue";
 import Necessities from "../modules/shared/views/Necessities.vue";
 import { isAuthenticated } from "@/modules/shared/utils/AuthenticationManager";
+import RegisterDonator from "../modules/donator/views/RegisterDonator.vue";
+import Donation from "../modules/donator/views/Donation.vue";
 import EditDonation from "../modules/shared/views/EditDonation.vue";
 import Donations from "../modules/donator/views/Donations.vue";
 
@@ -55,6 +59,21 @@ const routes: Array<RouteConfig> = [
     component: Necessities,
   },
   {
+    path: "/necessityDescription/:id",
+    name: "Donator necessity description",
+    component: NecessityDescription,
+  },
+  {
+    path: "/admin/necessities/:id",
+    name: "Administrator necessity description",
+    component: NecessityDescriptionAdmin,
+  },
+  {
+    path: "/donations/:id",
+    name: "Donation",
+    component: Donation,
+  },
+  {
     path: "/donations",
     name: "Donations",
     component: Donations,
@@ -65,9 +84,14 @@ const routes: Array<RouteConfig> = [
     component: EditDonation,
   },
   {
-    path: "/donation/create",
+    path: "/donations/create",
     name: "",
     component: RegisterRequest,
+  },
+  {
+    path: "/donator/create",
+    name: "Register",
+    component: RegisterDonator,
   },
 ];
 
@@ -76,8 +100,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const auth = !isAuthenticated();
-  if (auth && to.name !== "Login") {
+  const auth = isAuthenticated();
+  if (!auth && to.name !== "Login" && to.name !== "Register") {
     next({ name: "Login" });
   }
   next();

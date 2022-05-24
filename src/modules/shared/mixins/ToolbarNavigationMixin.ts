@@ -14,6 +14,10 @@ export default Vue.extend({
     root.onToolbarNavButtonClick = () => {
       this.onToolbarNavButtonClick();
     };
+    const router = this.$router as any;
+    if (router.history.current.path === "/home") {
+      root.hideToolbarButton();
+    }
   },
   methods: {
     onToolbarNavButtonClick() {

@@ -4,24 +4,21 @@
       :is="currentContent"
       @filterToggle="onFilterToggle"
       v-model="filters"
-      :requestType="requestType"
     />
   </v-slide-x-transition>
 </template>
 
 <script>
 import Vue from "vue";
-import NecessitiesFilter from "../../shared/components/NecessitiesFilter.vue";
-import NecessitiesContent from "../../shared/components/NecessitiesContent.vue";
 import { getDonationsFilters } from "../../shared/utils/UserPreferences";
-import { RequestType } from "@/modules/shared/models/RequestEntity";
+import DonationsFilter from "../../shared/components/DonationsFilter.vue";
+import DonationsContent from "../../shared/components/DonationsContent.vue";
 
 export default Vue.extend({
-  components: { NecessitiesFilter, NecessitiesContent },
+  components: { DonationsFilter, DonationsContent },
   data: () => ({
     filterActive: false,
     filters: getDonationsFilters(),
-    requestType: RequestType.donation,
   }),
   methods: {
     onNecessityClick(necessity) {
@@ -33,7 +30,7 @@ export default Vue.extend({
   },
   computed: {
     currentContent() {
-      return this.filterActive ? "NecessitiesFilter" : "NecessitiesContent";
+      return this.filterActive ? "DonationsFilter" : "DonationsContent";
     },
   },
 });

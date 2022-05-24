@@ -32,16 +32,23 @@
         @click="onNecessityClick(necessity)"
       />
     </v-row>
-    <v-row class="justify-end mr-6" v-if="shouldShowCreateButton">
-      <Button
-        class="a-fab"
-        :title="shouldLoadNecessities ? 'Criar' : 'Doar'"
-        prependIcon="mdi-plus"
-        color="primary"
-        elevation="4"
-        @click="$router.push('/necessities/create')"
+    <v-row fluid>
+      <EmptyListError
+        :title="emptyListTitleText"
+        :body="emptyListBodyText"
+        class="mt-12 mx-2"
+        v-if="isListEmpty"
       />
     </v-row>
+    <Button
+      v-if="isUserInstitution"
+      class="a-fab"
+      title="Criar"
+      prependIcon="mdi-plus"
+      color="primary"
+      elevation="4"
+      @click="$router.push('/necessities/create')"
+    />
   </v-container>
 </template>
 
@@ -56,17 +63,14 @@ import { UserRole } from "../enums/UserRole";
 import ToolbarMenuMixin from "../mixins/ToolbarMenuMixin";
 import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
 import InputChips from "./InputChips.vue";
-import { getNecessitiesFilters } from "../utils/UserPreferences";
 import lodash from "lodash";
-import { RequestType } from "../models/RequestEntity";
-import { getDonations } from "@/modules/donator/services/DonationService";
+import EmptyListError from "./EmptyListError.vue";
 
 export default Vue.extend({
   mixins: [ToolbarMenuMixin, ToolbarNavigationMixin],
-  components: { Input, NecessityCard, Button, InputChips },
+  components: { Input, NecessityCard, Button, InputChips, EmptyListError },
   props: {
     filters: Object,
-    requestType: String,
   },
   model: {
     prop: "filters",
@@ -74,24 +78,26 @@ export default Vue.extend({
   },
   data: () => ({
     necessities: [],
+    loaded: false,
   }),
   created() {
     this.onInputChange = lodash.debounce(this.onInputChange, 500);
   },
   async mounted() {
-    this.$root.showToolbar(
-      this.shouldLoadNecessities ? "NECESSIDADES" : "DOAÇÕES"
-    );
+    this.$root.showToolbar("NECESSIDADES");
     this.$root.startLoader();
-    this.loadFilters();
     this.necessities = await this.getNecessities();
     this.$root.stopLoader();
+    this.loaded = true;
   },
   methods: {
     onNecessityClick(necessity) {
-      const route = this.shouldLoadNecessities
-        ? `/necessity/${necessity.id}`
-        : `/donations/${necessity.id}`;
+      var route = ``;
+      if (this.isUserInstitution) {
+        route = `/necessity/${necessity.id}`;
+      } else if (this.isUserDonator) {
+        route = `/necessityDescription/${necessity.id}`;
+      }
       this.$router.push(route);
     },
     async getNecessities() {
@@ -103,32 +109,37 @@ export default Vue.extend({
         subcategorias: this.filters.subcategories.join(","),
         status: this.filters.status.join(","),
         textoBusca: this.filters.name,
+        mesesCorte: this.filters.startDate.value,
       };
-      const getter = this.shouldLoadNecessities ? getNecessities : getDonations;
-      const response = await getter(params);
+      const response = await getNecessities(params);
       this.$root.stopLoader();
       return response;
-    },
-    loadFilters() {
-      const filters = getNecessitiesFilters();
-      if (filters) {
-        this.$emit("change", filters);
-      }
     },
     async onInputChange() {
       this.necessities = await this.getNecessities();
     },
+    onToolbarNavButtonClick() {
+      this.$router.push("/home");
+    },
   },
   computed: {
-    shouldShowCreateButton() {
-      return (
-        (getUserData().role == UserRole.institution &&
-          this.shouldLoadNecessities) ||
-        (getUserData().role === UserRole.donator && !this.shouldLoadNecessities)
-      );
+    isListEmpty() {
+      return this.loaded && !this.necessities.length;
     },
-    shouldLoadNecessities() {
-      return this.requestType === RequestType.necessity;
+    emptyListTitleText() {
+      return `Nenhuma necessidade encontrada!`;
+    },
+    emptyListBodyText() {
+      return `Quando criadas, as necessidades aparecerão aqui.`;
+    },
+    shouldShowCreateButton() {
+      return getUserData().role == UserRole.institution;
+    },
+    isUserInstitution() {
+      return getUserData().role == UserRole.institution;
+    },
+    isUserDonator() {
+      return getUserData().role == UserRole.donator;
     },
   },
 });
@@ -137,8 +148,9 @@ export default Vue.extend({
 <style scoped>
 .a-fab {
   position: fixed;
-  bottom: 12px;
   max-width: 120px;
+  right: 36px;
+  bottom: 48px;
 }
 .container {
   height: 100%;

@@ -84,6 +84,7 @@
       @confirm="onDeleteConfirmed"
       :loading="isModalLoading"
       :isButtonOn="true"
+      :isCancelButtonOn="true"
     />
   </v-container>
 </template>

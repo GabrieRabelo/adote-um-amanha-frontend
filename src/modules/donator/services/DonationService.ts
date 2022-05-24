@@ -56,12 +56,26 @@ export async function updateDonation(donation: NecessityEntity): Promise<void> {
     .catch(() => Promise.reject());
 }
 
+export async function matchDonation(donation: NecessityEntity): Promise<void> {
+  const donationToEdit: unknown = {
+    assunto: donation.title,
+    descricao: donation.description,
+    categoria: donation.category,
+    subcategoria: donation.subcategory,
+    urlVideo: donation.url,
+  };
+  return HTTP.post(`/match/${donation.id}`, donationToEdit)
+    .then(() => Promise.resolve())
+    .catch(() => Promise.reject());
+}
+
 export function createDonation(donation: RequestEntity): Promise<void> {
   return HTTP.post("/pedidos", {
     assunto: donation.title,
     descricao: donation.description,
     categoria: donation.category,
     subcategoria: donation.subcategory,
+    urlVideo: donation.url,
   })
     .then(() => {
       return Promise.resolve();

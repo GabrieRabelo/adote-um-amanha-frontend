@@ -213,6 +213,9 @@ export default Vue.extend({
       });
       this.$router.push("/donations");
     },
+    onToolbarNavButtonClick() {
+      this.onBackButtonClick();
+    },
   },
   computed: {
     buttonTitle() {
