@@ -92,7 +92,7 @@ export default Vue.extend({
   },
   methods: {
     onNecessitiesButtonClick() {
-      this.$router.push("/necessities");
+      this.$router.push("/admin/necessities");
     },
     onPersonalizedDonationButtonClick() {
       // snackbar por agora
