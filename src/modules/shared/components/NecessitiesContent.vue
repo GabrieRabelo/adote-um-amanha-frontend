@@ -58,7 +58,12 @@ import Input from "./Input.vue";
 import NecessityCard from "./NecessityCard.vue";
 import Button from "./Button.vue";
 import { getNecessities } from "../services/NecessityService";
-import { getUserData } from "../utils/LoggedUserManager";
+import {
+  getUserData,
+  isUserInstitution,
+  isUserDonator,
+  isUserAdmin,
+} from "../utils/LoggedUserManager";
 import { UserRole } from "../enums/UserRole";
 import ToolbarMenuMixin from "../mixins/ToolbarMenuMixin";
 import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
@@ -93,15 +98,16 @@ export default Vue.extend({
   methods: {
     onNecessityClick(necessity) {
       var route = ``;
-      if (this.isUserInstitution) {
+      if (isUserInstitution()) {
         route = `/necessity/${necessity.id}`;
-      } else if (this.isUserDonator) {
+      } else if (isUserDonator()) {
         route = `/necessityDescription/${necessity.id}`;
+      } else if (isUserAdmin()) {
+        route = `/admin/necessities/${necessity.id}`;
       }
       this.$router.push(route);
     },
     async getNecessities() {
-      this.$root.startLoader();
       const params = {
         direcao: "DESC",
         ordenacao: "dataHora",
@@ -112,7 +118,6 @@ export default Vue.extend({
         mesesCorte: this.filters.startDate.value,
       };
       const response = await getNecessities(params);
-      this.$root.stopLoader();
       return response;
     },
     async onInputChange() {
@@ -136,10 +141,7 @@ export default Vue.extend({
       return getUserData().role == UserRole.institution;
     },
     isUserInstitution() {
-      return getUserData().role == UserRole.institution;
-    },
-    isUserDonator() {
-      return getUserData().role == UserRole.donator;
+      return isUserInstitution();
     },
   },
 });

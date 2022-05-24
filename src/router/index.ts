@@ -59,6 +59,11 @@ const routes: Array<RouteConfig> = [
     component: Necessities,
   },
   {
+    path: "/admin/necessities",
+    name: "List necessities",
+    component: Necessities,
+  },
+  {
     path: "/necessityDescription/:id",
     name: "Donator necessity description",
     component: NecessityDescription,
