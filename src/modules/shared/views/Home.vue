@@ -8,6 +8,7 @@ import Necessities from "./Necessities.vue";
 import { UserRole } from "../enums/UserRole";
 import { getUserData } from "../utils/LoggedUserManager";
 import HomeScreenDonator from "../../donator/views/HomescreenDonator.vue";
+import HomeScreenAdmin from "../../admin/views/HomescreenAdmin.vue";
 import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
 
 export default Vue.extend({
@@ -15,6 +16,7 @@ export default Vue.extend({
   components: {
     Necessities,
     HomeScreenDonator,
+    HomeScreenAdmin,
   },
   data: () => ({
     currentComponent: null,
@@ -28,7 +30,7 @@ export default Vue.extend({
       const viewMap = {
         [UserRole.institution]: "Necessities",
         [UserRole.donator]: "HomeScreenDonator",
-        [UserRole.admin]: "",
+        [UserRole.admin]: "HomeScreenAdmin",
       };
       const currentUser = getUserData();
       const role = currentUser.role;

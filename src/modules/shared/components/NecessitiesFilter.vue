@@ -110,6 +110,12 @@ export default Vue.extend({
   },
   data: () => ({}),
   methods: {
+    canFilterStatus() {
+      return getUserData().role == UserRole.admin;
+    },
+    buttonClick() {
+      console.log("Click");
+    },
     onToolbarNavButtonClick() {
       this.$emit("filterToggle", false);
     },
