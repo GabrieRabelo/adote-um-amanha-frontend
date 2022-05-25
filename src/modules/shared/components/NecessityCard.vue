@@ -10,6 +10,7 @@
     <div class="d-flex justify-space-between">
       <div>
         <div class="card__subtitle">{{ subcategory }}</div>
+        <div class="card__subtitle">{{ institutionName }}</div>
         <div class="card__subtitle">{{ necessity.createdDate | date }}</div>
       </div>
       <div class="status-container d-flex align-end">
@@ -25,6 +26,8 @@ import Vue from "vue";
 import StatusUtils from "../enums/Status";
 import Subcategory from "../enums/Subcategory";
 import dateFormat from "../filters/dateFormat";
+import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
+import { UserRole } from "@/modules/shared/enums/UserRole";
 
 export default Vue.extend({
   props: {
@@ -34,6 +37,11 @@ export default Vue.extend({
     date: dateFormat,
   },
   computed: {
+    institutionName() {
+      return getUserData().role == UserRole.admin
+        ? this.necessity.user.name
+        : "";
+    },
     statusIcon() {
       return StatusUtils.getIcon(this.necessity.status);
     },
