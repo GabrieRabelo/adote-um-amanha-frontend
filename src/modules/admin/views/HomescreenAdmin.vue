@@ -39,7 +39,7 @@
             title="Solicitações de Match"
             color="primary"
             outlined
-            @click="snackbar = true"
+            @click="onMatchRequestsClick"
           />
         </div>
         <div class="d-flex justify-center mb-4">
@@ -99,8 +99,7 @@ export default Vue.extend({
       this.$router.push("/necessities/create");
     },
     onMatchRequestsClick() {
-      // snackbar por agora
-      this.$router.push("/home");
+      this.$router.push("/admin/matches");
     },
     onDonatorsClick() {
       // snackbar por agora
