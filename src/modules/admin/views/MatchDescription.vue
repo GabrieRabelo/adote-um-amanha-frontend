@@ -22,11 +22,17 @@
 
     <UserCard
       :userRole="userRole"
-      :userName="donator.user.name"
-      :userId="donator.user.id"
+      :userName="necessity.user.name"
+      :userId="necessity.user.id"
     />
     <UserCard
       :userRole="userRole"
+      :userName="admin.user.name"
+      :userId="admin.user.id"
+    />
+
+    <MatchCard
+      :match="match"
       :userName="admin.user.name"
       :userId="admin.user.id"
     />
@@ -72,25 +78,25 @@
 
 <script>
 import Vue from "vue";
-import Category from "../shared/enums/Category";
-import Subcategory from "../shared/enums/Subcategory";
-import { getNecessity } from "../shared/services/NecessityService";
+import Category from "../../shared/enums/Category";
+import Subcategory from "../../shared/enums/Subcategory";
+import { getNecessity } from "../../shared/services/NecessityService";
 import moment from "moment";
-import Button from "../shared/components/Button.vue";
+import Button from "../../shared/components/Button.vue";
 import { Status } from "@/modules/shared/enums/Status";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
-import UserCard from "../shared/components/UserCard.vue";
-import { matchDonation } from "../donator/services/DonatorService";
-import ConfirmationModal from "../shared/components/ConfirmationModal.vue";
-import DonationDoneModal from "../shared/components/DonationDoneModal.vue";
+import UserCard from "../../shared/components/UserCard.vue";
+import { matchDonation } from "../../donator/services/DonatorService";
+import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
+import DonationDoneModal from "../../shared/components/DonationDoneModal.vue";
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({
     admin: null,
-    userRole: UserRole.institution,
+    userRole: UserRole.admin,
     isModalOpen: false,
     isModalLoading: false,
     isDonationDoneOpen: false,
@@ -143,14 +149,15 @@ export default Vue.extend({
     onNotFound() {
       this.$router.push("/home");
     },
-    onDonateButtonClick() {
-      this.confirmationTitle = "CONFIRMAR DOAÇÃO";
-      this.confirmationMessage = `Deseja confirmar a doação para <b>${this.admin.user.name}</b>? <br/> <br/> <i>${this.admin.description}</i>`;
+    onRefuseButtonClick() {
+      this.confirmationTitle = "RECUSAR MATCH";
+      this.confirmationMessage =
+        "Tem certeza de que deseja recusar esta match?";
       this.isModalOpen = true;
     },
     onConfirmMessage() {
       this.isDonationDoneOpen = false;
-      this.$router.push("/donations");
+      this.$router.push("/matches");
     },
     onConfirmButtonClick() {
       this.isModelLoading = true;
