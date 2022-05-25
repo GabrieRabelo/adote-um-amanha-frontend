@@ -22,8 +22,8 @@
 
     <UserCard
       :userRole="userRole"
-      :userName="admin.user.name"
-      :userId="admin.user.id"
+      :userName="donator.user.name"
+      :userId="donator.user.id"
     />
     <UserCard
       :userRole="userRole"
@@ -97,9 +97,7 @@ export default Vue.extend({
     isDonationDoneLoading: false,
     confirmationTitle: "",
     confirmationMessage: "",
-    donatedTitle: "Sua doação foi enviada, muito obrigado!",
-    donatedMessage:
-      "Assim que sua doação for avaliada, entraremos em contato para mais informações.",
+    donatedTitle: "A avaliação foi enviada, muito obrigado!",
   }),
   async mounted() {
     this.$root.showToolbar("MATCH");
