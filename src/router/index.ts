@@ -17,7 +17,7 @@ import EditDonation from "../modules/shared/views/EditDonation.vue";
 import Donations from "../modules/donator/views/Donations.vue";
 import Matches from "../modules/admin/views/matches/Matches.vue";
 import CreateMatch from "../modules/shared/views/CreateMatch.vue";
-import MatchDescription from "../modules/admin/MatchDescription.vue";
+import MatchDescription from "../modules/admin/views/MatchDescription.vue";
 
 Vue.use(VueRouter);
 
