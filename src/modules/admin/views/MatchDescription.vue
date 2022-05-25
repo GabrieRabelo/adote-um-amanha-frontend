@@ -1,8 +1,8 @@
 <template>
-  <v-container class="align-start" fill-height v-if="admin">
+  <v-container class="align-start" fill-height v-if="match">
     <v-container class="align-start px-7">
       <v-row class="mt-3 mb-4">
-        <div class="a-text__bold-title">{{ admin.title }}</div>
+        <div class="a-text__bold-title">{{ match.necessity.title }}</div>
       </v-row>
       <v-row
         class="justify-space-between mb-3"
@@ -16,28 +16,22 @@
         <div class="a-text">Descrição</div>
       </v-row>
       <v-row>
-        <div class="a-text light mt-1">{{ admin.description }}</div>
+        <div class="a-text light mt-1">{{ match.description }}</div>
       </v-row>
     </v-container>
 
-    <UserCard
+    <!-- <UserCard
       :userRole="userRole"
       :userName="necessity.user.name"
       :userId="necessity.user.id"
-    />
-    <UserCard
+    /> -->
+    <!-- <UserCard
       :userRole="userRole"
-      :userName="admin.user.name"
-      :userId="admin.user.id"
-    />
+      :userName="match.user.name"
+      :userId="match.user.id"
+    /> -->
 
-    <MatchCard
-      :match="match"
-      :userName="admin.user.name"
-      :userId="admin.user.id"
-    />
-
-    <v-container class="align-end" v-if="admin">
+    <v-container class="align-end" v-if="match">
       <v-row class="justify-center">
         <Button
           class="mr-4"
@@ -80,7 +74,6 @@
 import Vue from "vue";
 import Category from "../../shared/enums/Category";
 import Subcategory from "../../shared/enums/Subcategory";
-import { getNecessity } from "../../shared/services/NecessityService";
 import moment from "moment";
 import Button from "../../shared/components/Button.vue";
 import { Status } from "@/modules/shared/enums/Status";
@@ -91,11 +84,12 @@ import UserCard from "../../shared/components/UserCard.vue";
 import { matchDonation } from "../../donator/services/DonatorService";
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
 import DonationDoneModal from "../../shared/components/DonationDoneModal.vue";
+import { getMatchMock } from "../services/MatchesService";
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({
-    admin: null,
+    match: null,
     userRole: UserRole.admin,
     isModalOpen: false,
     isModalLoading: false,
@@ -107,17 +101,16 @@ export default Vue.extend({
   }),
   async mounted() {
     this.$root.showToolbar("MATCH");
-    this.admin = await getNecessity(this.$route.params.id).catch(
-      ({ response }) => {
-        if (response.status === 404) {
-          this.onNotFound();
-        }
+    this.match = await getMatchMock(9999).catch(({ response }) => {
+      if (response.status === 404) {
+        this.onNotFound();
       }
-    );
+    });
+    console.log(this.match);
   },
   components: {
     Button,
-    UserCard,
+    //UserCard,
     ConfirmationModal,
     DonationDoneModal,
   },
@@ -126,21 +119,21 @@ export default Vue.extend({
       return [
         {
           key: "Data cadastro",
-          value: moment(this.admin.createdDate).format("DD/MM/yyyy"),
+          value: moment(this.match.necessity.createdDate).format("DD/MM/yyyy"),
         },
         {
           key: "Categoria",
-          value: Category.toSingularString(this.admin.category),
+          value: Category.toSingularString(this.match.necessity.category),
         },
         {
           key: "Subcategoria",
-          value: Subcategory.toString(this.admin.subcategory),
+          value: Subcategory.toString(this.match.necessity.subcategory),
         },
       ];
     },
     canDonate() {
       return (
-        this.admin.status === Status.pending &&
+        this.match.status === Status.pending &&
         getUserData().role == UserRole.donator
       );
     },
@@ -161,7 +154,7 @@ export default Vue.extend({
     },
     onConfirmButtonClick() {
       this.isModelLoading = true;
-      matchDonation(this.admin)
+      matchDonation(this.match)
         .then(() => {
           this.isModalOpen = false;
           this.isModalLoading = false;
