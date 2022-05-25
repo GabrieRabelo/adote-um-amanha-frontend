@@ -27,6 +27,7 @@ export type RequestBackendEntity = {
   urlVideo?: string;
   tipo: RequestType;
   nomeUsuario?: string;
+  idUsuario?: number;
 };
 
 export enum RequestType {

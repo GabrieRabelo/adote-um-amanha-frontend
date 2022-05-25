@@ -10,6 +10,7 @@
     <div class="d-flex justify-space-between">
       <div>
         <div class="card__subtitle">{{ subcategory }}</div>
+        <div class="card__subtitle">{{ institutionName }}</div>
         <div class="card__subtitle">{{ necessity.createdDate | date }}</div>
       </div>
       <div class="status-container d-flex align-end">
@@ -22,10 +23,11 @@
 
 <script>
 import Vue from "vue";
-import { Status } from "../enums/Status";
 import StatusUtils from "../enums/Status";
 import Subcategory from "../enums/Subcategory";
 import dateFormat from "../filters/dateFormat";
+import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
+import { UserRole } from "@/modules/shared/enums/UserRole";
 
 export default Vue.extend({
   props: {
@@ -35,19 +37,20 @@ export default Vue.extend({
     date: dateFormat,
   },
   computed: {
+    institutionName() {
+      return getUserData().role == UserRole.admin
+        ? this.necessity.user.name
+        : "";
+    },
     statusIcon() {
-      return this.necessity.status == Status.resolved
-        ? "mdi-checkbox-marked-circle-outline"
-        : "mdi-dots-horizontal-circle";
+      return StatusUtils.getIcon(this.necessity.status);
     },
     statusIconColor() {
-      return this.necessity.status == Status.resolved ? "#3BB54A" : "#FFAA5A";
+      return StatusUtils.getIconColor(this.necessity.status);
     },
-
     subcategory() {
       return Subcategory.toString(this.necessity.subcategory);
     },
-
     status() {
       return StatusUtils.toString(this.necessity.status);
     },

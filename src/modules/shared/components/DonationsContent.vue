@@ -23,14 +23,11 @@
       <InputChips @click="$emit('filterToggle', true)" :filters="filters" />
     </v-row>
     <v-row
-      v-for="necessity in necessities"
-      :key="necessity.id"
+      v-for="donation in donations"
+      :key="donation.id"
       class="justify-center mx-2 mb-2"
     >
-      <NecessityCard
-        :necessity="necessity"
-        @click="onNecessityClick(necessity)"
-      />
+      <NecessityCard :necessity="donation" @click="onDonationClick(donation)" />
     </v-row>
     <v-row fluid>
       <EmptyListError
@@ -41,9 +38,8 @@
       />
     </v-row>
     <Button
-      v-if="isUserInstitution"
       class="a-fab"
-      title="Criar"
+      title="Doar"
       prependIcon="mdi-plus"
       color="primary"
       elevation="4"
@@ -57,18 +53,13 @@ import Vue from "vue";
 import Input from "./Input.vue";
 import NecessityCard from "./NecessityCard.vue";
 import Button from "./Button.vue";
-import { getNecessities } from "../services/NecessityService";
-import {
-  getUserData,
-  isUserInstitution,
-  isUserDonator,
-  isUserAdmin,
-} from "../utils/LoggedUserManager";
+import { getUserData } from "../utils/LoggedUserManager";
 import { UserRole } from "../enums/UserRole";
 import ToolbarMenuMixin from "../mixins/ToolbarMenuMixin";
 import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
 import InputChips from "./InputChips.vue";
 import lodash from "lodash";
+import { getDonations } from "@/modules/donator/services/DonationService";
 import EmptyListError from "./EmptyListError.vue";
 
 export default Vue.extend({
@@ -82,32 +73,25 @@ export default Vue.extend({
     event: "change",
   },
   data: () => ({
-    necessities: [],
+    donations: [],
     loaded: false,
   }),
   created() {
     this.onInputChange = lodash.debounce(this.onInputChange, 500);
   },
   async mounted() {
-    this.$root.showToolbar("NECESSIDADES");
+    this.$root.showToolbar("DOAÇÕES");
     this.$root.startLoader();
-    this.necessities = await this.getNecessities();
+    this.donations = await this.getDonations();
     this.$root.stopLoader();
     this.loaded = true;
   },
   methods: {
-    onNecessityClick(necessity) {
-      var route = ``;
-      if (isUserInstitution()) {
-        route = `/necessity/${necessity.id}`;
-      } else if (isUserDonator()) {
-        route = `/necessityDescription/${necessity.id}`;
-      } else if (isUserAdmin()) {
-        route = `/admin/necessities/${necessity.id}`;
-      }
-      this.$router.push(route);
+    onDonationClick(donation) {
+      this.$router.push(`/donations/${donation.id}`);
     },
-    async getNecessities() {
+    async getDonations() {
+      this.$root.startLoader();
       const params = {
         direcao: "DESC",
         ordenacao: "dataHora",
@@ -117,11 +101,12 @@ export default Vue.extend({
         textoBusca: this.filters.name,
         mesesCorte: this.filters.startDate.value,
       };
-      const response = await getNecessities(params);
+      const response = await getDonations(params);
+      this.$root.stopLoader();
       return response;
     },
     async onInputChange() {
-      this.necessities = await this.getNecessities();
+      this.donations = await this.getDonations();
     },
     onToolbarNavButtonClick() {
       this.$router.push("/home");
@@ -129,19 +114,22 @@ export default Vue.extend({
   },
   computed: {
     isListEmpty() {
-      return this.loaded && !this.necessities.length;
+      return this.loaded && !this.donations.length;
     },
     emptyListTitleText() {
-      return `Nenhuma necessidade encontrada!`;
+      return `Nenhuma doação encontrada!`;
     },
     emptyListBodyText() {
-      return `Quando criadas, as necessidades aparecerão aqui.`;
+      return `Quando criadas, as doações aparecerão aqui.`;
     },
     shouldShowCreateButton() {
-      return getUserData().role == UserRole.institution;
+      return getUserData().role === UserRole.donator;
     },
     isUserInstitution() {
-      return isUserInstitution();
+      return getUserData().role == UserRole.institution;
+    },
+    isUserDonator() {
+      return getUserData().role == UserRole.donator;
     },
   },
 });

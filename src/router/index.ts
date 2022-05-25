@@ -5,6 +5,8 @@ import Necessity from "../modules/institution/views/Necessity.vue";
 import Instituition from "../modules/institution/views/Instituition.vue";
 import SplashScreen from "../modules/shared/views/SplashScreen.vue";
 import EditNecessity from "../modules/institution/views/EditNecessity.vue";
+import NecessityDescription from "../modules/donator/views/NecessityDescription.vue";
+import NecessityDescriptionAdmin from "../modules/admin/views/NecessityDescription.vue";
 import RegisterRequest from "../modules/shared/views/RegisterRequest.vue";
 import Home from "../modules/shared/views/Home.vue";
 import Necessities from "../modules/shared/views/Necessities.vue";
@@ -13,6 +15,7 @@ import RegisterDonator from "../modules/donator/views/RegisterDonator.vue";
 import Donation from "../modules/donator/views/Donation.vue";
 import EditDonation from "../modules/shared/views/EditDonation.vue";
 import Donations from "../modules/donator/views/Donations.vue";
+import Matches from "../modules/admin/views/matches/Matches.vue";
 
 Vue.use(VueRouter);
 
@@ -57,6 +60,21 @@ const routes: Array<RouteConfig> = [
     component: Necessities,
   },
   {
+    path: "/admin/necessities",
+    name: "List necessities",
+    component: Necessities,
+  },
+  {
+    path: "/necessityDescription/:id",
+    name: "Donator necessity description",
+    component: NecessityDescription,
+  },
+  {
+    path: "/admin/necessities/:id",
+    name: "Administrator necessity description",
+    component: NecessityDescriptionAdmin,
+  },
+  {
     path: "/donations/:id",
     name: "Donation",
     component: Donation,
@@ -80,6 +98,11 @@ const routes: Array<RouteConfig> = [
     path: "/donator/create",
     name: "Register",
     component: RegisterDonator,
+  },
+  {
+    path: "/admin/matches",
+    name: "Matches",
+    component: Matches,
   },
 ];
 

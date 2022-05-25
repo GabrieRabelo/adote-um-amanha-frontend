@@ -144,6 +144,8 @@ import InputValidations from "../../shared/utils/InputValidations";
 import { createDonator } from "../services/DonatorService";
 import InputStates from "../../shared/components/InputStates.vue";
 import VueTheMask from "vue-the-mask";
+import LoginService from "@/modules/institution/services/LoginService";
+
 Vue.use(VueTheMask);
 
 export default Vue.extend({
@@ -161,8 +163,17 @@ export default Vue.extend({
       createDonator(this.donator)
         .then(() => {
           this.$root.showSnackbar({ title: "Cadastro realizado com sucesso!" });
-          this.$router.push("/auth");
-          this.isLoading = false;
+          LoginService.login(this.donator.email, this.donator.password)
+            .then(() => {
+              this.$router.push("/home");
+              this.isLoading = false;
+            })
+            .catch(() => {
+              this.$router.push("/auth");
+            })
+            .finally(() => {
+              this.signUpButtonLoading = false;
+            });
         })
         .catch((e) => {
           this.isLoading = false;

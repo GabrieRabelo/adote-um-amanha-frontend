@@ -23,14 +23,11 @@
       <InputChips @click="$emit('filterToggle', true)" :filters="filters" />
     </v-row>
     <v-row
-      v-for="necessity in necessities"
-      :key="necessity.id"
+      v-for="match in matches"
+      :key="match.id"
       class="justify-center mx-2 mb-2"
     >
-      <NecessityCard
-        :necessity="necessity"
-        @click="onNecessityClick(necessity)"
-      />
+      <MatchCard :match="match" @click="onMatchClick(match)" />
     </v-row>
     <v-row fluid>
       <EmptyListError
@@ -41,39 +38,39 @@
       />
     </v-row>
     <Button
-      v-if="isUserInstitution"
       class="a-fab"
       title="Criar"
       prependIcon="mdi-plus"
       color="primary"
       elevation="4"
-      @click="$router.push('/necessities/create')"
+      @click="
+        $root.showSnackbar({ title: '** Abrir modal de criação de match **' })
+      "
     />
   </v-container>
 </template>
 
 <script>
 import Vue from "vue";
-import Input from "./Input.vue";
-import NecessityCard from "./NecessityCard.vue";
-import Button from "./Button.vue";
-import { getNecessities } from "../services/NecessityService";
+import Input from "../../../shared/components/Input.vue";
+import MatchCard from "../../components/MatchCard.vue";
+import Button from "../../../shared/components/Button.vue";
 import {
   getUserData,
-  isUserInstitution,
   isUserDonator,
-  isUserAdmin,
-} from "../utils/LoggedUserManager";
-import { UserRole } from "../enums/UserRole";
-import ToolbarMenuMixin from "../mixins/ToolbarMenuMixin";
-import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
-import InputChips from "./InputChips.vue";
+  isUserInstitution,
+} from "../../../shared/utils/LoggedUserManager";
+import { UserRole } from "../../../shared/enums/UserRole";
+import ToolbarMenuMixin from "../../../shared/mixins/ToolbarMenuMixin";
+import ToolbarNavigationMixin from "../../../shared/mixins/ToolbarNavigationMixin";
+import InputChips from "../../../shared/components/InputChips.vue";
 import lodash from "lodash";
-import EmptyListError from "./EmptyListError.vue";
+import { getMatches } from "../../services/MatchesService";
+import EmptyListError from "../../../shared/components/EmptyListError.vue";
 
 export default Vue.extend({
   mixins: [ToolbarMenuMixin, ToolbarNavigationMixin],
-  components: { Input, NecessityCard, Button, InputChips, EmptyListError },
+  components: { Input, MatchCard, Button, InputChips, EmptyListError },
   props: {
     filters: Object,
   },
@@ -82,32 +79,25 @@ export default Vue.extend({
     event: "change",
   },
   data: () => ({
-    necessities: [],
+    matches: [],
     loaded: false,
   }),
   created() {
     this.onInputChange = lodash.debounce(this.onInputChange, 500);
   },
   async mounted() {
-    this.$root.showToolbar("NECESSIDADES");
+    this.$root.showToolbar("MATCHES");
     this.$root.startLoader();
-    this.necessities = await this.getNecessities();
+    this.matches = await this.getMatches();
     this.$root.stopLoader();
     this.loaded = true;
   },
   methods: {
-    onNecessityClick(necessity) {
-      var route = ``;
-      if (isUserInstitution()) {
-        route = `/necessity/${necessity.id}`;
-      } else if (isUserDonator()) {
-        route = `/necessityDescription/${necessity.id}`;
-      } else if (isUserAdmin()) {
-        route = `/admin/necessities/${necessity.id}`;
-      }
-      this.$router.push(route);
+    onMatchClick(match) {
+      this.$router.push(`/admin/matches/${match.id}`);
     },
-    async getNecessities() {
+    async getMatches() {
+      this.$root.startLoader();
       const params = {
         direcao: "DESC",
         ordenacao: "dataHora",
@@ -117,11 +107,12 @@ export default Vue.extend({
         textoBusca: this.filters.name,
         mesesCorte: this.filters.startDate.value,
       };
-      const response = await getNecessities(params);
+      const response = await getMatches(params);
+      this.$root.stopLoader();
       return response;
     },
     async onInputChange() {
-      this.necessities = await this.getNecessities();
+      this.matches = await this.getMatches();
     },
     onToolbarNavButtonClick() {
       this.$router.push("/home");
@@ -129,19 +120,22 @@ export default Vue.extend({
   },
   computed: {
     isListEmpty() {
-      return this.loaded && !this.necessities.length;
+      return this.loaded && !this.matches.length;
     },
     emptyListTitleText() {
-      return `Nenhuma necessidade encontrada!`;
+      return `Nenhum match encontrado!`;
     },
     emptyListBodyText() {
-      return `Quando criadas, as necessidades aparecerão aqui.`;
+      return `Quando criados, os matches aparecerão aqui.`;
     },
     shouldShowCreateButton() {
-      return getUserData().role == UserRole.institution;
+      return getUserData().role === UserRole.donator;
     },
     isUserInstitution() {
       return isUserInstitution();
+    },
+    isUserDonator() {
+      return isUserDonator();
     },
   },
 });

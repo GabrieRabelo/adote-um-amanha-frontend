@@ -10,19 +10,19 @@
 
 <script>
 import Vue from "vue";
-import NecessitiesFilter from "../components/NecessitiesFilter.vue";
-import NecessitiesContent from "../components/NecessitiesContent.vue";
-import { getNecessitiesFilters } from "../utils/UserPreferences";
+import MatchesContent from "./MatchesContent.vue";
+import MatchesFilter from "./MatchesFilter.vue";
+import { getMatchesFilters } from "@/modules/shared/utils/UserPreferences";
 
 export default Vue.extend({
-  components: { NecessitiesFilter, NecessitiesContent },
+  components: { MatchesFilter, MatchesContent },
   data: () => ({
     filterActive: false,
-    filters: getNecessitiesFilters(),
+    filters: getMatchesFilters(),
   }),
   methods: {
     onNecessityClick(necessity) {
-      this.$router.push(`/necessity/${necessity.id}`);
+      this.$router.push(`/admin/necessities/${necessity.id}`);
     },
     onFilterToggle(active) {
       this.filterActive = active;
@@ -30,7 +30,7 @@ export default Vue.extend({
   },
   computed: {
     currentContent() {
-      return this.filterActive ? "NecessitiesFilter" : "NecessitiesContent";
+      return this.filterActive ? "MatchesFilter" : "MatchesContent";
     },
   },
 });

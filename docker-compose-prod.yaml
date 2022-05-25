@@ -2,9 +2,9 @@ version: '3.7'
 
 services:
   adoteumamanha-vuefrontend:
-    image: adote-um-amanha/frontenduat:latest
+    image: adote-um-amanha/vuefrontend:latest
     ports:
-      - "5021:80"
+      - "80:80"
     networks:
       - frontend
 

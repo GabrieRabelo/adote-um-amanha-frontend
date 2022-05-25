@@ -9,7 +9,6 @@ import { Subcategory } from "../enums/Subcategory";
 export function fromBackendFormat(
   request: RequestBackendEntity
 ): RequestEntity {
-  console.log(request);
   return {
     id: request.id,
     title: request.assunto,
@@ -19,7 +18,7 @@ export function fromBackendFormat(
     url: request.urlVideo,
     description: request.descricao,
     status: request.status as Status,
-    user: { name: request.nomeUsuario, id: request.id },
+    user: { name: request.nomeUsuario, id: request.idUsuario },
     type: request.tipo,
   };
 }

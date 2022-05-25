@@ -39,7 +39,7 @@
 
       <v-divider></v-divider>
 
-      <div class="mx-2 my-6" v-if="shouldShowStatusFilter">
+      <div class="mx-2 my-6">
         <div class="font-weight-bold">Status</div>
         <v-row align="center">
           <div class="mt-4 align-left">
@@ -57,7 +57,7 @@
       </div>
     </v-col>
 
-    <v-divider v-if="shouldShowStatusFilter"></v-divider>
+    <v-divider></v-divider>
 
     <v-row class="ml-0 mt-4">
       <v-col class="py-0">
@@ -88,17 +88,15 @@
 </template>
 
 <script>
+import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
+import { setDonationsFilters } from "@/modules/shared/utils/UserPreferences";
 import Vue from "vue";
-import Button from "./Button.vue";
-import CategoryUtils from "../enums/Category";
-import SubcategoryUtils from "../enums/Subcategory";
-import StatusUtils from "../enums/Status";
-import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
-import Select from "./Select.vue";
-import DateFilter from "../enums/DateFilter";
-import { setNecessitiesFilters } from "../utils/UserPreferences";
-import { UserRole } from "../enums/UserRole";
-import { getUserData } from "../utils/LoggedUserManager";
+import Button from "../../../shared/components/Button.vue";
+import Select from "../../../shared/components/Select.vue";
+import CategoryUtils from "../../../shared/enums/Category";
+import SubcategoryUtils from "../../../shared/enums/Subcategory";
+import StatusUtils from "../../../shared/enums/Status";
+import DateFilter from "@/modules/shared/enums/DateFilter";
 
 export default Vue.extend({
   components: { Button, Select },
@@ -110,12 +108,6 @@ export default Vue.extend({
   },
   data: () => ({}),
   methods: {
-    canFilterStatus() {
-      return getUserData().role == UserRole.admin;
-    },
-    buttonClick() {
-      console.log("Click");
-    },
     onToolbarNavButtonClick() {
       this.$emit("filterToggle", false);
     },
@@ -156,7 +148,7 @@ export default Vue.extend({
       this.saveFilterAndEmit();
     },
     saveFilterAndEmit() {
-      setNecessitiesFilters(this.filters);
+      setDonationsFilters(this.filters);
       this.$emit("change", this.filters);
     },
   },
@@ -172,18 +164,10 @@ export default Vue.extend({
       return SubcategoryUtils.allObjects();
     },
     allStatus() {
-      const currentUser = getUserData();
-      if (currentUser.role === UserRole.donator) {
-        return StatusUtils.allObjects().slice(0, -1);
-      }
       return StatusUtils.allObjects();
     },
     allDates() {
       return DateFilter.allObjects();
-    },
-    shouldShowStatusFilter() {
-      const currentUser = getUserData();
-      return !(currentUser.role === UserRole.donator);
     },
   },
 });

@@ -1,6 +1,6 @@
 <template>
-  <v-container class="align-start" fill-height>
-    <v-container class="align-start px-7" v-if="necessity">
+  <v-container class="align-start" fill-height v-if="necessity">
+    <v-container class="align-start px-7">
       <v-row class="mt-3 mb-4">
         <div class="a-text__bold-title">{{ necessity.title }}</div>
       </v-row>
@@ -16,60 +16,42 @@
         <div class="a-text">Descrição</div>
       </v-row>
       <v-row>
-        <div class="a-text light">{{ necessity.description }}</div>
+        <div class="a-text light mt-1">{{ necessity.description }}</div>
       </v-row>
     </v-container>
 
+    <UserCard
+      :userRole="userRole"
+      :userName="necessity.user.name"
+      :userId="necessity.user.id"
+    />
+
     <v-container v-if="necessity">
-      <v-row class="justify-center">
-        <EmbeddedVideo :src="necessity.url" />
-      </v-row>
+      <v-row class="justify-center"> </v-row>
     </v-container>
 
     <v-container class="align-end" v-if="necessity">
       <v-row class="justify-center">
         <Button
           class="mr-4"
-          title="Voltar"
+          title="Recusar"
           color="primary"
-          prependIcon="mdi-arrow-left"
+          prependIcon="mdi-thumb-down"
           outlined
           compact
-          @click="$router.go(-1)"
-        />
-        <Button
-          title="Doar"
-          color="primary"
-          prependIcon="mdi-hand-heart-outline"
-          compact
-          v-if="canDonate"
-          @click="onDonateButtonClick"
-        />
-        <Button
-          title="Editar"
-          color="primary"
-          prependIcon="mdi-pencil"
-          compact
-          v-if="canEdit"
-          @click="onEditButtonClick"
+          v-if="canRefuse"
+          @click="onRefuseButtonClick"
         />
       </v-row>
     </v-container>
-    <ConfirmationModal
+    <RefuseNecessityModal
       v-model="isModalOpen"
       :title="confirmationTitle"
       :message="confirmationMessage"
       @cancel="isModalOpen = false"
-      @confirm="onConfirmButtonClick()"
+      @confirm="onConfirmButtonClick($event)"
       :loading="isModalLoading"
       :isCancelButtonOn="true"
-    />
-    <DonationDoneModal
-      v-model="isDonationDoneOpen"
-      :title="donatedTitle"
-      :message="donatedMessage"
-      @confirm="onConfirmMessage()"
-      :loading="isDonationDoneLoading"
     />
   </v-container>
 </template>
@@ -78,35 +60,33 @@
 import Vue from "vue";
 import Category from "../../shared/enums/Category";
 import Subcategory from "../../shared/enums/Subcategory";
+import {
+  getNecessity,
+  refuseNecessity,
+} from "../../shared/services/NecessityService";
 import moment from "moment";
-
-import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
-import DonationDoneModal from "../../shared/components/DonationDoneModal.vue";
 import Button from "../../shared/components/Button.vue";
-import EmbeddedVideo from "../../shared/components/EmbeddedVideo.vue";
 import { Status } from "@/modules/shared/enums/Status";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
-import { matchDonation } from "@/modules/donator/services/DonationService";
-import { getNecessity } from "../../shared/services/NecessityService";
+import UserCard from "../../shared/components/UserCard.vue";
+import RefuseNecessityModal from "../../shared/components/RefuseNecessityModal.vue";
+
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({
     necessity: null,
-    donatedTitle: "Sua doação foi enviada, muito obrigado!",
-    donatedMessage:
-      "Assim que sua doação for avaliada, entraremos em contato para mais informações.",
-    confirmationTitle: "",
-    confirmationMessage: "",
+    userRole: UserRole.admin,
     isModalOpen: false,
     isModalLoading: false,
-    isDonationDoneOpen: false,
-    isDonationDoneLoading: false,
-    isSaveButtonLoading: false,
+    confirmationTitle: "",
+    confirmationMessage: "",
+    loaded: false,
   }),
   async mounted() {
-    this.$root.showToolbar("NECESSIDADES");
+    this.$root.showToolbar("NECESSIDADE");
+    this.$root.startLoader();
     this.necessity = await getNecessity(this.$route.params.id).catch(
       ({ response }) => {
         if (response.status === 404) {
@@ -114,12 +94,13 @@ export default Vue.extend({
         }
       }
     );
+    this.$root.stopLoader();
+    this.loaded = true;
   },
   components: {
-    EmbeddedVideo,
     Button,
-    ConfirmationModal,
-    DonationDoneModal,
+    UserCard,
+    RefuseNecessityModal,
   },
   computed: {
     attributes() {
@@ -138,16 +119,10 @@ export default Vue.extend({
         },
       ];
     },
-    canEdit() {
+    canRefuse() {
       return (
         this.necessity.status === Status.pending &&
-        getUserData().role == UserRole.institution
-      );
-    },
-    canDonate() {
-      return (
-        this.necessity.status === Status.pending &&
-        getUserData().role == UserRole.donator
+        getUserData().role == UserRole.admin
       );
     },
   },
@@ -155,34 +130,34 @@ export default Vue.extend({
     onNotFound() {
       this.$router.push("/home");
     },
-    onConfirmButtonClick() {
+    onRefuseButtonClick() {
+      this.confirmationTitle = "RECUSAR NECESSIDADE";
+      this.confirmationMessage =
+        "Tem certeza de que deseja recusar esta necessidade?";
+      this.isModalOpen = true;
+    },
+    onConfirmButtonClick(refusalReason) {
       this.isModelLoading = true;
-      matchDonation(this.necessity)
+      refuseNecessity(this.necessity, refusalReason)
         .then(() => {
           this.isModalOpen = false;
           this.isModalLoading = false;
           this.isDonationDoneOpen = true;
+          this.$root.showSnackbar({
+            title: "NECESSIDADE REJEITADA!",
+            body: "A necessidade foi excluída da lista de necessidades.",
+            color: "success",
+          });
+          this.$router.push("/necessities");
         })
         .catch(() => {
           this.$root.showSnackbar({
             title: "ERRO INESPERADO!",
-            body: "Ocorreu um erro inesperado ao tentar realizar sua doação... Tente novamente!",
+            body: "Ocorreu um erro inesperado ao tentar recusar a necessidade... Tente novamente!",
             color: "error",
           });
           this.isModalLoading = false;
         });
-    },
-    onConfirmMessage() {
-      this.isDonationDoneOpen = false;
-      this.$router.push("/donations");
-    },
-    onEditButtonClick() {
-      this.$router.push(`/necessity/${this.necessity.id}/edit`);
-    },
-    onDonateButtonClick() {
-      this.confirmationTitle = "CONFIRMAR DOAÇÃO";
-      this.confirmationMessage = `Deseja confirmar a doação para <b>${this.necessity.user.name}</b>? <br/> <br/> <i>${this.necessity.description}</i>`;
-      this.isModalOpen = true;
     },
   },
 });

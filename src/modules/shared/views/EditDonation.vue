@@ -170,9 +170,9 @@ export default Vue.extend({
   },
   methods: {
     onDeleteClick() {
-      this.confirmationTitle = "EXCLUIR NECESSIDADE";
+      this.confirmationTitle = "EXCLUIR DOAÇÃO";
       this.confirmationMessage =
-        "Tem certeza que deseja excluir esta necessidade?";
+        "Tem certeza que deseja excluir esta doação?";
       this.isModalOpen = true;
     },
     onDeleteConfirmed() {
@@ -183,7 +183,7 @@ export default Vue.extend({
           this.isModalLoading = false;
           this.$root.showSnackbar({
             title: "DOAÇÃO EXCLUÍDA!",
-            body: "Sua necessidade foi excluída da lista de necessidades.",
+            body: "Sua doação foi excluída com sucesso.",
             color: "success",
           });
           this.$router.push("/home");

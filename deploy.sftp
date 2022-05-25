@@ -1,0 +1,8 @@
+mkdir frontend
+cd frontend
+put docker-compose.yaml
+put Dockerfile
+mkdir dist
+cd dist
+put -r dist/
+bye

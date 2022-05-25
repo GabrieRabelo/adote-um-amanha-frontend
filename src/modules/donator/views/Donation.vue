@@ -15,8 +15,8 @@
       <v-row class="justify-space-between mb-3">
         <div class="a-text">Status</div>
         <div>
-          <span class="a-text light">{{ statusText }}</span>
           <v-icon :color="statusIconColor">{{ statusIcon }}</v-icon>
+          <span class="a-text light ml-2">{{ statusText }}</span>
         </div>
       </v-row>
       <v-row>
@@ -71,7 +71,13 @@ export default Vue.extend({
   }),
   async mounted() {
     this.$root.showToolbar("DOAÇÃO");
-    this.donation = await getDonation(this.$route.params.id);
+    this.donation = await getDonation(this.$route.params.id).catch(
+      ({ response }) => {
+        if (response.status === 404) {
+          this.onNotFound();
+        }
+      }
+    );
   },
   components: {
     Button,
@@ -97,12 +103,10 @@ export default Vue.extend({
       return StatusUtils.toString(this.donation.status);
     },
     statusIcon() {
-      return this.donation.status == Status.resolved
-        ? "mdi-checkbox-marked-circle-outline"
-        : "mdi-dots-horizontal-circle";
+      return StatusUtils.getIcon(this.donation.status);
     },
     statusIconColor() {
-      return this.donation.status == Status.resolved ? "#3BB54A" : "#FFAA5A";
+      return StatusUtils.getIconColor(this.donation.status);
     },
     canEdit() {
       return (
@@ -112,6 +116,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    onNotFound() {
+      this.$router.push("/home");
+    },
     onEditButtonClick() {
       this.$router.push(`/donations/${this.donation.id}/edit/`);
     },
