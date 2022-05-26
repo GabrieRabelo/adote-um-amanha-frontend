@@ -27,13 +27,22 @@
     />
 
     <v-container v-if="necessity">
-      <v-row class="justify-center"> </v-row>
+      <v-row class="justify-center">
+        <Button
+          class="vinculate-button"
+          title="Vincular Doador"
+          color="primary"
+          prependIcon="mdi-plus"
+          outlined
+          @click="$router.push('/admin/matches/create')"
+        />
+      </v-row>
     </v-container>
 
     <v-container class="align-end" v-if="necessity">
       <v-row class="justify-center">
         <Button
-          class="mr-4"
+          class="mr-4 refuse-button"
           title="Recusar"
           color="primary"
           prependIcon="mdi-thumb-down"
@@ -166,5 +175,16 @@ export default Vue.extend({
 <style>
 .a-text {
   color: #000000;
+}
+
+.vinculate-button {
+  width: 313px;
+  min-height: 75px;
+  border: 2px dotted #ffd25a !important;
+  border-radius: 7px;
+}
+
+.refuse-button {
+  width: 135px;
 }
 </style>
