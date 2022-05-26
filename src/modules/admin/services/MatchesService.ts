@@ -11,6 +11,7 @@ import { mountQueryString } from "@/modules/shared/utils/QueryParamBuilder";
 import { fromBackendFormat } from "@/modules/shared/utils/RequestMapper";
 //import { RequestMatchEntity } from "@/modules/shared/models/MatchEntity";
 import { HTTP } from "@/api/http-common";
+import { Category } from "@/modules/shared/enums/Category";
 
 export async function getMatchesMock(): Promise<MatchEntity[]> {
   const matches: MatchEntity[] = [
@@ -20,6 +21,7 @@ export async function getMatchesMock(): Promise<MatchEntity[]> {
         id: 9999,
         title: "Livros Didáticos",
         user: { name: "Lar Esperança" },
+        category: Category.service,
         subcategory: Subcategory.education,
       },
       donation: {
@@ -37,6 +39,7 @@ export async function getMatchesMock(): Promise<MatchEntity[]> {
         id: 9999,
         title: "Livros Didáticos",
         user: { name: "Lar Esperança" },
+        category: Category.service,
         subcategory: Subcategory.education,
       },
       donation: {
@@ -54,6 +57,7 @@ export async function getMatchesMock(): Promise<MatchEntity[]> {
         id: 9999,
         title: "Livros Didáticos",
         user: { name: "Lar Esperança" },
+        category: Category.service,
         subcategory: Subcategory.education,
       },
       donation: {
@@ -75,13 +79,14 @@ export async function getMatchMock(): Promise<MatchEntity> {
     necessity: {
       id: 9999,
       title: "Livros Didáticos",
-      user: { name: "Lar Esperança" },
+      user: { id: 9998, name: "Lar Esperança" },
+      category: Category.service,
       subcategory: Subcategory.education,
     },
     donation: {
       id: 9996,
       title: "Doacao 1",
-      user: { name: "Ada Lovelace" },
+      user: { id: 9994, name: "Ada Lovelace" },
     },
     date: new Date(),
     status: Status.match,

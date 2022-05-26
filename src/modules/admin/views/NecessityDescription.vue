@@ -12,7 +12,7 @@
         <div class="a-text">{{ attribute.key }}</div>
         <div class="a-text light">{{ attribute.value }}</div>
       </v-row>
-      <v-row>
+      <v-row class="mt-10">
         <div class="a-text">Descrição</div>
       </v-row>
       <v-row>
