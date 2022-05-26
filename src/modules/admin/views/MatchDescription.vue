@@ -40,14 +40,14 @@
           prependIcon="mdi-thumb-down-outline"
           outlined
           compact
-          @click="$router.go(-1)"
+          @click="onRefuseButtonClick"
         />
         <Button
           title="Aprovar"
           color="primary"
           prependIcon="mdi-thumb-up"
           compact
-          @click="onDonateButtonClick"
+          @click="onApproveButtonClick"
         />
       </v-row>
     </v-container>
@@ -59,13 +59,6 @@
       @confirm="onConfirmButtonClick()"
       :loading="isModalLoading"
       :isCancelButtonOn="true"
-    />
-    <DonationDoneModal
-      v-model="isDonationDoneOpen"
-      :title="donatedTitle"
-      :message="donatedMessage"
-      @confirm="onConfirmMessage()"
-      :loading="isDonationDoneLoading"
     />
   </v-container>
 </template>
@@ -81,10 +74,12 @@ import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
 import UserCard from "../../shared/components/UserCard.vue";
-import { matchDonation } from "../../donator/services/DonatorService";
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
-import DonationDoneModal from "../../shared/components/DonationDoneModal.vue";
-import { getMatchMock } from "../services/MatchesService";
+import {
+  getMatchMock,
+  refuseMatch,
+  approveMatch,
+} from "../services/MatchesService";
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
@@ -113,7 +108,6 @@ export default Vue.extend({
     Button,
     UserCard,
     ConfirmationModal,
-    DonationDoneModal,
   },
   computed: {
     attributes() {
@@ -146,25 +140,36 @@ export default Vue.extend({
     onRefuseButtonClick() {
       this.confirmationTitle = "RECUSAR MATCH";
       this.confirmationMessage =
-        "Tem certeza de que deseja recusar esta match?";
+        "Tem certeza de que deseja recusar este match?";
       this.isModalOpen = true;
     },
-    onConfirmMessage() {
-      this.isDonationDoneOpen = false;
-      this.$router.push("/matches");
-    },
-    onConfirmButtonClick() {
+    onApproveButtonClick() {
       this.isModelLoading = true;
-      matchDonation(this.match)
+      approveMatch(this.match)
         .then(() => {
-          this.isModalOpen = false;
-          this.isModalLoading = false;
-          this.isDonationDoneOpen = true;
+          this.$router.push("/admin/matches");
         })
         .catch(() => {
           this.$root.showSnackbar({
             title: "ERRO INESPERADO!",
-            body: "Ocorreu um erro inesperado ao tentar realizar sua doação... Tente novamente!",
+            body: "Ocorreu um erro inesperado ao tentar aprovar o match... Tente novamente!",
+            color: "error",
+          });
+          this.isModalLoading = false;
+        });
+    },
+    onConfirmButtonClick() {
+      this.isModelLoading = true;
+      refuseMatch(this.match)
+        .then(() => {
+          this.isModalOpen = false;
+          this.isModalLoading = false;
+          this.$router.push("/admin/matches");
+        })
+        .catch(() => {
+          this.$root.showSnackbar({
+            title: "ERRO INESPERADO!",
+            body: "Ocorreu um erro inesperado ao tentar recusar o match... Tente novamente!",
             color: "error",
           });
           this.isModalLoading = false;
