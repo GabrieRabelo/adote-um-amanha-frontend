@@ -20,16 +20,16 @@
       </v-row>
     </v-container>
 
-    <!-- <UserCard
-      :userRole="userRole"
-      :userName="necessity.user.name"
-      :userId="necessity.user.id"
-    /> -->
-    <!-- <UserCard
-      :userRole="userRole"
-      :userName="match.user.name"
-      :userId="match.user.id"
-    /> -->
+    <UserCard
+      :userRole="userRoleInstitution"
+      :userName="match.necessity.user.name"
+      :userId="match.necessity.user.id"
+    />
+    <UserCard
+      :userRole="userRoleDonator"
+      :userName="match.donation.user.name"
+      :userId="match.donation.user.id"
+    />
 
     <v-container class="align-end" v-if="match">
       <v-row class="justify-center">
@@ -90,7 +90,8 @@ export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({
     match: null,
-    userRole: UserRole.admin,
+    userRoleInstitution: UserRole.institution,
+    userRoleDonator: UserRole.donator,
     isModalOpen: false,
     isModalLoading: false,
     isDonationDoneOpen: false,
@@ -110,7 +111,7 @@ export default Vue.extend({
   },
   components: {
     Button,
-    //UserCard,
+    UserCard,
     ConfirmationModal,
     DonationDoneModal,
   },

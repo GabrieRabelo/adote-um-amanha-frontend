@@ -69,7 +69,7 @@ export async function getMatchesMock(): Promise<MatchEntity[]> {
   return matches;
 }
 
-export async function getMatchMock(id:number): Promise<MatchEntity> {
+export async function getMatchMock(id: number): Promise<MatchEntity> {
   return {
     id: 9999,
     necessity: {
@@ -92,7 +92,7 @@ export async function getMatchMock(id:number): Promise<MatchEntity> {
 export function getMatches(
   queryParams: MatchRequestParams
 ): Promise<RequestEntity[]> {
-  return getMatchesWithURL(queryParams, "pedidos");
+  return getMatchesWithURL(queryParams, "matches");
 }
 
 function getMatchesWithURL(
