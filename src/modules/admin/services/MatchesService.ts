@@ -97,7 +97,7 @@ export async function getMatchMock(): Promise<MatchEntity> {
 export function getMatches(
   queryParams: MatchRequestParams
 ): Promise<RequestEntity[]> {
-  return getMatchesWithURL(queryParams, "matches");
+  return getMatchesWithURL(queryParams, "match");
 }
 
 function getMatchesWithURL(
