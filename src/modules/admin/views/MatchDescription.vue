@@ -36,7 +36,7 @@
         <Button
           class="mr-4"
           title="Recusar"
-          color="primary"
+          color="error"
           prependIcon="mdi-thumb-down-outline"
           outlined
           compact
@@ -96,12 +96,14 @@ export default Vue.extend({
     donatedTitle: "A avaliação foi enviada, muito obrigado!",
   }),
   async mounted() {
+    this.$root.startLoader();
     this.$root.showToolbar("SOLICITAÇÃO DE MATCH");
     this.match = await getMatchMock(9999).catch(({ response }) => {
       if (response.status === 404) {
         this.onNotFound();
       }
     });
+    this.$root.stopLoader();
     console.log(this.match);
   },
   components: {
