@@ -69,7 +69,7 @@ export async function getMatchesMock(): Promise<MatchEntity[]> {
   return matches;
 }
 
-export async function getMatchMock(id: number): Promise<MatchEntity> {
+export async function getMatchMock(): Promise<MatchEntity> {
   return {
     id: 9999,
     necessity: {
@@ -115,12 +115,27 @@ function getMatchesWithURL(
 //     .catch((err) => Promise.reject(err));
 // }
 
-export function refuseMatch(
-  match: MatchEntity,
-  refusalReason: string
-): Promise<void> {
-  return HTTP.patch(`/pedidos/${match.id}/recusar`, {
-    motivoRecusa: refusalReason,
+export function refuseMatch(match: MatchEntity): Promise<void> {
+  console.log("Recusando match");
+  return Promise.resolve();
+
+  return HTTP.patch(`/matches/${match.id}/recusar`, {
+    motivoRecusa: "",
+  })
+    .then(() => {
+      return Promise.resolve();
+    })
+    .catch((error) => {
+      return Promise.reject(error);
+    });
+}
+
+export function approveMatch(match: MatchEntity): Promise<void> {
+  console.log("Aprovando match");
+  return Promise.resolve();
+
+  return HTTP.patch(`/matches/${match.id}/recusar`, {
+    motivoRecusa: "",
   })
     .then(() => {
       return Promise.resolve();
