@@ -25,6 +25,14 @@
       <v-row>
         <div class="a-text light">{{ donation.description }}</div>
       </v-row>
+
+      <v-row class="py-4">
+        <UserCard
+          :userRole="donatorRole"
+          :userName="donation.user.name"
+          :userId="donation.user.id"
+        />
+      </v-row>
     </v-container>
 
     <v-container class="align-self-end" v-if="donation">
@@ -64,8 +72,11 @@ import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
 import ToolbarMenuMixin from "@/modules/shared/mixins/ToolbarMenuMixin";
+import UserCard from "../../shared/components/UserCard.vue";
+
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin, ToolbarMenuMixin],
+  components: { UserCard, Button },
   data: () => ({
     donation: null,
   }),
@@ -78,9 +89,6 @@ export default Vue.extend({
         }
       }
     );
-  },
-  components: {
-    Button,
   },
   computed: {
     attributes() {
@@ -113,6 +121,9 @@ export default Vue.extend({
         this.donation.status === Status.pending &&
         getUserData().role == UserRole.donator
       );
+    },
+    donatorRole() {
+      return UserRole.donator;
     },
   },
   methods: {

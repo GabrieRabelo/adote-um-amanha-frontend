@@ -33,6 +33,7 @@ export function getDonation(id: number): Promise<unknown> {
       description: data.descricao,
       status: data.status,
       subcategory: data.subcategoria,
+      user: { id: data.idUsuario, name: data.nomeUsuario }
     }))
     .catch((err) => Promise.reject(err));
 }

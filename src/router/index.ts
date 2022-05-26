@@ -104,6 +104,11 @@ const routes: Array<RouteConfig> = [
     name: "Matches",
     component: Matches,
   },
+  {
+    path: "/admin/donations/:id",
+    name: "Donation For Admin",
+    component: Donation
+  }
 ];
 
 const router = new VueRouter({

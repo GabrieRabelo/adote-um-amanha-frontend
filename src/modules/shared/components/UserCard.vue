@@ -1,5 +1,5 @@
 <template>
-  <v-container @click="onClick()">
+  <v-container @click="onClick()" class="pa-0">
     <v-row class="align-start ml-1 mt-1 align-center">
       <img
         width="60px"
