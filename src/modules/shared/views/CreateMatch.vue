@@ -36,6 +36,20 @@
         v-if="isListEmpty"
       />
     </v-row>
+    <MatchConfirmationModal
+      v-model="isModalOpen"
+      :title="confirmationTitle"
+      :firstPath="firstPath"
+      :firstTitle="firstTitle"
+      :firstDescription="firstDescription"
+      :secondPath="secondPath"
+      :secondTitle="secondTitle"
+      :secondDescription="secondDescription"
+      @cancel="isModalOpen = false"
+      @confirm="onMatchConfirmationClick()"
+      :loading="isModalLoading"
+      :isCancelButtonOn="true"
+    />
   </v-container>
 </template>
 
@@ -48,16 +62,18 @@ import Input from "../components/Input.vue";
 import OrderCard from "../components/OrderCard.vue";
 import { getNecessities, getNecessity } from "../services/NecessityService";
 import { RequestType } from "../models/RequestEntity";
+import MatchConfirmationModal from "../components/MatchConfirmationModal.vue";
 import {
   getDonation,
   getDonations,
+  matchDonation,
 } from "@/modules/donator/services/DonationService";
 import { Status } from "../enums/Status";
 import EmptyListError from "../components/EmptyListError.vue";
 
 export default Vue.extend({
   props: ["order"],
-  components: { Input, OrderCard, EmptyListError },
+  components: { Input, OrderCard, EmptyListError, MatchConfirmationModal },
   mixins: [ToolbarNavigationMixin, ToolbarMenuMixin],
   data: () => ({
     loaded: false,
@@ -65,6 +81,14 @@ export default Vue.extend({
     baseOrder: {},
     inputFilter: "",
     hasError: false,
+    isModalOpen: false,
+    isModalLoading: false,
+    firstPath: "",
+    firstTitle: "",
+    firstDescription: "",
+    secondTitle: "",
+    secondDescription: "",
+    secondPath: "",
   }),
   created() {
     this.onInputChange = lodash.debounce(this.onInputChange, 500);
@@ -106,10 +130,43 @@ export default Vue.extend({
       this.$root.stopLoader();
     },
     onOrderClick() {
-      this.$root.showSnackbar({
-        title: "Modal em implementação",
-        color: "#555",
-      });
+      if (this.isNecessity) {
+        this.confirmationTitle = "Vincular Necessidade";
+        this.firstPath = "../../../assets/img/institution-logo.png";
+        this.firstTitle = this.necessity.title;
+        this.firstDescription = this.necessity.description;
+        this.secondPath = "../../../assets/img/donator-logo.png";
+        this.secondTitle = this.order.title;
+        this.secondDescription = this.order.description;
+      } else {
+        this.confirmationTitle = "Vincular Doação";
+        this.firstPath = "../../../assets/img/donator-logo.png";
+        this.firstTitle = this.order.title;
+        this.firstDescription = this.order.description;
+        this.secondPath = "../../../assets/img/institution-logo.png";
+        this.secondTitle = this.necessity.title;
+        this.secondDescription = this.necessity.description;
+      }
+      this.isModalOpen = true;
+    },
+    onMatchConfirmationClick() {
+      this.isModelLoading = true;
+      matchDonation(this.necessity)
+        .then(() => {
+          this.isModalOpen = false;
+          this.isModalLoading = false;
+          this.isDonationDoneOpen = true;
+        })
+        .catch(() => {
+          this.$root.showSnackbar({
+            title: "ERRO INESPERADO!",
+            body: `Ocorreu um erro inesperado ao tentar vincular essa ${
+              this.isNecessity ? "necessidade à doação" : "doação à necessidade"
+            } ... Tente novamente!`,
+            color: "error",
+          });
+          this.isModalLoading = false;
+        });
     },
     async getOrders() {
       const params = {
