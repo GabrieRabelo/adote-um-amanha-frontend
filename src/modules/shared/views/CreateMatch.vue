@@ -66,8 +66,8 @@ import MatchConfirmationModal from "../components/MatchConfirmationModal.vue";
 import {
   getDonation,
   getDonations,
-  matchDonation,
 } from "@/modules/donator/services/DonationService";
+import { matchAdmin } from "@/modules/admin/services/MatchesService.ts";
 import { Status } from "../enums/Status";
 import EmptyListError from "../components/EmptyListError.vue";
 
@@ -151,11 +151,11 @@ export default Vue.extend({
     },
     onMatchConfirmationClick() {
       this.isModelLoading = true;
-      matchDonation(this.necessity)
-        .then(() => {
+      matchAdmin(this.necessity.id, this.order.id)
+        .then((response) => {
           this.isModalOpen = false;
           this.isModalLoading = false;
-          this.isDonationDoneOpen = true;
+          this.$router.push(`/admin/matches/${response}`);
         })
         .catch(() => {
           this.$root.showSnackbar({

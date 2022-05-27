@@ -1,8 +1,12 @@
 import { Status } from "@/modules/shared/enums/Status";
 import {
+  NecessityEntity,
+  RequestNecessityEntity,
+} from "../../shared/models/NecessityEntity";
+import {
   RequestBackendEntity,
   RequestEntity,
-  //RequestType,
+  RequestType,
 } from "../../shared/models/RequestEntity";
 import { Subcategory } from "@/modules/shared/enums/Subcategory";
 import { MatchEntity } from "../models/MatchEntity";
@@ -92,6 +96,13 @@ export async function getMatchMock(): Promise<MatchEntity> {
     status: Status.match,
     description: "Este é um match!!",
   };
+}
+
+export async function matchAdmin(
+  donation: NecessityEntity,
+  necessity: NecessityEntity
+): Promise<number> {
+  return HTTP.post(`/${necessity.id}/vincular/${donation.id}`);
 }
 
 export function getMatches(
