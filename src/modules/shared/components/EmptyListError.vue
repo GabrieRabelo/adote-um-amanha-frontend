@@ -7,7 +7,7 @@
       width="128"
     />
     <div class="empty-list__text text--title mb-4">{{ title }}</div>
-    <div class="empty-list__text text--body">{{ body }}</div>
+    <div class="empty-list__text text--body" v-html="body"></div>
   </div>
 </template>
 
