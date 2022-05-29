@@ -112,7 +112,7 @@ const routes: Array<RouteConfig> = [
     component: Matches,
   },
   {
-    path: "/admin/matches/create",
+    path: "/admin/create-match",
     name: "Create Match",
     component: CreateMatch,
     props: true,

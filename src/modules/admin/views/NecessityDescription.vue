@@ -145,7 +145,7 @@ export default Vue.extend({
         orderType: RequestType.necessity,
         orderID: this.necessity.id,
       };
-      this.$router.push({ path: "/admin/matches/create", query });
+      this.$router.push({ path: "/admin/create-match", query });
     },
     onNotFound() {
       this.$router.push("/home");
@@ -173,7 +173,7 @@ export default Vue.extend({
         .catch(() => {
           this.$root.showSnackbar({
             title: "ERRO INESPERADO!",
-            body: "Ocorreu um erro inesperado ao tentar recusar a necessidade... Tente novamente!",
+            body: "ADMINNNN Ocorreu um erro inesperado ao tentar recusar a necessidade... Tente novamente!",
             color: "error",
           });
           this.isModalLoading = false;

@@ -55,7 +55,6 @@ import ToolbarNavigationMixin from "../../../shared/mixins/ToolbarNavigationMixi
 import InputChips from "../../../shared/components/InputChips.vue";
 import lodash from "lodash";
 import { getMatches } from "../../services/MatchesService";
-import { getMatchesMock } from "../../services/MatchesService";
 import EmptyListError from "../../../shared/components/EmptyListError.vue";
 
 export default Vue.extend({
@@ -96,7 +95,7 @@ export default Vue.extend({
         textoBusca: this.filters.name,
         mesesCorte: this.filters.startDate.value,
       };
-      const response = await getMatchesMock(params);
+      const response = await getMatches(params);
       return response;
     },
     async onInputChange() {

@@ -135,7 +135,6 @@ export default Vue.extend({
         .then((match) => {
           this.isModalOpen = false;
           this.isModalLoading = false;
-          debugger;
           this.$router.push(`/admin/matches/${match.id}`);
         })
         .catch(() => {

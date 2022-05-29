@@ -56,9 +56,7 @@ export async function updateDonation(donation: NecessityEntity): Promise<void> {
     .catch(() => Promise.reject());
 }
 
-// essa função ta igual a de cima e não faz o que deveria fazer
-
-/* export async function matchDonation(donation: NecessityEntity): Promise<void> {
+export async function matchDonation(donation: NecessityEntity): Promise<void> {
   const donationToEdit: unknown = {
     assunto: donation.title,
     descricao: donation.description,
@@ -69,7 +67,7 @@ export async function updateDonation(donation: NecessityEntity): Promise<void> {
   return HTTP.post(`/match/${donation.id}`, donationToEdit)
     .then(() => Promise.resolve())
     .catch(() => Promise.reject());
-} */
+}
 
 export function createDonation(donation: RequestEntity): Promise<void> {
   return HTTP.post("/pedidos", {
