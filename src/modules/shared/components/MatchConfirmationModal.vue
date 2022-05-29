@@ -1,17 +1,15 @@
 <template>
-  <v-dialog max-width="330" v-bind="$attrs" v-on="$listeners">
+  <v-dialog content-class="dialog" v-bind="$attrs" v-on="$listeners">
     <v-card class="py-6 px-4">
       <div class="d-flex justify-center pb-8">
         <span class="dialog--title" v-html="title"></span>
       </div>
-      <div class="d-flex justify-center pb-8 my-1">
-        <img width="25px" :src="firstPath" alt="user logo" />
-        <span class="dialog--title" v-html="firstTitle"></span>
-        <span class="dialog--body" v-html="firstDescription"></span>
-        <span icon="mdi-chevron-double-down"> </span>
-        <img width="25px" :src="secondPath" alt="user logo" />
-        <span class="dialog--title" v-html="secondTitle"></span>
-        <span class="dialog--body" v-html="secondDescription"></span>
+      <div class="d-flex flex-column justify-center pb-8 my-1">
+        <OrderInfo :order="baseOrder" />
+        <div class="d-flex justify-center">
+          <v-icon class="my-3">mdi-chevron-double-down</v-icon>
+        </div>
+        <OrderInfo :order="targetOrder" v-if="targetOrder" />
       </div>
       <v-card-actions class="justify-center">
         <Button
@@ -28,7 +26,6 @@
           color="primary"
           @click="onConfirmClick"
           :loading="loading"
-          :disabled="!isValid"
         />
       </v-card-actions>
     </v-card>
@@ -36,26 +33,22 @@
 </template>
 <script>
 import Vue from "vue";
+import { RequestType } from "../models/RequestEntity";
+import { getNecessity } from "../services/NecessityService";
 import Button from "./Button.vue";
+import OrderInfo from "./OrderInfo.vue";
 
 export default Vue.extend({
+  components: { OrderInfo, Button },
   props: {
-    title: String,
-    firstpath: String,
-    firstTitle: String,
-    firstDescription: String,
-    secondPath: String,
-    secondTitle: String,
-    secondDescription: String,
     loading: Boolean,
     isCancelButtonOn: Boolean,
+    baseOrder: Object,
+    targetOrderID: Number,
   },
   data: () => ({
-    isValid: false,
+    targetOrder: {},
   }),
-  components: {
-    Button,
-  },
   methods: {
     onCancelClick() {
       this.$emit("cancel");
@@ -64,22 +57,40 @@ export default Vue.extend({
       this.$emit("confirm", this.refusalReason);
     },
   },
+  mounted() {
+    setTimeout(async () => {
+      this.targetOrder = await getNecessity(this.targetOrderID);
+    }, 1500);
+  },
+  computed: {
+    isNecessity() {
+      return this.orderType === RequestType.necessity;
+    },
+    title() {
+      return this.isNecessity ? "Vincular Doação" : "Vincular Necessidade";
+    },
+    attributes() {
+      if (this.isNecessity) {
+        return {
+          title: "Vincular Doação",
+          firstPath: "",
+        };
+      }
+      return {
+        title: "Vincular Necessidade",
+      };
+    },
+  },
 });
 </script>
 
 <style scoped lang="scss">
 .dialog {
-  &--container {
-    min-height: 180px;
-  }
+  overflow-x: hidden !important;
 
   &--title {
     font-size: 18px;
     font-weight: 600;
-    text-align: center;
-  }
-
-  &--body {
     text-align: center;
   }
 }

@@ -34,7 +34,7 @@
           color="primary"
           prependIcon="mdi-plus"
           outlined
-          @click="$router.push('/admin/matches/create')"
+          @click="onVinculateClick"
         />
       </v-row>
     </v-container>
@@ -81,6 +81,7 @@ import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
 import UserCard from "../../shared/components/UserCard.vue";
 import RefuseNecessityModal from "../../shared/components/RefuseNecessityModal.vue";
+import { RequestType } from "@/modules/shared/models/RequestEntity";
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
@@ -136,6 +137,13 @@ export default Vue.extend({
     },
   },
   methods: {
+    onVinculateClick() {
+      const query = {
+        orderType: RequestType.necessity,
+        orderID: this.necessity.id,
+      };
+      this.$router.push({ path: "/admin/matches/create", query });
+    },
     onNotFound() {
       this.$router.push("/home");
     },
