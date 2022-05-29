@@ -78,7 +78,7 @@ import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMix
 import UserCard from "../../shared/components/UserCard.vue";
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
 import {
-  getMatchMock,
+  getMatch,
   refuseMatch,
   approveMatch,
 } from "../services/MatchesService";
@@ -100,13 +100,13 @@ export default Vue.extend({
   async mounted() {
     this.$root.startLoader();
     this.$root.showToolbar("SOLICITAÇÃO DE MATCH");
-    this.match = await getMatchMock(9999).catch(({ response }) => {
+    const id = this.$route.params.id;
+    this.match = await getMatch(id).catch(({ response }) => {
       if (response.status === 404) {
         this.onNotFound();
       }
     });
     this.$root.stopLoader();
-    console.log(this.match);
   },
   components: {
     Button,
