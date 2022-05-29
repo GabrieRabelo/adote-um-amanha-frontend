@@ -53,7 +53,13 @@ import Vue from "vue";
 import Input from "./Input.vue";
 import NecessityCard from "./NecessityCard.vue";
 import Button from "./Button.vue";
-import { getUserData } from "../utils/LoggedUserManager";
+import {
+  getUserData,
+  isUserInstitution,
+  isUserDonator,
+  isUserAdmin,
+} from "../utils/LoggedUserManager";
+
 import { UserRole } from "../enums/UserRole";
 import ToolbarMenuMixin from "../mixins/ToolbarMenuMixin";
 import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
@@ -88,7 +94,15 @@ export default Vue.extend({
   },
   methods: {
     onDonationClick(donation) {
-      this.$router.push(`/donations/${donation.id}`);
+      var route = ``;
+      if (isUserInstitution()) {
+        route = `/donation/${donation.id}`;
+      } else if (isUserDonator()) {
+        route = `/donationDescription/${donation.id}`;
+      } else if (isUserAdmin()) {
+        route = `/admin/donations/${donation.id}`;
+      }
+      this.$router.push(route);
     },
     async getDonations() {
       this.$root.startLoader();

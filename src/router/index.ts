@@ -106,6 +106,11 @@ const routes: Array<RouteConfig> = [
     component: Matches,
   },
   {
+    path: "/admin/donations",
+    name: "List donations",
+    component: Donations,
+  },
+  {
     path: "/admin/matches/create",
     name: "Create Match",
     component: CreateMatch,
