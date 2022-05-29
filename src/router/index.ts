@@ -17,6 +17,7 @@ import EditDonation from "../modules/shared/views/EditDonation.vue";
 import Donations from "../modules/donator/views/Donations.vue";
 import Matches from "../modules/admin/views/matches/Matches.vue";
 import CreateMatch from "../modules/shared/views/CreateMatch.vue";
+import MatchDescription from "../modules/admin/views/MatchDescription.vue";
 
 Vue.use(VueRouter);
 
@@ -101,6 +102,11 @@ const routes: Array<RouteConfig> = [
     component: RegisterDonator,
   },
   {
+    path: "/admin/matches/:id",
+    name: "Admin Match Description",
+    component: MatchDescription,
+  },
+  {
     path: "/admin/matches",
     name: "Matches",
     component: Matches,
@@ -111,10 +117,15 @@ const routes: Array<RouteConfig> = [
     component: Donations,
   },
   {
-    path: "/admin/matches/create",
+    path: "/admin/create-match",
     name: "Create Match",
     component: CreateMatch,
     props: true,
+  },
+  {
+    path: "/admin/matches/:id",
+    name: "Admin Match Description",
+    component: MatchDescription,
   },
 ];
 

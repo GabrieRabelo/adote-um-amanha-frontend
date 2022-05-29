@@ -36,6 +36,18 @@
         v-if="isListEmpty"
       />
     </v-row>
+    <div v-if="isModalOpen">
+      <MatchConfirmationModal
+        class="dialog-teste"
+        :baseOrder="baseOrder"
+        :targetOrderID="targetOrder.id"
+        v-model="isModalOpen"
+        @cancel="isModalOpen = false"
+        @confirm="onMatchConfirmationClick"
+        :loading="isModalLoading"
+        :isCancelButtonOn="true"
+      />
+    </div>
   </v-container>
 </template>
 
@@ -48,23 +60,28 @@ import Input from "../components/Input.vue";
 import OrderCard from "../components/OrderCard.vue";
 import { getNecessities, getNecessity } from "../services/NecessityService";
 import { RequestType } from "../models/RequestEntity";
+import MatchConfirmationModal from "../components/MatchConfirmationModal.vue";
 import {
   getDonation,
   getDonations,
 } from "@/modules/donator/services/DonationService";
 import { Status } from "../enums/Status";
 import EmptyListError from "../components/EmptyListError.vue";
+import { matchAdmin } from "@/modules/admin/services/MatchesService";
 
 export default Vue.extend({
   props: ["order"],
-  components: { Input, OrderCard, EmptyListError },
+  components: { Input, OrderCard, EmptyListError, MatchConfirmationModal },
   mixins: [ToolbarNavigationMixin, ToolbarMenuMixin],
   data: () => ({
     loaded: false,
     orders: [],
     baseOrder: {},
+    targetOrder: {},
     inputFilter: "",
     hasError: false,
+    isModalOpen: false,
+    isModalLoading: false,
   }),
   created() {
     this.onInputChange = lodash.debounce(this.onInputChange, 500);
@@ -105,11 +122,31 @@ export default Vue.extend({
       this.orders = await this.getOrders();
       this.$root.stopLoader();
     },
-    onOrderClick() {
-      this.$root.showSnackbar({
-        title: "Modal em implementação",
-        color: "#555",
-      });
+    onOrderClick(order) {
+      this.targetOrder = order;
+      this.isModalOpen = true;
+    },
+    onMatchConfirmationClick({ baseOrderID, targetOrderID }) {
+      this.isModelLoading = true;
+      const params = this.isNecessity
+        ? [baseOrderID, targetOrderID]
+        : [targetOrderID, baseOrderID];
+      matchAdmin(...params)
+        .then((match) => {
+          this.isModalOpen = false;
+          this.isModalLoading = false;
+          this.$router.push(`/admin/matches/${match.id}`);
+        })
+        .catch(() => {
+          this.$root.showSnackbar({
+            title: "ERRO INESPERADO!",
+            body: `Ocorreu um erro ao tentar vincular a ${
+              this.isNecessity ? "necessidade à doação" : "doação à necessidade"
+            }, tente novamente!`,
+            color: "error",
+          });
+          this.isModalLoading = false;
+        });
     },
     async getOrders() {
       const params = {
