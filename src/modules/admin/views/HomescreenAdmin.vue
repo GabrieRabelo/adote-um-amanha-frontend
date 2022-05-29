@@ -30,7 +30,7 @@
             title="Doações Desvinculadas"
             color="primary"
             outlined
-            @click="snackbar = true"
+            @click="onPersonalizedDonationButtonClick"
           />
         </div>
         <div class="d-flex justify-center mb-4">
@@ -95,8 +95,7 @@ export default Vue.extend({
       this.$router.push("/admin/necessities");
     },
     onPersonalizedDonationButtonClick() {
-      // snackbar por agora
-      this.$router.push("/necessities/create");
+      this.$router.push("/admin/donations");
     },
     onMatchRequestsClick() {
       this.$router.push("/admin/matches");
