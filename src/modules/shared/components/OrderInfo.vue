@@ -1,21 +1,21 @@
 <template>
   <div class="info__container">
     <div class="info__header d-flex">
-      <div class="info__img">
+      <div class="info__img justify-center">
         <img
           v-if="isNecessity"
-          width="25px"
+          width="40px"
           src="../../../assets/img/institution-logo.png"
           alt="user logo"
         />
         <img
           v-else
-          width="25px"
+          width="40px"
           src="../../../assets/img/donator-logo.png"
           alt="user logo"
         />
       </div>
-      <div class="info__title ml-2">
+      <div class="info__title ml-2 d-flex align-center">
         <span>{{ order.title }}</span>
       </div>
     </div>
