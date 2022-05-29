@@ -5,7 +5,7 @@
     @click="$emit('click')"
   >
     <div class="d-flex">
-      <div class="card__title">{{ match.necessity.title }}</div>
+      <div class="card__title">{{ match.title }}</div>
     </div>
     <div class="d-flex justify-space-between">
       <div>
