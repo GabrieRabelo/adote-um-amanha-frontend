@@ -13,6 +13,10 @@ export function setDonationsFilters(filters: unknown): void {
   localStorage.setItem(donationsKey, JSON.stringify(filters));
 }
 
+export function setMatchesFilters(filters: unknown): void {
+  localStorage.setItem(matchesKey, JSON.stringify(filters));
+}
+
 export function getNecessitiesFilters(): unknown {
   try {
     const strItems = localStorage.getItem(necessitiesKey);

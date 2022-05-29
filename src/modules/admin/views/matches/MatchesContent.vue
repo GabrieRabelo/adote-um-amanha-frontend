@@ -89,7 +89,7 @@ export default Vue.extend({
       this.$root.startLoader();
       const params = {
         direcao: "DESC",
-        ordenacao: "dataHora",
+        ordenacao: "dataCriacao",
         categorias: this.filters.categories.join(","),
         subcategorias: this.filters.subcategories.join(","),
         status: this.filters.status.join(","),
