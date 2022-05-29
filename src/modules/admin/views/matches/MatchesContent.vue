@@ -86,7 +86,6 @@ export default Vue.extend({
       this.$router.push(`/admin/matches/${match.id}`);
     },
     async getMatches() {
-      this.$root.startLoader();
       const params = {
         direcao: "DESC",
         ordenacao: "dataCriacao",
@@ -97,7 +96,6 @@ export default Vue.extend({
         mesesCorte: this.filters.startDate.value,
       };
       const response = await getMatches(params);
-      this.$root.stopLoader();
       return response;
     },
     async onInputChange() {
