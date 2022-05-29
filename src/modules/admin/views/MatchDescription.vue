@@ -20,16 +20,18 @@
       </v-row>
     </v-container>
 
-    <UserCard
-      :userRole="userRoleInstitution"
-      :userName="match.necessity.user.name"
-      :userId="match.necessity.user.id"
-    />
-    <UserCard
-      :userRole="userRoleDonator"
-      :userName="match.donation.user.name"
-      :userId="match.donation.user.id"
-    />
+    <div>
+      <UserCard
+        :userRole="userRoleInstitution"
+        :userName="match.necessity.user.name"
+        :userId="match.necessity.user.id"
+      />
+      <UserCard
+        :userRole="userRoleDonator"
+        :userName="match.donation.user.name"
+        :userId="match.donation.user.id"
+      />
+    </div>
 
     <v-container class="align-end" v-if="match">
       <v-row class="justify-center">

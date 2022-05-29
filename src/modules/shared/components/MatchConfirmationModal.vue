@@ -67,7 +67,10 @@ export default Vue.extend({
       this.$emit("cancel");
     },
     onConfirmClick() {
-      this.$emit("confirm", this.refusalReason);
+      this.$emit("confirm", {
+        baseOrderID: this.baseOrder.id,
+        targetOrderID: this.targetOrderID,
+      });
     },
   },
   async mounted() {

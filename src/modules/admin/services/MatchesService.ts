@@ -99,10 +99,10 @@ export async function getMatchMock(): Promise<MatchEntity> {
 }
 
 export async function matchAdmin(
-  donation: NecessityEntity,
-  necessity: NecessityEntity
-): Promise<number> {
-  return HTTP.post(`/${necessity.id}/vincular/${donation.id}`);
+  necessityID: number,
+  donationID: number
+): Promise<MatchEntity> {
+  return (await HTTP.post(`/match/${necessityID}/vincula/${donationID}`)).data;
 }
 
 export function getMatches(

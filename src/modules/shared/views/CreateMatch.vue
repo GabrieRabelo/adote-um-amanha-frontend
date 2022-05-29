@@ -43,7 +43,7 @@
         :targetOrderID="targetOrder.id"
         v-model="isModalOpen"
         @cancel="isModalOpen = false"
-        @confirm="onMatchConfirmationClick()"
+        @confirm="onMatchConfirmationClick"
         :loading="isModalLoading"
         :isCancelButtonOn="true"
       />
@@ -67,6 +67,7 @@ import {
 } from "@/modules/donator/services/DonationService";
 import { Status } from "../enums/Status";
 import EmptyListError from "../components/EmptyListError.vue";
+import { matchAdmin } from "@/modules/admin/services/MatchesService";
 
 export default Vue.extend({
   props: ["order"],
@@ -124,43 +125,29 @@ export default Vue.extend({
     onOrderClick(order) {
       this.targetOrder = order;
       this.isModalOpen = true;
-      // if (this.isNecessity) {
-      //   this.confirmationTitle = "Vincular Necessidade";
-      //   this.firstPath = "../../../assets/img/institution-logo.png";
-      //   this.firstTitle = this.necessity.title;
-      //   this.firstDescription = this.necessity.description;
-      //   this.secondPath = "../../../assets/img/donator-logo.png";
-      //   this.secondTitle = this.order.title;
-      //   this.secondDescription = this.order.description;
-      // } else {
-      //   this.confirmationTitle = "Vincular Doação";
-      //   this.firstPath = "../../../assets/img/donator-logo.png";
-      //   this.firstTitle = this.order.title;
-      //   this.firstDescription = this.order.description;
-      //   this.secondPath = "../../../assets/img/institution-logo.png";
-      //   this.secondTitle = this.necessity.title;
-      //   this.secondDescription = this.necessity.description;
-      // }
-      // this.isModalOpen = true;
     },
-    onMatchConfirmationClick() {
+    onMatchConfirmationClick({ baseOrderID, targetOrderID }) {
       this.isModelLoading = true;
-      // matchAdmin(this.necessity.id, this.order.id)
-      //   .then((response) => {
-      //     this.isModalOpen = false;
-      //     this.isModalLoading = false;
-      //     this.$router.push(`/admin/matches/${response}`);
-      //   })
-      //   .catch(() => {
-      //     this.$root.showSnackbar({
-      //       title: "ERRO INESPERADO!",
-      //       body: `Ocorreu um erro inesperado ao tentar vincular essa ${
-      //         this.isNecessity ? "necessidade à doação" : "doação à necessidade"
-      //       } ... Tente novamente!`,
-      //       color: "error",
-      //     });
-      //     this.isModalLoading = false;
-      //   });
+      const params = this.isNecessity
+        ? [baseOrderID, targetOrderID]
+        : [targetOrderID, baseOrderID];
+      matchAdmin(...params)
+        .then((match) => {
+          this.isModalOpen = false;
+          this.isModalLoading = false;
+          debugger;
+          this.$router.push(`/admin/matches/${match.id}`);
+        })
+        .catch(() => {
+          this.$root.showSnackbar({
+            title: "ERRO INESPERADO!",
+            body: `Ocorreu um erro ao tentar vincular a ${
+              this.isNecessity ? "necessidade à doação" : "doação à necessidade"
+            }, tente novamente!`,
+            color: "error",
+          });
+          this.isModalLoading = false;
+        });
     },
     async getOrders() {
       const params = {

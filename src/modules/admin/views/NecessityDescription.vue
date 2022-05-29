@@ -21,7 +21,7 @@
     </v-container>
 
     <UserCard
-      :userRole="userRole"
+      :userRole="institutionRole"
       :userName="necessity.user.name"
       :userId="necessity.user.id"
     />
@@ -134,6 +134,9 @@ export default Vue.extend({
         this.necessity.status === Status.pending &&
         getUserData().role == UserRole.admin
       );
+    },
+    institutionRole() {
+      return UserRole.institution;
     },
   },
   methods: {
