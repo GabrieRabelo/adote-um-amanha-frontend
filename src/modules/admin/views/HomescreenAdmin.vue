@@ -27,7 +27,7 @@
         <div class="d-flex justify-center mb-4">
           <Button
             class="extended-button font-weight-medium"
-            title="Doações Desvinculadas"
+            title="Doações"
             color="primary"
             outlined
             @click="onPersonalizedDonationButtonClick"
