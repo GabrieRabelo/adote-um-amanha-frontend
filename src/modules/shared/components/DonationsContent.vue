@@ -98,7 +98,7 @@ export default Vue.extend({
       if (isUserInstitution()) {
         route = `/donation/${donation.id}`;
       } else if (isUserDonator()) {
-        route = `/donationDescription/${donation.id}`;
+        route = `/donations/${donation.id}`;
       } else if (isUserAdmin()) {
         route = `/admin/donations/${donation.id}`;
       }

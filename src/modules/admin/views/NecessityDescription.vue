@@ -12,6 +12,14 @@
         <div class="a-text">{{ attribute.key }}</div>
         <div class="a-text light">{{ attribute.value }}</div>
       </v-row>
+      <v-row class="justify-space-between mb-3">
+        <div class="a-text">Status</div>
+        <div>
+          <v-icon :color="statusIconColor">{{ statusIcon }}</v-icon>
+          <span class="a-text light ml-2">{{ statusText }}</span>
+        </div>
+      </v-row>
+
       <v-row class="mt-10">
         <div class="a-text">Descrição</div>
       </v-row>
@@ -26,7 +34,7 @@
       :userId="necessity.user.id"
     />
 
-    <v-container v-if="necessity">
+    <v-container v-if="isNecessityPending">
       <v-row class="justify-center">
         <Button
           class="vinculate-button"
@@ -82,6 +90,7 @@ import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMix
 import UserCard from "../../shared/components/UserCard.vue";
 import RefuseNecessityModal from "../../shared/components/RefuseNecessityModal.vue";
 import { RequestType } from "@/modules/shared/models/RequestEntity";
+import StatusUtils from "../../shared/enums/Status";
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
@@ -129,6 +138,15 @@ export default Vue.extend({
         },
       ];
     },
+    statusText() {
+      return StatusUtils.toString(this.necessity.status);
+    },
+    statusIcon() {
+      return StatusUtils.getIcon(this.necessity.status);
+    },
+    statusIconColor() {
+      return StatusUtils.getIconColor(this.necessity.status);
+    },
     canRefuse() {
       return (
         this.necessity.status === Status.pending &&
@@ -138,6 +156,9 @@ export default Vue.extend({
     institutionRole() {
       return UserRole.institution;
     },
+    isNecessityPending() {
+      return this.necessity && this.necessity.status === Status.pending
+    }
   },
   methods: {
     onVinculateClick() {
