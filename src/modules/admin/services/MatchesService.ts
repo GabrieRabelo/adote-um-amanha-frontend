@@ -1,77 +1,10 @@
 import { Status } from "@/modules/shared/enums/Status";
-import {
-  RequestBackendEntity,
-  RequestEntity,
-  //RequestType,
-} from "../../shared/models/RequestEntity";
 import { Subcategory } from "@/modules/shared/enums/Subcategory";
 import { MatchEntity } from "../models/MatchEntity";
-import { MatchRequestParams } from "@/modules/shared/types/MatchRequestParams";
 import { mountQueryString } from "@/modules/shared/utils/QueryParamBuilder";
-import { fromBackendFormat } from "@/modules/shared/utils/RequestMapper";
-//import { RequestMatchEntity } from "@/modules/shared/models/MatchEntity";
 import { HTTP } from "@/api/http-common";
 import { Category } from "@/modules/shared/enums/Category";
-
-export async function getMatchesMock(): Promise<MatchEntity[]> {
-  const matches: MatchEntity[] = [
-    {
-      id: 9999,
-      necessity: {
-        id: 9999,
-        title: "Livros Didáticos",
-        user: { name: "Lar Esperança" },
-        category: Category.service,
-        subcategory: Subcategory.education,
-      },
-      donation: {
-        id: 9996,
-        title: "Doacao 1",
-        user: { name: "Ada Lovelace" },
-      },
-      date: new Date(),
-      status: Status.match,
-      description: "Este é um match!!",
-    },
-    {
-      id: 9989,
-      necessity: {
-        id: 9999,
-        title: "Livros Didáticos",
-        user: { name: "Lar Esperança" },
-        category: Category.service,
-        subcategory: Subcategory.education,
-      },
-      donation: {
-        id: 9996,
-        title: "Doacao 1",
-        user: { name: "Ada Lovelace" },
-      },
-      date: new Date(),
-      status: Status.match,
-      description: "Este é um match!!",
-    },
-    {
-      id: 1999,
-      necessity: {
-        id: 9999,
-        title: "Livros Didáticos",
-        user: { name: "Lar Esperança" },
-        category: Category.service,
-        subcategory: Subcategory.education,
-      },
-      donation: {
-        id: 9996,
-        title: "Doacao 1",
-        user: { name: "Ada Lovelace" },
-      },
-      date: new Date(),
-      status: Status.match,
-      description: "Este é um match!!",
-    },
-  ];
-  return matches;
-}
+import { NecessitiesRequestParams } from "@/modules/shared/types/NecessityRequestParams";
 
 export async function getMatchMock(): Promise<MatchEntity> {
   return {
@@ -94,31 +27,36 @@ export async function getMatchMock(): Promise<MatchEntity> {
   };
 }
 
-export function getMatches(
-  queryParams: MatchRequestParams
-): Promise<RequestEntity[]> {
-  return getMatchesWithURL(queryParams, "match");
+export async function matchAdmin(
+  necessityID: number,
+  donationID: number
+): Promise<MatchEntity> {
+  return (await HTTP.post(`/match/${necessityID}/vincula/${donationID}`)).data;
 }
 
-function getMatchesWithURL(
-  queryParams: MatchRequestParams = {},
-  url: string
-): Promise<RequestEntity[]> {
+export function getMatches(
+  queryParams: NecessitiesRequestParams = {}
+): Promise<MatchEntity[]> {
   const params = mountQueryString(queryParams);
-  return HTTP.get(`${url}?${params}`)
+  return HTTP.get(`match?${params}`)
     .then((response) => {
       const data = response.data;
-      const serviceMatches = data.conteudo as RequestBackendEntity[];
-      return Promise.resolve(serviceMatches.map(fromBackendFormat));
+      const serviceMatches = data.conteudo;
+      return Promise.resolve(
+        serviceMatches.map((match: MatchListDTO) => ({
+          title: match.assunto,
+          donation: { user: { name: match.nomeDoador } },
+          necessity: {
+            user: { name: match.nomeCasa },
+            subcategory: match.subcategoria,
+          },
+          date: match.data,
+          id: match.id,
+        }))
+      );
     })
     .catch((err) => Promise.reject(err));
 }
-
-// export function getMatch(id: number): Promise<RequestEntity> {
-//   return HTTP.get(`pedidos/${id}?tipoPedido=${RequestType.matches}`)
-//     .then(({ data }) => fromBackendFormat(data))
-//     .catch((err) => Promise.reject(err));
-// }
 
 export function refuseMatch(match: MatchEntity): Promise<void> {
   console.log("Recusando match");
@@ -148,4 +86,15 @@ export function approveMatch(match: MatchEntity): Promise<void> {
     .catch((error) => {
       return Promise.reject(error);
     });
+}
+
+interface MatchListDTO {
+  assunto: string;
+  categoria: string;
+  data: string;
+  id: number;
+  nomeCasa: string;
+  nomeDoador: string;
+  status: Status;
+  subcategoria: Subcategory;
 }

@@ -37,16 +37,6 @@
         v-if="isListEmpty"
       />
     </v-row>
-    <Button
-      class="a-fab"
-      title="Criar"
-      prependIcon="mdi-plus"
-      color="primary"
-      elevation="4"
-      @click="
-        $root.showSnackbar({ title: '** Abrir modal de criação de match **' })
-      "
-    />
   </v-container>
 </template>
 
@@ -54,7 +44,6 @@
 import Vue from "vue";
 import Input from "../../../shared/components/Input.vue";
 import MatchCard from "../../components/MatchCard.vue";
-import Button from "../../../shared/components/Button.vue";
 import {
   getUserData,
   isUserDonator,
@@ -71,7 +60,7 @@ import EmptyListError from "../../../shared/components/EmptyListError.vue";
 
 export default Vue.extend({
   mixins: [ToolbarMenuMixin, ToolbarNavigationMixin],
-  components: { Input, MatchCard, Button, InputChips, EmptyListError },
+  components: { Input, MatchCard, InputChips, EmptyListError },
   props: {
     filters: Object,
   },
@@ -100,14 +89,14 @@ export default Vue.extend({
     async getMatches() {
       const params = {
         direcao: "DESC",
-        ordenacao: "dataHora",
+        ordenacao: "dataCriacao",
         categorias: this.filters.categories.join(","),
         subcategorias: this.filters.subcategories.join(","),
         status: this.filters.status.join(","),
         textoBusca: this.filters.name,
         mesesCorte: this.filters.startDate.value,
       };
-      const response = await getMatchesMock(params);
+      const response = await getMatches(params);
       return response;
     },
     async onInputChange() {
