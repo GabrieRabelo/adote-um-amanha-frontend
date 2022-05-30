@@ -123,7 +123,6 @@ export default Vue.extend({
   },
   computed: {
     attributes() {
-      console.log(this.match);
       return [
         {
           key: "Data cadastro",
