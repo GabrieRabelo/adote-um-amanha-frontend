@@ -145,8 +145,16 @@ export default Vue.extend({
       );
     },
     statusText() {
-      const status = StatusUtils.toString(this.match.status);
-      return status.slice(0, -1).concat("o");
+      switch (this.match.status) {
+        case Status.pending:
+          return "Pendente";
+        case Status.resolved:
+          return "Atendido";
+        case Status.match:
+          return "Correspondido";
+        default:
+          return "";
+      }
     },
     statusIcon() {
       return StatusUtils.getIcon(this.match.status);
