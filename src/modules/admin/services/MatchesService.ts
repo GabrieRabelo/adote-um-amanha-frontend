@@ -42,13 +42,13 @@ export function getMatch(id: number): Promise<Partial<MatchEntity>> {
     const data = response.data as MatchDescriptionDTO;
     return {
       id: data.id,
+      title: data.assunto,
+      category: data.categoria,
+      subcategory: data.subcategoria,
       necessity: {
-        title: data.assunto,
-        category: data.categoria,
         user: { id: data.idCasa, name: data.nomeCasa },
       },
       donation: {
-        category: data.categoria,
         user: { id: data.idDoador, name: data.nomeDoador },
       },
       date: new Date(data.dataCriacao),
