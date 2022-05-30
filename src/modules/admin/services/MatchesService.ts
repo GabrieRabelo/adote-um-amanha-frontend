@@ -6,27 +6,6 @@ import { HTTP } from "@/api/http-common";
 import { Category } from "@/modules/shared/enums/Category";
 import { NecessitiesRequestParams } from "@/modules/shared/types/NecessityRequestParams";
 
-export async function getMatchMock(): Promise<MatchEntity> {
-  return {
-    id: 9999,
-    necessity: {
-      id: 9999,
-      title: "Livros Didáticos",
-      user: { id: 9998, name: "Lar Esperança" },
-      category: Category.service,
-      subcategory: Subcategory.education,
-    },
-    donation: {
-      id: 9996,
-      title: "Doacao 1",
-      user: { id: 9994, name: "Ada Lovelace" },
-    },
-    date: new Date(),
-    status: Status.match,
-    description: "Este é um match!!",
-  };
-}
-
 export async function matchAdmin(
   necessityID: number,
   donationID: number
@@ -56,6 +35,27 @@ export function getMatches(
       );
     })
     .catch((err) => Promise.reject(err));
+}
+
+export function getMatch(id: number): Promise<Partial<MatchEntity>> {
+  return HTTP.get(`/match/${id}`).then((response) => {
+    const data = response.data as MatchDescriptionDTO;
+    return {
+      id: data.id,
+      title: data.assunto,
+      category: data.categoria,
+      subcategory: data.subcategoria,
+      necessity: {
+        user: { id: data.idCasa, name: data.nomeCasa },
+      },
+      donation: {
+        user: { id: data.idDoador, name: data.nomeDoador },
+      },
+      date: new Date(data.dataCriacao),
+      description: data.descricao,
+      status: data.status,
+    };
+  });
 }
 
 export function refuseMatch(match: MatchEntity): Promise<void> {
@@ -93,6 +93,22 @@ interface MatchListDTO {
   categoria: string;
   data: string;
   id: number;
+  nomeCasa: string;
+  nomeDoador: string;
+  status: Status;
+  subcategoria: Subcategory;
+}
+
+interface MatchDescriptionDTO {
+  assunto: string;
+  categoria: Category;
+  dataCriacao: string;
+  dataFechamento: null;
+  descricao: string;
+  finalizadoPor: null;
+  id: number;
+  idCasa: number;
+  idDoador: number;
   nomeCasa: string;
   nomeDoador: string;
   status: Status;

@@ -2,7 +2,7 @@
   <v-container class="align-start" fill-height v-if="match">
     <v-container class="align-start px-7">
       <v-row class="mt-3 mb-4">
-        <div class="a-text__bold-title">{{ match.necessity.title }}</div>
+        <div class="a-text__bold-title">{{ match.title }}</div>
       </v-row>
       <v-row
         class="justify-space-between mb-3"
@@ -11,6 +11,13 @@
       >
         <div class="a-text">{{ attribute.key }}</div>
         <div class="a-text light">{{ attribute.value }}</div>
+      </v-row>
+      <v-row class="justify-space-between mb-3">
+        <div class="a-text">Status</div>
+        <div>
+          <v-icon :color="statusIconColor">{{ statusIcon }}</v-icon>
+          <span class="a-text light ml-2">{{ statusText }}</span>
+        </div>
       </v-row>
       <v-row class="mt-10">
         <div class="a-text">Descrição</div>
@@ -72,13 +79,14 @@ import Subcategory from "../../shared/enums/Subcategory";
 import moment from "moment";
 import Button from "../../shared/components/Button.vue";
 import { Status } from "@/modules/shared/enums/Status";
+import StatusUtils from "../../shared/enums/Status";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
 import UserCard from "../../shared/components/UserCard.vue";
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
 import {
-  getMatchMock,
+  getMatch,
   refuseMatch,
   approveMatch,
 } from "../services/MatchesService";
@@ -99,14 +107,14 @@ export default Vue.extend({
   }),
   async mounted() {
     this.$root.startLoader();
-    this.$root.showToolbar("SOLICITAÇÃO DE MATCH");
-    this.match = await getMatchMock(9999).catch(({ response }) => {
+    this.$root.showToolbar("MATCH");
+    const id = this.$route.params.id;
+    this.match = await getMatch(id).catch(({ response }) => {
       if (response.status === 404) {
         this.onNotFound();
       }
     });
     this.$root.stopLoader();
-    console.log(this.match);
   },
   components: {
     Button,
@@ -118,15 +126,15 @@ export default Vue.extend({
       return [
         {
           key: "Data cadastro",
-          value: moment(this.match.necessity.createdDate).format("DD/MM/yyyy"),
+          value: moment(this.createdDate).format("DD/MM/yyyy"),
         },
         {
           key: "Categoria",
-          value: Category.toSingularString(this.match.necessity.category),
+          value: Category.toSingularString(this.match.category),
         },
         {
           key: "Subcategoria",
-          value: Subcategory.toString(this.match.necessity.subcategory),
+          value: Subcategory.toString(this.match.subcategory),
         },
       ];
     },
@@ -135,6 +143,16 @@ export default Vue.extend({
         this.match.status === Status.pending &&
         getUserData().role == UserRole.donator
       );
+    },
+    statusText() {
+      const status = StatusUtils.toString(this.match.status);
+      return status.slice(0, -1).concat("o");
+    },
+    statusIcon() {
+      return StatusUtils.getIcon(this.match.status);
+    },
+    statusIconColor() {
+      return StatusUtils.getIconColor(this.match.status);
     },
   },
   methods: {
