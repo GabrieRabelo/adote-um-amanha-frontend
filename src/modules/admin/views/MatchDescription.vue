@@ -40,7 +40,7 @@
       />
     </div>
 
-    <v-container class="align-end" v-if="match">
+    <v-container class="align-end" v-if="canManage">
       <v-row class="justify-center">
         <Button
           class="mr-4"
@@ -60,12 +60,12 @@
         />
       </v-row>
     </v-container>
-    <ConfirmationModal
+    <RefuseNecessityModal
       v-model="isModalOpen"
       :title="confirmationTitle"
       :message="confirmationMessage"
       @cancel="isModalOpen = false"
-      @confirm="onConfirmButtonClick()"
+      @confirm="onConfirmButtonClick($event)"
       :loading="isModalLoading"
       :isCancelButtonOn="true"
     />
@@ -80,16 +80,15 @@ import moment from "moment";
 import Button from "../../shared/components/Button.vue";
 import { Status } from "@/modules/shared/enums/Status";
 import StatusUtils from "../../shared/enums/Status";
-import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
 import UserCard from "../../shared/components/UserCard.vue";
-import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
 import {
   getMatch,
   refuseMatch,
   approveMatch,
 } from "../services/MatchesService";
+import RefuseNecessityModal from "@/modules/shared/components/RefuseNecessityModal.vue";
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
@@ -104,6 +103,7 @@ export default Vue.extend({
     confirmationTitle: "",
     confirmationMessage: "",
     donatedTitle: "A avaliação foi enviada, muito obrigado!",
+    motivoRecusa: ""
   }),
   async mounted() {
     this.$root.startLoader();
@@ -119,7 +119,7 @@ export default Vue.extend({
   components: {
     Button,
     UserCard,
-    ConfirmationModal,
+    RefuseNecessityModal,
   },
   computed: {
     attributes() {
@@ -138,12 +138,6 @@ export default Vue.extend({
         },
       ];
     },
-    canDonate() {
-      return (
-        this.match.status === Status.pending &&
-        getUserData().role == UserRole.donator
-      );
-    },
     statusText() {
       switch (this.match.status) {
         case Status.pending:
@@ -152,6 +146,8 @@ export default Vue.extend({
           return "Atendido";
         case Status.match:
           return "Correspondido";
+        case Status.refused:
+          return "Recusado";
         default:
           return "";
       }
@@ -162,7 +158,10 @@ export default Vue.extend({
     statusIconColor() {
       return StatusUtils.getIconColor(this.match.status);
     },
-  },
+    canManage() {
+      return this.match && this.match.status === Status.match
+    }
+   },
   methods: {
     onNotFound() {
       this.$router.push("/home");
@@ -175,9 +174,13 @@ export default Vue.extend({
     },
     onApproveButtonClick() {
       this.isModelLoading = true;
-      approveMatch(this.match)
+      approveMatch(this.match.id)
         .then(() => {
           this.$router.push("/admin/matches");
+          this.$root.showSnackbar({
+            title: "MATCH APROVADO!",
+            color: "success",
+          });
         })
         .catch(() => {
           this.$root.showSnackbar({
@@ -188,13 +191,17 @@ export default Vue.extend({
           this.isModalLoading = false;
         });
     },
-    onConfirmButtonClick() {
+    onConfirmButtonClick(refusalReason) {
       this.isModelLoading = true;
-      refuseMatch(this.match)
+      refuseMatch(this.match.id, refusalReason)
         .then(() => {
           this.isModalOpen = false;
           this.isModalLoading = false;
           this.$router.push("/admin/matches");
+          this.$root.showSnackbar({
+            title: "MATCH RECUSADO!",
+            color: "success",
+          });
         })
         .catch(() => {
           this.$root.showSnackbar({
