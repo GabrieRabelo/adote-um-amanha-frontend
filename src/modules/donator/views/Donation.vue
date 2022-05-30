@@ -36,6 +36,7 @@
       <v-row class="justify-center mt-5">
         <VinculateButton
           @click="onVinculateClick"
+          v-if="canManage"
           title="Vincular Instituição"
         />
       </v-row>
@@ -59,7 +60,7 @@
           prependIcon="mdi-thumb-down-outline"
           outlined
           compact
-          v-if="isDonationPending"
+          v-if="canManage"
           @click="onRefuseButtonClick"
         />
         <Button
@@ -163,6 +164,11 @@ export default Vue.extend({
     donatorRole() {
       return UserRole.donator;
     },
+    canManage() {
+      return this.donation 
+          && this.donation.status == Status.pending 
+          && getUserData().role == UserRole.admin
+    }
   },
   methods: {
     onRefusalConfirm() {
