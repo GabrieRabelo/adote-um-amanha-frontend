@@ -33,7 +33,7 @@ export function getDonation(id: number): Promise<unknown> {
       description: data.descricao,
       status: data.status,
       subcategory: data.subcategoria,
-      user: { id: data.idUsuario, name: data.nomeUsuario }
+      user: { id: data.idUsuario, name: data.nomeUsuario },
     }))
     .catch((err) => Promise.reject(err));
 }
@@ -84,4 +84,10 @@ export function createDonation(donation: RequestEntity): Promise<void> {
     .catch((error) => {
       return Promise.reject(error);
     });
+}
+
+export async function refuseDonation(donationID: number): Promise<void> {
+  return HTTP.patch(`/pedidos/${donationID}/recusar`, {
+    motivoRecusa: "NO_REASON",
+  });
 }

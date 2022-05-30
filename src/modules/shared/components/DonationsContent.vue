@@ -44,6 +44,7 @@
       color="primary"
       elevation="4"
       @click="$router.push('/necessities/create')"
+      v-if="isUserDonator"
     />
   </v-container>
 </template>

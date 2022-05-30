@@ -9,7 +9,7 @@
       <div class="d-flex justify-center pb-8">
         <span class="dialog--body" v-html="message"> </span>
       </div>
-      <v-form v-model="isValid">
+      <v-form v-model="isValid" v-if="!hideReasonInput">
         <TextArea
           name="input-reason"
           v-model="refusalReason"
@@ -34,7 +34,7 @@
           color="primary"
           @click="onConfirmClick"
           :loading="loading"
-          :disabled="!isValid"
+          :disabled="!canConfirm"
         />
       </v-card-actions>
     </v-card>
@@ -52,6 +52,7 @@ export default Vue.extend({
     message: String,
     loading: Boolean,
     isCancelButtonOn: Boolean,
+    hideReasonInput: Boolean,
   },
   data: () => ({
     refusalReason: "",
@@ -64,6 +65,9 @@ export default Vue.extend({
   computed: {
     inputValidations() {
       return InputValidations;
+    },
+    canConfirm() {
+      return this.isValid || this.hideReasonInput;
     },
   },
   methods: {
