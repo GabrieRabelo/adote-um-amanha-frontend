@@ -12,7 +12,15 @@
         <div class="a-text">{{ attribute.key }}</div>
         <div class="a-text light">{{ attribute.value }}</div>
       </v-row>
-      <v-row>
+      <v-row class="justify-space-between mb-3">
+        <div class="a-text">Status</div>
+        <div>
+          <v-icon :color="statusIconColor">{{ statusIcon }}</v-icon>
+          <span class="a-text light ml-2">{{ statusText }}</span>
+        </div>
+      </v-row>
+
+      <v-row class="mt-10">
         <div class="a-text">Descrição</div>
       </v-row>
       <v-row>
@@ -21,19 +29,28 @@
     </v-container>
 
     <UserCard
-      :userRole="userRole"
+      :userRole="institutionRole"
       :userName="necessity.user.name"
       :userId="necessity.user.id"
     />
 
-    <v-container v-if="necessity">
-      <v-row class="justify-center"> </v-row>
+    <v-container v-if="isNecessityPending">
+      <v-row class="justify-center">
+        <Button
+          class="vinculate-button"
+          title="Vincular Doador"
+          color="primary"
+          prependIcon="mdi-plus"
+          outlined
+          @click="onVinculateClick"
+        />
+      </v-row>
     </v-container>
 
     <v-container class="align-end" v-if="necessity">
       <v-row class="justify-center">
         <Button
-          class="mr-4"
+          class="mr-4 refuse-button"
           title="Recusar"
           color="primary"
           prependIcon="mdi-thumb-down"
@@ -72,6 +89,8 @@ import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
 import UserCard from "../../shared/components/UserCard.vue";
 import RefuseNecessityModal from "../../shared/components/RefuseNecessityModal.vue";
+import { RequestType } from "@/modules/shared/models/RequestEntity";
+import StatusUtils from "../../shared/enums/Status";
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
@@ -119,14 +138,36 @@ export default Vue.extend({
         },
       ];
     },
+    statusText() {
+      return StatusUtils.toString(this.necessity.status);
+    },
+    statusIcon() {
+      return StatusUtils.getIcon(this.necessity.status);
+    },
+    statusIconColor() {
+      return StatusUtils.getIconColor(this.necessity.status);
+    },
     canRefuse() {
       return (
         this.necessity.status === Status.pending &&
         getUserData().role == UserRole.admin
       );
     },
+    institutionRole() {
+      return UserRole.institution;
+    },
+    isNecessityPending() {
+      return this.necessity && this.necessity.status === Status.pending
+    }
   },
   methods: {
+    onVinculateClick() {
+      const query = {
+        orderType: RequestType.necessity,
+        orderID: this.necessity.id,
+      };
+      this.$router.push({ path: "/admin/create-match", query });
+    },
     onNotFound() {
       this.$router.push("/home");
     },
@@ -166,5 +207,16 @@ export default Vue.extend({
 <style>
 .a-text {
   color: #000000;
+}
+
+.vinculate-button {
+  width: 313px;
+  min-height: 75px;
+  border: 2px dotted #ffd25a !important;
+  border-radius: 7px;
+}
+
+.refuse-button {
+  width: 135px;
 }
 </style>

@@ -89,7 +89,7 @@
 
 <script>
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
-import { setDonationsFilters } from "@/modules/shared/utils/UserPreferences";
+import { setMatchesFilters } from "@/modules/shared/utils/UserPreferences";
 import Vue from "vue";
 import Button from "../../../shared/components/Button.vue";
 import Select from "../../../shared/components/Select.vue";
@@ -148,7 +148,7 @@ export default Vue.extend({
       this.saveFilterAndEmit();
     },
     saveFilterAndEmit() {
-      setDonationsFilters(this.filters);
+      setMatchesFilters(this.filters);
       this.$emit("change", this.filters);
     },
   },
