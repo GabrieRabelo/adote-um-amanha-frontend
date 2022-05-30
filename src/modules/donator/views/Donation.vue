@@ -33,9 +33,11 @@
           :userId="donation.user.id"
         />
       </v-row>
-      <v-row class="justify-center mt-5" >
-        <VinculateButton @click="onVinculateClick"
-        title="Vincular Instituição"/>
+      <v-row class="justify-center mt-5">
+        <VinculateButton
+          @click="onVinculateClick"
+          title="Vincular Instituição"
+        />
       </v-row>
     </v-container>
 
@@ -57,7 +59,8 @@
           prependIcon="mdi-thumb-down-outline"
           outlined
           compact
-          @click="$router.go(-1)"
+          v-if="isDonationPending"
+          @click="onRefuseButtonClick"
         />
         <Button
           title="Editar"
@@ -69,6 +72,17 @@
         />
       </v-row>
     </v-container>
+
+    <RefuseNecessityModal
+      title="Recusar Doação"
+      message="Tem certeza que deseja recusar esta doação?"
+      v-model="isRefuseModalOpen"
+      hideReasonInput
+      isCancelButtonOn
+      @cancel="isRefuseModalOpen = false"
+      @confirm="onRefusalConfirm"
+      :loading="isModalLoading"
+    />
   </v-container>
 </template>
 
@@ -76,7 +90,10 @@
 import Vue from "vue";
 import Category from "../../shared/enums/Category";
 import Subcategory from "../../shared/enums/Subcategory";
-import { getDonation } from "../../donator/services/DonationService";
+import {
+  getDonation,
+  refuseDonation,
+} from "../../donator/services/DonationService";
 import moment from "moment";
 import Button from "../../shared/components/Button.vue";
 import { Status } from "@/modules/shared/enums/Status";
@@ -88,12 +105,15 @@ import ToolbarMenuMixin from "@/modules/shared/mixins/ToolbarMenuMixin";
 import UserCard from "../../shared/components/UserCard.vue";
 import VinculateButton from "@/modules/shared/components/VinculateButton.vue";
 import { RequestType } from "@/modules/shared/models/RequestEntity";
+import RefuseNecessityModal from "../../shared/components/RefuseNecessityModal.vue";
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin, ToolbarMenuMixin],
-  components: { UserCard, Button, VinculateButton },
+  components: { UserCard, Button, VinculateButton, RefuseNecessityModal },
   data: () => ({
     donation: null,
+    isRefuseModalOpen: false,
+    isModalLoading: false,
   }),
   async mounted() {
     this.$root.showToolbar("DOAÇÃO");
@@ -106,6 +126,9 @@ export default Vue.extend({
     );
   },
   computed: {
+    isDonationPending() {
+      return this.donation.status === Status.pending;
+    },
     attributes() {
       return [
         {
@@ -142,6 +165,26 @@ export default Vue.extend({
     },
   },
   methods: {
+    onRefusalConfirm() {
+      this.isModalLoading = true;
+      refuseDonation(this.donation.id)
+        .then(() => {
+          this.$root.showSnackbar({
+            title: "Doação Recusada",
+            body: "Doação recusada com sucesso.",
+          });
+          this.$router.push("/admin/donations");
+        })
+        .catch(() => {
+          this.$root.showSnackbar({ title: "Erro Inesperado." });
+        })
+        .finally(() => {
+          this.isModalLoading = false;
+        });
+    },
+    onRefuseButtonClick() {
+      this.isRefuseModalOpen = true;
+    },
     onNotFound() {
       this.$router.push("/home");
     },
