@@ -55,7 +55,6 @@ import ToolbarNavigationMixin from "../../../shared/mixins/ToolbarNavigationMixi
 import InputChips from "../../../shared/components/InputChips.vue";
 import lodash from "lodash";
 import { getMatches } from "../../services/MatchesService";
-import { getMatchesMock } from "../../services/MatchesService";
 import EmptyListError from "../../../shared/components/EmptyListError.vue";
 
 export default Vue.extend({
