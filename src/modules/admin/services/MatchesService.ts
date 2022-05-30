@@ -58,12 +58,9 @@ export function getMatch(id: number): Promise<Partial<MatchEntity>> {
   });
 }
 
-export function refuseMatch(match: MatchEntity): Promise<void> {
-  console.log("Recusando match");
-  return Promise.resolve();
-
-  return HTTP.patch(`/matches/${match.id}/recusar`, {
-    motivoRecusa: "",
+export function refuseMatch(matchID: string, motivoRecusa: string): Promise<void> {
+  return HTTP.post(`/match/${matchID}/recusar`, {
+    motivoRecusa: motivoRecusa,
   })
     .then(() => {
       return Promise.resolve();
@@ -73,13 +70,8 @@ export function refuseMatch(match: MatchEntity): Promise<void> {
     });
 }
 
-export function approveMatch(match: MatchEntity): Promise<void> {
-  console.log("Aprovando match");
-  return Promise.resolve();
-
-  return HTTP.patch(`/matches/${match.id}/recusar`, {
-    motivoRecusa: "",
-  })
+export function approveMatch(matchID: string): Promise<void> {
+  return HTTP.post(`/match/${matchID}/aprovar`)
     .then(() => {
       return Promise.resolve();
     })
