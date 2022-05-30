@@ -25,6 +25,18 @@
       <v-row>
         <div class="a-text light">{{ donation.description }}</div>
       </v-row>
+
+      <v-row class="py-4">
+        <UserCard
+          :userRole="donatorRole"
+          :userName="donation.user.name"
+          :userId="donation.user.id"
+        />
+      </v-row>
+      <v-row class="justify-center mt-5" >
+        <VinculateButton @click="onVinculateClick"
+        title="Vincular Instituição"/>
+      </v-row>
     </v-container>
 
     <v-container class="align-self-end" v-if="donation">
@@ -34,6 +46,15 @@
           title="Voltar"
           color="primary"
           prependIcon="mdi-arrow-left"
+          outlined
+          compact
+          @click="$router.go(-1)"
+        />
+        <Button
+          class="mr-2"
+          title="Recusar"
+          color="error"
+          prependIcon="mdi-thumb-down-outline"
           outlined
           compact
           @click="$router.go(-1)"
@@ -64,8 +85,13 @@ import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
 import ToolbarMenuMixin from "@/modules/shared/mixins/ToolbarMenuMixin";
+import UserCard from "../../shared/components/UserCard.vue";
+import VinculateButton from "@/modules/shared/components/VinculateButton.vue";
+import { RequestType } from "@/modules/shared/models/RequestEntity";
+
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin, ToolbarMenuMixin],
+  components: { UserCard, Button, VinculateButton },
   data: () => ({
     donation: null,
   }),
@@ -78,9 +104,6 @@ export default Vue.extend({
         }
       }
     );
-  },
-  components: {
-    Button,
   },
   computed: {
     attributes() {
@@ -114,6 +137,9 @@ export default Vue.extend({
         getUserData().role == UserRole.donator
       );
     },
+    donatorRole() {
+      return UserRole.donator;
+    },
   },
   methods: {
     onNotFound() {
@@ -121,6 +147,13 @@ export default Vue.extend({
     },
     onEditButtonClick() {
       this.$router.push(`/donations/${this.donation.id}/edit/`);
+    },
+    onVinculateClick() {
+      const query = {
+        orderType: RequestType.donation,
+        orderID: this.donation.id,
+      };
+      this.$router.push({ path: "/admin/create-match", query });
     },
   },
 });

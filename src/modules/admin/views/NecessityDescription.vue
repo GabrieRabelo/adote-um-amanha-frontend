@@ -35,15 +35,9 @@
     />
 
     <v-container v-if="isNecessityPending">
-      <v-row class="justify-center">
-        <Button
-          class="vinculate-button"
-          title="Vincular Doador"
-          color="primary"
-          prependIcon="mdi-plus"
-          outlined
-          @click="onVinculateClick"
-        />
+      <v-row class="justify-center mt-5" >
+        <VinculateButton @click="onVinculateClick"
+        title="Vincular Doador"/>
       </v-row>
     </v-container>
 
@@ -52,7 +46,7 @@
         <Button
           class="mr-4 refuse-button"
           title="Recusar"
-          color="primary"
+          color="error"
           prependIcon="mdi-thumb-down"
           outlined
           compact
@@ -91,6 +85,8 @@ import UserCard from "../../shared/components/UserCard.vue";
 import RefuseNecessityModal from "../../shared/components/RefuseNecessityModal.vue";
 import { RequestType } from "@/modules/shared/models/RequestEntity";
 import StatusUtils from "../../shared/enums/Status";
+import VinculateButton from "@/modules/shared/components/VinculateButton.vue";
+
 
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
@@ -120,6 +116,7 @@ export default Vue.extend({
     Button,
     UserCard,
     RefuseNecessityModal,
+    VinculateButton
   },
   computed: {
     attributes() {

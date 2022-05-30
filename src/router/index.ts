@@ -112,6 +112,11 @@ const routes: Array<RouteConfig> = [
     component: Matches,
   },
   {
+    path: "/admin/donations/:id",
+    name: "Donation For Admin",
+    component: Donation
+  },
+  {
     path: "/admin/donations",
     name: "List donations",
     component: Donations,
