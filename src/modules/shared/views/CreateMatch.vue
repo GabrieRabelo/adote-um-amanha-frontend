@@ -127,7 +127,7 @@ export default Vue.extend({
       this.isModalOpen = true;
     },
     onMatchConfirmationClick({ baseOrderID, targetOrderID }) {
-      this.isModelLoading = true;
+      this.isModalLoading = true;
       const params = this.isNecessity
         ? [baseOrderID, targetOrderID]
         : [targetOrderID, baseOrderID];

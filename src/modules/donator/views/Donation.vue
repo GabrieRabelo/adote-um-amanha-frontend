@@ -118,13 +118,16 @@ export default Vue.extend({
   }),
   async mounted() {
     this.$root.showToolbar("DOAÇÃO");
-    this.donation = await getDonation(this.$route.params.id).catch(
-      ({ response }) => {
+    this.$root.startLoader();
+    this.donation = await getDonation(this.$route.params.id)
+      .catch(({ response }) => {
         if (response.status === 404) {
           this.onNotFound();
         }
-      }
-    );
+      })
+      .finally(() => {
+        this.$root.stopLoader();
+      });
   },
   computed: {
     isDonationPending() {
@@ -165,10 +168,12 @@ export default Vue.extend({
       return UserRole.donator;
     },
     canManage() {
-      return this.donation 
-          && this.donation.status == Status.pending 
-          && getUserData().role == UserRole.admin
-    }
+      return (
+        this.donation &&
+        this.donation.status == Status.pending &&
+        getUserData().role == UserRole.admin
+      );
+    },
   },
   methods: {
     onRefusalConfirm() {

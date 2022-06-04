@@ -76,9 +76,7 @@ export default Vue.extend({
   },
   async mounted() {
     this.$root.showToolbar("MATCHES");
-    this.$root.startLoader();
     this.matches = await this.getMatches();
-    this.$root.stopLoader();
     this.loaded = true;
   },
   methods: {
@@ -86,6 +84,7 @@ export default Vue.extend({
       this.$router.push(`/admin/matches/${match.id}`);
     },
     async getMatches() {
+      this.$root.startLoader();
       const params = {
         direcao: "DESC",
         ordenacao: "dataCriacao",
@@ -96,6 +95,7 @@ export default Vue.extend({
         mesesCorte: this.filters.startDate.value,
       };
       const response = await getMatches(params);
+      this.$root.stopLoader();
       return response;
     },
     async onInputChange() {
