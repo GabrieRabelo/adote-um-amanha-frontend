@@ -71,7 +71,7 @@ export default Vue.extend({
   },
   methods: {
     onDonatorClick(donator) {
-      this.$router.push(donator.id);
+      this.$router.push(`/admin/donators/${donator.id}`);
     },
     async getDonators() {
       this.$root.startLoader();
