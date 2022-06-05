@@ -90,9 +90,7 @@ export default Vue.extend({
   },
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
-    this.$root.startLoader();
     this.necessities = await this.getNecessities();
-    this.$root.stopLoader();
     this.loaded = true;
   },
   methods: {
@@ -108,6 +106,7 @@ export default Vue.extend({
       this.$router.push(route);
     },
     async getNecessities() {
+      this.$root.startLoader();
       const params = {
         direcao: "DESC",
         ordenacao: "dataHora",
@@ -118,6 +117,7 @@ export default Vue.extend({
         mesesCorte: this.filters.startDate.value,
       };
       const response = await getNecessities(params);
+      this.$root.stopLoader();
       return response;
     },
     async onInputChange() {

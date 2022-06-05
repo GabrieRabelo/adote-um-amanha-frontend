@@ -107,13 +107,16 @@ export default Vue.extend({
   }),
   async mounted() {
     this.$root.showToolbar("NECESSIDADES");
-    this.necessity = await getNecessity(this.$route.params.id).catch(
-      ({ response }) => {
+    this.$root.startLoader();
+    this.necessity = await getNecessity(this.$route.params.id)
+      .catch(({ response }) => {
         if (response.status === 404) {
           this.onNotFound();
         }
-      }
-    );
+      })
+      .finally(() => {
+        this.$root.stopLoader();
+      });
   },
   components: {
     EmbeddedVideo,
@@ -156,7 +159,7 @@ export default Vue.extend({
       this.$router.push("/home");
     },
     onConfirmButtonClick() {
-      this.isModelLoading = true;
+      this.isModalLoading = true;
       matchDonation(this.necessity)
         .then(() => {
           this.isModalOpen = false;

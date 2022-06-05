@@ -33,7 +33,8 @@
         :userName="match.necessity.user.name"
         :userId="match.necessity.user.id"
       />
-      <UserCard class="mt-10"
+      <UserCard
+        class="mt-10"
         :userRole="userRoleDonator"
         :userName="match.donation.user.name"
         :userId="match.donation.user.id"
@@ -57,6 +58,7 @@
           prependIcon="mdi-thumb-up"
           compact
           @click="onApproveButtonClick"
+          :loading="isApproveButtonLoading"
         />
       </v-row>
     </v-container>
@@ -103,7 +105,8 @@ export default Vue.extend({
     confirmationTitle: "",
     confirmationMessage: "",
     donatedTitle: "A avaliação foi enviada, muito obrigado!",
-    motivoRecusa: ""
+    motivoRecusa: "",
+    isApproveButtonLoading: false,
   }),
   async mounted() {
     this.$root.startLoader();
@@ -159,9 +162,9 @@ export default Vue.extend({
       return StatusUtils.getIconColor(this.match.status);
     },
     canManage() {
-      return this.match && this.match.status === Status.match
-    }
-   },
+      return this.match && this.match.status === Status.match;
+    },
+  },
   methods: {
     onNotFound() {
       this.$router.push("/home");
@@ -173,7 +176,7 @@ export default Vue.extend({
       this.isModalOpen = true;
     },
     onApproveButtonClick() {
-      this.isModelLoading = true;
+      this.isApproveButtonLoading = true;
       approveMatch(this.match.id)
         .then(() => {
           this.$router.push("/admin/matches");
@@ -188,11 +191,11 @@ export default Vue.extend({
             body: "Ocorreu um erro inesperado ao tentar aprovar o match... Tente novamente!",
             color: "error",
           });
-          this.isModalLoading = false;
+          this.isApproveButtonLoading = false;
         });
     },
     onConfirmButtonClick(refusalReason) {
-      this.isModelLoading = true;
+      this.isModalLoading = true;
       refuseMatch(this.match.id, refusalReason)
         .then(() => {
           this.isModalOpen = false;

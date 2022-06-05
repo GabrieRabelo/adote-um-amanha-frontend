@@ -35,9 +35,8 @@
     />
 
     <v-container v-if="isNecessityPending">
-      <v-row class="justify-center mt-5" >
-        <VinculateButton @click="onVinculateClick"
-        title="Vincular Doador"/>
+      <v-row class="justify-center mt-5">
+        <VinculateButton @click="onVinculateClick" title="Vincular Doador" />
       </v-row>
     </v-container>
 
@@ -87,7 +86,6 @@ import { RequestType } from "@/modules/shared/models/RequestEntity";
 import StatusUtils from "../../shared/enums/Status";
 import VinculateButton from "@/modules/shared/components/VinculateButton.vue";
 
-
 export default Vue.extend({
   mixins: [ToolbarNavigationMixin],
   data: () => ({
@@ -102,21 +100,22 @@ export default Vue.extend({
   async mounted() {
     this.$root.showToolbar("NECESSIDADE");
     this.$root.startLoader();
-    this.necessity = await getNecessity(this.$route.params.id).catch(
-      ({ response }) => {
+    this.necessity = await getNecessity(this.$route.params.id)
+      .catch(({ response }) => {
         if (response.status === 404) {
           this.onNotFound();
         }
-      }
-    );
-    this.$root.stopLoader();
+      })
+      .finally(() => {
+        this.$root.stopLoader();
+      });
     this.loaded = true;
   },
   components: {
     Button,
     UserCard,
     RefuseNecessityModal,
-    VinculateButton
+    VinculateButton,
   },
   computed: {
     attributes() {
@@ -154,8 +153,8 @@ export default Vue.extend({
       return UserRole.institution;
     },
     isNecessityPending() {
-      return this.necessity && this.necessity.status === Status.pending
-    }
+      return this.necessity && this.necessity.status === Status.pending;
+    },
   },
   methods: {
     onVinculateClick() {
@@ -175,7 +174,7 @@ export default Vue.extend({
       this.isModalOpen = true;
     },
     onConfirmButtonClick(refusalReason) {
-      this.isModelLoading = true;
+      this.isModalLoading = true;
       refuseNecessity(this.necessity, refusalReason)
         .then(() => {
           this.isModalOpen = false;
