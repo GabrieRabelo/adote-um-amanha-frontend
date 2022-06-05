@@ -18,6 +18,7 @@ import Donations from "../modules/donator/views/Donations.vue";
 import Matches from "../modules/admin/views/matches/Matches.vue";
 import CreateMatch from "../modules/shared/views/CreateMatch.vue";
 import MatchDescription from "../modules/admin/views/MatchDescription.vue";
+import Donators from '../modules/admin/views/Donators.vue';
 
 Vue.use(VueRouter);
 
@@ -131,6 +132,11 @@ const routes: Array<RouteConfig> = [
     path: "/admin/matches/:id",
     name: "Admin Match Description",
     component: MatchDescription,
+  },
+  {
+    path: "/admin/donators",
+    name: "Donators List",
+    component: Donators,
   },
 ];
 
