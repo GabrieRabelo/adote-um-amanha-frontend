@@ -3,7 +3,6 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Login from "../modules/shared/views/Login.vue";
 import Necessity from "../modules/institution/views/Necessity.vue";
 import Instituition from "../modules/institution/views/Instituition.vue";
-import SplashScreen from "../modules/shared/views/SplashScreen.vue";
 import EditNecessity from "../modules/institution/views/EditNecessity.vue";
 import NecessityDescription from "../modules/donator/views/NecessityDescription.vue";
 import NecessityDescriptionAdmin from "../modules/admin/views/NecessityDescription.vue";
@@ -18,14 +17,14 @@ import Donations from "../modules/donator/views/Donations.vue";
 import Matches from "../modules/admin/views/matches/Matches.vue";
 import CreateMatch from "../modules/shared/views/CreateMatch.vue";
 import MatchDescription from "../modules/admin/views/MatchDescription.vue";
-import Donators from '../modules/admin/views/Donators.vue';
+import Donators from "../modules/admin/views/Donators.vue";
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    component: SplashScreen,
+    component: Home,
   },
   {
     path: "/auth",
@@ -115,7 +114,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/admin/donations/:id",
     name: "Donation For Admin",
-    component: Donation
+    component: Donation,
   },
   {
     path: "/admin/donations",

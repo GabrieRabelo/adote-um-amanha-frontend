@@ -1,0 +1,32 @@
+{
+    "theme_color": "#fffffe",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/?source=pwa",
+    "name": "Adote um Amanh\u00e3",
+    "short_name": "Adote",
+    "description": "Aplicativo para unir as institui\u00e7\u00f5es acolhedoras de Porto Alegre com poss\u00edveis doadores.",
+    "icons": [
+        {
+            "src": "./img/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "./img/icons/icon-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "./img/icons/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "./img/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
