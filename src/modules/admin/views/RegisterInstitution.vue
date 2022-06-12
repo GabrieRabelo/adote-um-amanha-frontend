@@ -6,8 +6,8 @@
     <v-form v-model="isFormValid" class="fill-width">
       <v-col>
         <Input
-          label="Nome Completo"
-          placeholder="Exemplo de Souza"
+          label="Nome da Instituição"
+          placeholder="Exemplo de Nome"
           v-model="institution.name"
           required
           :rules="[inputValidations.required]"
@@ -15,9 +15,9 @@
         <v-row>
           <v-col cols="6" class="mb-0 pb-0">
             <Input
-              label="CPF/CNPJ"
-              placeholder="123.456.789-01"
-              v-mask="['###.###.###-##', '##.###.###/####-##']"
+              label="CNPJ"
+              placeholder="12.345.678/9999-99"
+              v-mask="['##.###.###/####-##']"
               v-model="institution.cpf_cnpj"
               required
               :rules="[inputValidations.cpf_cnpj, inputValidations.required]"
@@ -102,6 +102,12 @@
           required
           :rules="[inputValidations.telefone, inputValidations.required]"
         />
+        <Input
+          prepend-inner-icon="mdi-link"
+          label="Vídeo da Instituição (URL)"
+          placeholder="youtube.com/watch"
+          v-model="necessityVideoURL"
+        />
         <PasswordInput
           label="Senha"
           v-model="institution.password"
@@ -122,22 +128,12 @@
         />
       </div>
     </v-container>
-
-    <v-container class="align-end">
-      <v-col align-self="stretch">
-        <v-row class="d-flex justify-center">
-          <span>Já possuí uma conta?</span>&nbsp;
-          <Link url="/auth">Fazer login</Link>
-        </v-row>
-      </v-col>
-    </v-container>
   </v-container>
 </template>
 
 <script>
 import Vue from "vue";
 import Button from "../../shared/components/Button.vue";
-import Link from "../../shared/components/Link.vue";
 import Input from "../../shared/components/Input.vue";
 import PasswordInput from "../../shared/components/PasswordInput.vue";
 import InputValidations from "../../shared/utils/InputValidations";
@@ -149,7 +145,7 @@ import LoginService from "@/modules/institution/services/LoginService";
 Vue.use(VueTheMask);
 
 export default Vue.extend({
-  components: { Button, Link, Input, PasswordInput, InputStates },
+  components: { Button, Input, PasswordInput, InputStates },
   data: () => ({
     isFormValid: false,
     signUpButtonLoading: false,

@@ -51,6 +51,15 @@
             @click="snackbar = true"
           />
         </div>
+        <div class="d-flex justify-center mb-4">
+          <Button
+            class="extended-button font-weight-medium"
+            title="Registrar Instituição"
+            color="primary"
+            outlined
+            @click="onRegisterInstitutionsButtonClick"
+          />
+        </div>
       </div>
       <div class="mx-12">
         <v-divider inline />
@@ -106,6 +115,9 @@ export default Vue.extend({
     },
     onLogoutButtonClick() {
       this.$router.push("/auth");
+    },
+    onRegisterInstitutionsButtonClick() {
+      this.$router.push("/admin/institution/create");
     },
   },
 });
