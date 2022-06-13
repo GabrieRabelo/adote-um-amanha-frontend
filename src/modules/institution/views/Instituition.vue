@@ -43,6 +43,7 @@
           color="primary"
           prependIcon="mdi-arrow-left"
           outlined
+          @click="$router.go(-1)"
         />
       </v-row>
     </v-container>
