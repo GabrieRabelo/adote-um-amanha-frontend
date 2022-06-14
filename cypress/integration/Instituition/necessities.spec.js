@@ -15,9 +15,13 @@ describe("Necessities", () => {
   });
 
   it("Create a new necessity", () => {
-    cy.get(".a-button", { timeout: Cypress.env("timeOut") }).click();
+    cy.contains('[class="a-button--title"]', "Criar", {
+      timeout: Cypress.env("timeOut"),
+    }).click();
     cy.url().should("include", "/create", { timeout: Cypress.env("timeOut") });
-    cy.get(".v-btn--has-bg", { timeout: Cypress.env("timeOut") }).click();
+    cy.contains(".a-button--title", "Continuar", {
+      timeout: Cypress.env("timeOut"),
+    }).click();
     cy.contains(".a-button--title", "Continuar", {
       timeout: Cypress.env("timeOut"),
     }).click();
@@ -49,11 +53,13 @@ describe("Necessities", () => {
   });
 
   it("Edit a necessity", () => {
-    cy.contains(":nth-child(2) > .card > :nth-child(1)", "Caixa de luvas", {
+    cy.contains('[class="card__title"]', "Caixa de luvas", {
       timeout: Cypress.env("timeOut"),
     })
-      .first()
+      .parent()
+      .parent()
       .click();
+    cy.get(".a-text__bold-title").should("contain", "Caixa de luvas");
     cy.contains(".a-button--title", "Editar", {
       timeout: Cypress.env("timeOut"),
     }).click();
@@ -98,13 +104,13 @@ describe("Necessities", () => {
   });
 
   it("Delete a necessity", () => {
-    cy.contains(
-      ":nth-child(2) > .card > :nth-child(1)",
-      "Aulas de Matemática",
-      { timeout: Cypress.env("timeOut") }
-    )
-      .first()
+    cy.contains('[class="card__title"]', "Aulas de Matemática", {
+      timeout: Cypress.env("timeOut"),
+    })
+      .parent()
+      .parent()
       .click();
+    cy.get(".a-text__bold-title").should("contain", "Aulas de Matemática");
     cy.contains(".a-button--title", "Editar", {
       timeout: Cypress.env("timeOut"),
     }).click();
