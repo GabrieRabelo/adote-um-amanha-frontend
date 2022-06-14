@@ -14,13 +14,13 @@ import RegisterDonator from "../modules/donator/views/RegisterDonator.vue";
 import Donation from "../modules/donator/views/Donation.vue";
 import EditDonation from "../modules/shared/views/EditDonation.vue";
 import Donations from "../modules/donator/views/Donations.vue";
+import Donator from "../modules/donator/views/Donator.vue";
 import Matches from "../modules/admin/views/matches/Matches.vue";
 import CreateMatch from "../modules/shared/views/CreateMatch.vue";
 import MatchDescription from "../modules/admin/views/MatchDescription.vue";
 import Donators from "../modules/admin/views/Donators.vue";
 
 Vue.use(VueRouter);
-
 const routes: Array<RouteConfig> = [
   {
     path: "/",
@@ -136,6 +136,11 @@ const routes: Array<RouteConfig> = [
     path: "/admin/donators",
     name: "Donators List",
     component: Donators,
+  },
+  {
+    path: "/admin/donator/:id",
+    name: "Donator",
+    component: Donator,
   },
 ];
 

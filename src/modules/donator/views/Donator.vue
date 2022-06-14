@@ -1,10 +1,10 @@
 <template>
   <v-container class="align-start" fill-height>
-    <v-container class="align-start px-7" v-if="instituition">
+    <v-container class="align-start px-7" v-if="donator">
       <v-row class="mt-3 mb-4">
         <div class="header">
-          <img width="65px" src="../../../assets/img/institution-logo.png" />
-          <div class="a-text__bold-title py-0">{{ instituition.name }}</div>
+          <img width="65px" src="../../../assets/img/donator-logo.png" />
+          <div class="a-text__bold-title py-0">{{ donator.name }}</div>
         </div>
       </v-row>
       <v-row
@@ -17,20 +17,11 @@
       </v-row>
       <v-row>
         <v-col class="px-0 py-0">
-          Site
-          <v-btn icon v-bind:href="getUrlSite" target="_blank">
-            <v-icon>mdi-open-in-new</v-icon>
-          </v-btn>
-          <div class="">{{ instituition.site }}</div>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col class="px-0 py-0">
           Endereço
           <v-btn icon v-bind:href="getUrlAddress" target="_blank">
             <v-icon>mdi-open-in-new</v-icon>
           </v-btn>
-          <div class="">{{ instituition.address }}</div>
+          <div class="">{{ donator.address }}</div>
         </v-col>
       </v-row>
     </v-container>
@@ -52,16 +43,16 @@
 
 <script>
 import Vue from "vue";
-import { getInstituition } from "../services/InstituitionService";
+import { getDonatorInformation } from "../services/DonatorService";
 import Button from "../../shared/components/Button.vue";
 
 export default Vue.extend({
   data: () => ({
-    instituition: null,
+    donator: null,
   }),
   async mounted() {
-    this.$root.showToolbar("Perfil da instituição");
-    this.instituition = await getInstituition(this.$route.params.id);
+    this.$root.showToolbar("DOADOR");
+    this.donator = await getDonatorInformation(this.$route.params.id);
   },
   components: {
     Button,
@@ -71,19 +62,20 @@ export default Vue.extend({
       return [
         {
           key: "Telefone",
-          value: this.instituition.phone,
+          value: this.donator.phone,
         },
         {
           key: "Email",
-          value: this.instituition.email,
+          value: this.donator.email,
+        },
+        {
+          key: "CPF/CNPJ",
+          value: this.donator.document,
         },
       ];
     },
-    getUrlSite() {
-      return "https://" + this.instituition.site;
-    },
     getUrlAddress() {
-      return "https://www.google.com/maps/search/" + this.instituition.address;
+      return "https://www.google.com/maps/search/" + this.donator.address;
     },
   },
 });

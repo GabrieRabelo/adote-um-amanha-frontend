@@ -11,9 +11,9 @@ export async function getInstituition(id: number): Promise<UserEntity> {
     body.nome,
     body.telefone,
     body.email,
-    body.site,
     body.endereco,
-    UserRole.institution
+    UserRole.institution,
+    body.site
   );
   return Promise.resolve(institution);
 }
