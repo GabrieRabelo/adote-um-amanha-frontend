@@ -1,13 +1,6 @@
 <template>
   <v-container class="align-start" fill-height>
-    <transition>
-      <v-skeleton-loader
-        v-bind="attrs"
-        type="list-item-avatar-three-line, list-item-three-line"
-      >
-      </v-skeleton-loader>
-    </transition>
-    <!-- <v-container class="align-start px-7" v-if="instituition">
+    <v-container class="align-start px-7" v-if="instituition">
       <v-row class="mt-3 mb-4">
         <div class="header">
           <img width="65px" src="../../../assets/img/institution-logo.png" />
@@ -40,7 +33,7 @@
           <div class="">{{ instituition.address }}</div>
         </v-col>
       </v-row>
-    </v-container> -->
+    </v-container>
 
     <v-container class="align-self-end mb-8">
       <v-row class="justify-center">
