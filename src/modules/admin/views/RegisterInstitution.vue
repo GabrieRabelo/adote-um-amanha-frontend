@@ -106,7 +106,7 @@
           prepend-inner-icon="mdi-link"
           label="Vídeo da Instituição (URL)"
           placeholder="youtube.com/watch"
-          v-model="necessityVideoURL"
+          v-model="institution.site"
         />
         <PasswordInput
           label="Senha"

@@ -13,15 +13,15 @@ export async function getinstitution(id: number): Promise<UserEntity> {
     body.nome,
     body.telefone,
     body.email,
-    body.site,
     body.endereco,
-    UserRole.institution
+    UserRole.institution,
+    body.site,
   );
   return Promise.resolve(institution);
 }
 
 export function createInstitution(institution: institutionEntity): Promise<void> {
-  return HTTP.post("/public/instituicao", {
+  return HTTP.post("/casa", {
     nome: institution.name,
     email: institution.email,
     senha: institution.password,

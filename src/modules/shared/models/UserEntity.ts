@@ -7,9 +7,9 @@ export class UserEntity {
     public name: string,
     public phone: string,
     public email: string,
-    public site: string,
     public addressDTO: AddressDTO,
-    public role: UserRole
+    public role: UserRole,
+    public site?: string
    
   ) {}
 
