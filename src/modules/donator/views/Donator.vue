@@ -24,7 +24,10 @@
           <div class="">{{ donator.address }}</div>
         </v-col>
       </v-row>
-      <DonationScore />
+      <DonationScore
+        :approved="donator.approvedDonations"
+        :refused="donator.refusedDonations"
+      />
     </v-container>
     <v-container class="align-self-end mb-8">
       <v-row class="justify-center">
