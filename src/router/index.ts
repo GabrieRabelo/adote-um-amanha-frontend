@@ -138,7 +138,7 @@ const routes: Array<RouteConfig> = [
     component: Donators,
   },
   {
-    path: "/admin/donator/:id",
+    path: "/donator/:id",
     name: "Donator",
     component: Donator,
   },
