@@ -9,7 +9,6 @@ import Vue from "vue";
 export default Vue.extend({
   props: {
     url: {
-      required: true,
       type: String,
     },
   },
@@ -21,8 +20,9 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<style>
 .link {
   text-decoration: underline;
+  cursor: pointer;
 }
 </style>
