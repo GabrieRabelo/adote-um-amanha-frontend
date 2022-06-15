@@ -24,8 +24,8 @@
           <div class="">{{ donator.address }}</div>
         </v-col>
       </v-row>
+      <DonationScore />
     </v-container>
-
     <v-container class="align-self-end mb-8">
       <v-row class="justify-center">
         <Button
@@ -45,6 +45,7 @@
 import Vue from "vue";
 import { getDonatorInformation } from "../services/DonatorService";
 import Button from "../../shared/components/Button.vue";
+import DonationScore from "../../shared/components/DonationScore.vue";
 
 export default Vue.extend({
   data: () => ({
@@ -56,6 +57,7 @@ export default Vue.extend({
   },
   components: {
     Button,
+    DonationScore,
   },
   computed: {
     attributes() {
