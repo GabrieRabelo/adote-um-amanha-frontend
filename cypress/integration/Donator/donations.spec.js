@@ -1,21 +1,25 @@
-describe("Necessities", () => {
+describe("Donations", () => {
   beforeEach(() => {
     cy.visit("/auth");
     cy.get("input[type='email']", { timeout: Cypress.env("timeOut") }).type(
-      Cypress.env("emailHouse")
+      Cypress.env("emailDonator")
     );
     cy.get("input[type='password']", { timeout: Cypress.env("timeOut") }).type(
       Cypress.env("password")
     );
-    cy.get(
-      "button[class='a-button v-application px-9 py-5 v-btn v-btn--has-bg v-btn--rounded theme--light elevation-0 v-size--default primary']",
-      { timeout: Cypress.env("timeOut") }
-    ).click();
-    cy.url().should("include", "/home", { timeout: Cypress.env("timeOut") });
+    cy.contains('[class="a-button--title"]', "Entrar", {
+      timeout: Cypress.env("timeOut"),
+    }).click();
+    cy.contains('[class="a-button--title"]', "Minhas doações", {
+      timeout: Cypress.env("timeOut"),
+    }).click();
+    cy.url().should("include", "/donations", {
+      timeout: Cypress.env("timeOut"),
+    });
   });
 
-  it("Create a new necessity", () => {
-    cy.contains('[class="a-button--title"]', "Criar", {
+  it("Create a new donation", () => {
+    cy.contains('[class="a-button--title"]', "Doar", {
       timeout: Cypress.env("timeOut"),
     }).click();
     cy.url().should("include", "/create", { timeout: Cypress.env("timeOut") });
@@ -34,14 +38,20 @@ describe("Necessities", () => {
     cy.contains(".a-button--title", "Confirmar", {
       timeout: Cypress.env("timeOut"),
     }).click();
+    cy.get(
+      'button[class="a-button v-application px-9 py-5 button--confirm v-btn v-btn--has-bg v-btn--rounded theme--light elevation-0 v-size--default primary"]',
+      {
+        timeout: Cypress.env("timeOut"),
+      }
+    ).click();
     cy.get(".container", { timeout: Cypress.env("timeOut") }).should(
       "contain",
       "Caixa de luvas"
     );
   });
 
-  it("Open necessity description", () => {
-    cy.url().should("contain", "/home");
+  it("Open donation description", () => {
+    cy.url().should("contain", "/donations");
     cy.contains('[class="card__title"]', "Caixa de luvas", {
       timeout: Cypress.env("timeOut"),
     })
@@ -49,10 +59,10 @@ describe("Necessities", () => {
       .parent()
       .click();
     cy.get(".a-text__bold-title").should("contain", "Caixa de luvas");
-    cy.url().should("contain", "/necessity/");
+    cy.url().should("contain", "/donations/");
   });
 
-  it("Edit a necessity", () => {
+  it("Edit a donation", () => {
     cy.contains('[class="card__title"]', "Caixa de luvas", {
       timeout: Cypress.env("timeOut"),
     })
@@ -103,7 +113,7 @@ describe("Necessities", () => {
     );
   });
 
-  it("Delete a necessity", () => {
+  it("Delete a donation", () => {
     cy.contains('[class="card__title"]', "Aulas de Matemática", {
       timeout: Cypress.env("timeOut"),
     })
