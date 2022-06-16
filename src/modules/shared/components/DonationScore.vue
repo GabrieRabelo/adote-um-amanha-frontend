@@ -14,7 +14,9 @@
       </v-card>
       <v-card class="a-card-rejeitado" max-width="150" elevation="0" outlined>
         <v-card-title>RECUSADAS</v-card-title>
-        <v-card-text class="a-card-text">{{ refused }}</v-card-text>
+        <v-card-text class="a-card-text" color="black">{{
+          refused
+        }}</v-card-text>
       </v-card>
     </v-row>
   </div>
@@ -37,5 +39,11 @@ export default Vue.extend({
 }
 .v-card__title {
   font-size: 100%;
+}
+.a-card-aprovado {
+  border: thin solid #3bb54a !important;
+}
+.a-card-rejeitado {
+  border: thin solid #ff785a !important;
 }
 </style>
