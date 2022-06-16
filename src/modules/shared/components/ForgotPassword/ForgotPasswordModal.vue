@@ -21,7 +21,13 @@
       </div>
 
       <div class="d-flex justify-center">
-        <Button compact title="Cancelar" @click="$emit('close')" class="mr-4" />
+        <Button
+          compact
+          outlined
+          title="Cancelar"
+          @click="$emit('close')"
+          class="mr-4"
+        />
         <Button
           title="Enviar"
           color="primary"
