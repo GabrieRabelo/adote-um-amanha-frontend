@@ -8,7 +8,7 @@
         variant="round"
         hide-details
         elevation="3"
-        v-model="nameFilter"
+        v-model="filters.name"
         @input="onInputChange"
       />
     </v-row>
@@ -27,6 +27,7 @@
         v-if="isListEmpty"
       />
     </v-row>
+    <BottomLoader :value="isRequestLoading" />
   </v-container>
 </template>
 
@@ -39,14 +40,20 @@ import lodash from "lodash";
 import EmptyListError from "../../../shared/components/EmptyListError.vue";
 import { getDonators } from "../../services/DonatorsService";
 import DonatorCard from "./DonatorCard.vue";
+import InfiniteScrollMixin from "@/modules/shared/mixins/InfiniteScrollMixin";
+import BottomLoader from "@/modules/shared/components/Loaders/BottomLoader.vue";
 
 export default Vue.extend({
-  mixins: [ToolbarMenuMixin, ToolbarNavigationMixin],
-  components: { Input, DonatorCard, EmptyListError },
+  mixins: [ToolbarMenuMixin, ToolbarNavigationMixin, InfiniteScrollMixin],
+  components: { Input, DonatorCard, EmptyListError, BottomLoader },
   data: () => ({
     donators: [],
     loaded: false,
-    nameFilter: "",
+    filters: {
+      name: "",
+      page: 0,
+      limit: 10,
+    },
   }),
   created() {
     this.onInputChange = lodash.debounce(this.onInputChange, 500);
@@ -63,17 +70,27 @@ export default Vue.extend({
     async getDonators() {
       this.$root.startLoader();
       const params = {
-        nome: this.nameFilter,
+        nome: this.filters.name,
+        pagina: this.filters.page,
+        tamanho: this.filters.limit,
       };
       const response = await getDonators(params);
       this.$root.stopLoader();
       return response;
     },
     async onInputChange() {
+      this.filters.page = 0;
       this.donators = await this.getDonators();
     },
     onToolbarNavButtonClick() {
       this.$router.push("/home");
+    },
+    async onBottomReached() {
+      this.filters.page = this.filters.page + 1;
+      this.isRequestLoading = true;
+      const newDonators = await this.getDonators();
+      this.isRequestLoading = false;
+      this.donators = [...this.donators, ...newDonators];
     },
   },
   computed: {

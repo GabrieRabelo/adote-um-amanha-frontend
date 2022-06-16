@@ -18,7 +18,7 @@ export default Vue.extend({
   components: { DonationsFilter, DonationsContent },
   data: () => ({
     filterActive: false,
-    filters: getDonationsFilters(),
+    filters: { ...getDonationsFilters(), page: 0 },
   }),
   methods: {
     onNecessityClick(necessity) {

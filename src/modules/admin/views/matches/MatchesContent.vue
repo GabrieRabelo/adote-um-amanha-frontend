@@ -37,6 +37,7 @@
         v-if="isListEmpty"
       />
     </v-row>
+    <BottomLoader :value="isRequestLoading" />
   </v-container>
 </template>
 
@@ -56,10 +57,12 @@ import InputChips from "../../../shared/components/InputChips.vue";
 import lodash from "lodash";
 import { getMatches } from "../../services/MatchesService";
 import EmptyListError from "../../../shared/components/EmptyListError.vue";
+import BottomLoader from "@/modules/shared/components/Loaders/BottomLoader.vue";
+import InfiniteScrollMixin from "@/modules/shared/mixins/InfiniteScrollMixin";
 
 export default Vue.extend({
-  mixins: [ToolbarMenuMixin, ToolbarNavigationMixin],
-  components: { Input, MatchCard, InputChips, EmptyListError },
+  mixins: [ToolbarMenuMixin, ToolbarNavigationMixin, InfiniteScrollMixin],
+  components: { Input, MatchCard, InputChips, EmptyListError, BottomLoader },
   props: {
     filters: Object,
   },
@@ -75,6 +78,7 @@ export default Vue.extend({
     this.onInputChange = lodash.debounce(this.onInputChange, 500);
   },
   async mounted() {
+    this.filters.page = 0;
     this.$root.showToolbar("MATCHES");
     this.matches = await this.getMatches();
     this.loaded = true;
@@ -88,6 +92,8 @@ export default Vue.extend({
       const params = {
         direcao: "DESC",
         ordenacao: "dataCriacao",
+        tamanho: 10,
+        pagina: this.filters.page,
         categorias: this.filters.categories.join(","),
         subcategorias: this.filters.subcategories.join(","),
         status: this.filters.status.join(","),
@@ -99,10 +105,18 @@ export default Vue.extend({
       return response;
     },
     async onInputChange() {
+      this.filters.page = 0;
       this.matches = await this.getMatches();
     },
     onToolbarNavButtonClick() {
       this.$router.push("/home");
+    },
+    async onBottomReached() {
+      this.filters.page += 1;
+      this.isRequestLoading = true;
+      const newMatches = await this.getMatches();
+      this.isRequestLoading = false;
+      this.matches = [...this.matches, ...newMatches];
     },
   },
   computed: {
