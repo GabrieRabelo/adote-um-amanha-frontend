@@ -1,23 +1,16 @@
 <template>
   <v-container>
-    <v-row class="justify-center align-center my-3 mx-1">
-      <v-col class="px-0 py-0">
-        <Input
-          placeholder="Pesquisar..."
-          prepend-inner-icon="mdi-magnify"
-          class="mr-2"
-          variant="round"
-          hide-details
-          elevation="3"
-          v-model="filters.name"
-          @input="onInputChange"
-        />
-      </v-col>
-      <v-col cols="3" class="d-flex flex-column align-end px-0 py-0">
-        <v-btn fab color="primary" @click="$emit('filterToggle', true)"
-          ><v-icon color="black">mdi-filter-variant</v-icon></v-btn
-        >
-      </v-col>
+    <v-row class="justify-center align-center my-3 mx-1 mb-6">
+      <Input
+        placeholder="Pesquisar..."
+        prepend-inner-icon="mdi-magnify"
+        class="mr-2"
+        variant="round"
+        hide-details
+        elevation="3"
+        v-model="nameFilter"
+        @input="onInputChange"
+      />
     </v-row>
     <v-row
       v-for="donator in donators"
@@ -50,22 +43,16 @@ import DonatorCard from "./DonatorCard.vue";
 export default Vue.extend({
   mixins: [ToolbarMenuMixin, ToolbarNavigationMixin],
   components: { Input, DonatorCard, EmptyListError },
-  props: {
-    filters: Object,
-  },
-  model: {
-    prop: "filters",
-    event: "change",
-  },
   data: () => ({
     donators: [],
     loaded: false,
+    nameFilter: "",
   }),
   created() {
     this.onInputChange = lodash.debounce(this.onInputChange, 500);
   },
   async mounted() {
-    this.$root.showToolbar("DOAÇÕES");
+    this.$root.showToolbar("DOADORES");
     this.donators = await this.getDonators();
     this.loaded = true;
   },
@@ -76,9 +63,7 @@ export default Vue.extend({
     async getDonators() {
       this.$root.startLoader();
       const params = {
-        nome: this.filters.name,
-        doacoesAprovadas: this.filters.donationsApproved,
-        doacoesRecusadas: this.filters.donationsRefused,
+        nome: this.nameFilter,
       };
       const response = await getDonators(params);
       this.$root.stopLoader();
