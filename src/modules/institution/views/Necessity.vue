@@ -27,6 +27,10 @@
       </v-row>
     </v-container>
 
+    <v-container>
+      <MotiveCard></MotiveCard>
+    </v-container>
+
     <v-container v-if="necessity">
       <v-row class="justify-center">
         <EmbeddedVideo :src="necessity.url" />
@@ -86,7 +90,7 @@ import Vue from "vue";
 import Category from "../../shared/enums/Category";
 import Subcategory from "../../shared/enums/Subcategory";
 import moment from "moment";
-
+import MotiveCard from "../../shared/components/MotiveCard.vue";
 import ConfirmationModal from "../../shared/components/ConfirmationModal.vue";
 import DonationDoneModal from "../../shared/components/DonationDoneModal.vue";
 import Button from "../../shared/components/Button.vue";
@@ -131,6 +135,7 @@ export default Vue.extend({
     Button,
     ConfirmationModal,
     DonationDoneModal,
+    MotiveCard,
   },
   computed: {
     statusText() {
