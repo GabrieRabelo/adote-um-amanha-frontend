@@ -144,6 +144,11 @@ const routes: Array<RouteConfig> = [
     name: "Donator",
     component: Donator,
   },
+  {
+    path: "/necessities",
+    name: "List necessities",
+    component: Necessities,
+  },
 ];
 
 const router = new VueRouter({
