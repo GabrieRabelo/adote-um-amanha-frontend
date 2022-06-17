@@ -46,6 +46,7 @@
       @click="$router.push('/necessities/create')"
       v-if="isUserDonator"
     />
+    <BottomLoader :value="isRequestLoading" />
   </v-container>
 </template>
 
@@ -68,10 +69,19 @@ import InputChips from "./InputChips.vue";
 import lodash from "lodash";
 import { getDonations } from "@/modules/donator/services/DonationService";
 import EmptyListError from "./EmptyListError.vue";
+import InfiniteScrollMixin from "../mixins/InfiniteScrollMixin";
+import BottomLoader from "./Loaders/BottomLoader.vue";
 
 export default Vue.extend({
-  mixins: [ToolbarMenuMixin, ToolbarNavigationMixin],
-  components: { Input, NecessityCard, Button, InputChips, EmptyListError },
+  mixins: [ToolbarMenuMixin, ToolbarNavigationMixin, InfiniteScrollMixin],
+  components: {
+    Input,
+    NecessityCard,
+    Button,
+    InputChips,
+    EmptyListError,
+    BottomLoader,
+  },
   props: {
     filters: Object,
   },
@@ -87,6 +97,7 @@ export default Vue.extend({
     this.onInputChange = lodash.debounce(this.onInputChange, 500);
   },
   async mounted() {
+    this.filters.page = 0;
     this.$root.showToolbar("DOAÇÕES");
     this.$root.startLoader();
     this.donations = await this.getDonations();
@@ -110,6 +121,8 @@ export default Vue.extend({
       const params = {
         direcao: "DESC",
         ordenacao: "dataHora",
+        pagina: this.filters.page,
+        tamanho: 8,
         categorias: this.filters.categories.join(","),
         subcategorias: this.filters.subcategories.join(","),
         status: this.filters.status.join(","),
@@ -121,10 +134,18 @@ export default Vue.extend({
       return response;
     },
     async onInputChange() {
+      this.filters.page = 0;
       this.donations = await this.getDonations();
     },
     onToolbarNavButtonClick() {
       this.$router.push("/home");
+    },
+    async onBottomReached() {
+      this.filters.page = this.filters.page + 1;
+      this.isRequestLoading = true;
+      const newDonations = await this.getDonations();
+      this.isRequestLoading = false;
+      this.donations = [...this.donations, ...newDonations];
     },
   },
   computed: {

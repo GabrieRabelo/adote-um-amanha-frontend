@@ -39,13 +39,24 @@
       </div>
     </v-container>
     <v-container class="align-end">
-      <v-col class="mt-10" align-self="stretch">
-        <v-row class="d-flex justify-center">
-          <span>Ainda não tem conta?</span>&nbsp;
-          <Link url="/donator/create">Cadastre-se!</Link>
-        </v-row>
-      </v-col>
+      <v-row class="justify-center mb-2">
+        <div class="link" @click="onForgotPasswordClick">
+          Esqueci minha senha
+        </div>
+      </v-row>
+      <v-row class="justify-center">
+        <span>Ainda não tem conta?</span>&nbsp;
+        <Link url="/donator/create">Cadastre-se!</Link>
+      </v-row>
     </v-container>
+
+    <div v-if="isForgotPasswordOpen">
+      <ForgotPasswordModal
+        v-model="isForgotPasswordOpen"
+        :email="login"
+        @close="isForgotPasswordOpen = false"
+      />
+    </div>
   </v-container>
 </template>
 
@@ -58,6 +69,7 @@ import loginService from "../../institution/services/LoginService";
 import InputValidations from "../utils/InputValidations";
 import Link from "../components/Link.vue";
 import { clearAccessToken } from "../utils/AuthenticationManager";
+import ForgotPasswordModal from "../components/ForgotPassword/ForgotPasswordModal.vue";
 
 export default Vue.extend({
   components: {
@@ -65,12 +77,14 @@ export default Vue.extend({
     Input,
     Button,
     Link,
+    ForgotPasswordModal,
   },
   data: () => ({
     login: "",
     password: "",
     loginButtonLoading: false,
     isFormValid: false,
+    isForgotPasswordOpen: false,
   }),
   mounted() {
     this.$root.hideToolbar();
@@ -85,6 +99,10 @@ export default Vue.extend({
     },
   },
   methods: {
+    onForgotPasswordClick() {
+      this.isForgotPasswordOpen = true;
+    },
+
     async onLoginButtonClick() {
       this.loginButtonLoading = true;
       const result = await loginService.login(this.login, this.password);
@@ -106,7 +124,10 @@ export default Vue.extend({
       this.$router.push("home");
     },
     onLoginUnauthorized() {
-      this.$root.showSnackbar({title:"Usuário e/ou senha incorretos.", color:"error"});
+      this.$root.showSnackbar({
+        title: "Usuário e/ou senha incorretos.",
+        color: "error",
+      });
     },
   },
 });

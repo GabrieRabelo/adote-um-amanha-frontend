@@ -1,24 +1,34 @@
-import { UserEntity } from "@/modules/shared/models/UserEntity";
+import { HTTP } from "@/api/http-common";
+import { mountQueryString } from "@/modules/shared/utils/QueryParamBuilder";
 
-export async function getDonators(params: DonatorsQueryParams): Promise<DonatorListItem[]> {
-    return [
-        { id: 1, name: 'Doador 1', donationsApproved: 10, donationsRefused: 1 },
-        { id: 2, name: 'Doador 2', donationsApproved: 1, donationsRefused: 0 },
-        { id: 3, name: 'Doador 3', donationsApproved: 20, donationsRefused: 2 },
-        { id: 4, name: 'Doador 4', donationsApproved: 25, donationsRefused: 5 },
-        { id: 5, name: 'Doador 5', donationsApproved: 0, donationsRefused: 3 },
-    ]
+export async function getDonators(
+  params: DonatorsQueryParams
+): Promise<DonatorListItem[]> {
+  const queryString = mountQueryString(params);
+  return HTTP.get(`/usuarios?${queryString}`).then(({ data }) => {
+    return data.conteudo.map((donator: DonatorListItemDTO) => ({
+      id: donator.id,
+      name: donator.nome,
+      donationsApproved: donator.doacoesAprovadas,
+      donationsRefused: donator.doacoesRecusadas,
+    }));
+  });
 }
 
 interface DonatorsQueryParams {
-    nome: string;
-    doacoesAprovadas: number;
-    doacoesRecusadas: number;
+  nome: string;
+}
+
+interface DonatorListItemDTO {
+  id: number;
+  nome: string;
+  doacoesAprovadas: number;
+  doacoesRecusadas: number;
 }
 
 interface DonatorListItem {
-    id: number;
-    name: string;
-    donationsApproved: number;
-    donationsRefused: number;
+  id: number;
+  name: string;
+  donationsApproved: number;
+  donationsRefused: number;
 }

@@ -19,12 +19,18 @@ import Matches from "../modules/admin/views/matches/Matches.vue";
 import CreateMatch from "../modules/shared/views/CreateMatch.vue";
 import MatchDescription from "../modules/admin/views/MatchDescription.vue";
 import Donators from "../modules/admin/views/Donators.vue";
+import RecoverPassword from "../modules/shared/views/RecoverPassword.vue";
 
 Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: "/",
     component: Home,
+  },
+  {
+    path: "/recover-password/",
+    name: "Recover Password",
+    component: RecoverPassword,
   },
   {
     path: "/auth",
@@ -149,8 +155,10 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const allowedRoutes = ["Login", "Register", "Recover Password"];
+
   const auth = isAuthenticated();
-  if (!auth && to.name !== "Login" && to.name !== "Register") {
+  if (!auth && !allowedRoutes.includes(to.name ?? "")) {
     next({ name: "Login" });
   }
   next();
