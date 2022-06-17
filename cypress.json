@@ -5,6 +5,7 @@
     "longTimeOut": 40000,
     "emailHouse": "lar_esperanca@email.com",
     "emailDonator": "rabelo@gmail.com",
+    "emailAdmin": "admin@mail.com",
     "password": "admin"
   }
 }

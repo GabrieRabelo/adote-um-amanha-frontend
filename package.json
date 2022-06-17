@@ -13,6 +13,7 @@
     "axios": "^0.26.1",
     "core-js": "^3.6.5",
     "deep-object-diff": "^1.1.7",
+    "gerador-validador-cpf": "^5.0.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "register-service-worker": "^1.7.1",
