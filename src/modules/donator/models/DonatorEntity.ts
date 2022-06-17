@@ -1,20 +1,36 @@
-import { UserEntity } from "@/modules/shared/models/UserEntity";
 import { AddressDTO } from "../dtos/DonatorDetailDTO";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 
-export default class DonatorEntity extends UserEntity {
+export default class DonatorEntity {
   constructor(
     public id: number,
     public name: string,
-    public phone: string,
     public email: string,
-    public site: string,
-    public cpf_cnpj: string,
+    public document: string,
+    public phone: string,
+    public role: UserRole,
     public addressDTO: AddressDTO,
+    public approvedDonations?: number,
+    public refusedDonations?: number,
     public password?: string
-  ) {
-    super(id, name, phone, email, addressDTO, UserRole.donator, site);
-    this.password = password;
-    this.cpf_cnpj = cpf_cnpj;
+  ) {}
+
+  get address(): string {
+    const { rua, numero, bairro, cidade, estado, cep, complemento } =
+      this.addressDTO;
+    const fields = [
+      this.getAddressPart(rua, ","),
+      this.getAddressPart(numero, " -"),
+      complemento == undefined ? "" : this.getAddressPart(complemento, ","),
+      this.getAddressPart(bairro, ","),
+      this.getAddressPart(cidade, " -"),
+      this.getAddressPart(estado, ","),
+      this.getAddressPart(cep, ""),
+    ];
+    return fields.join(" ");
+  }
+
+  private getAddressPart(part: string, separator: string): string {
+    return part ? `${part}${separator}` : "";
   }
 }

@@ -1,10 +1,10 @@
 <template>
   <v-container class="align-start" fill-height>
-    <v-container class="align-start px-7" v-if="institution">
+    <v-container class="align-start px-7" v-if="donator">
       <v-row class="mt-3 mb-4">
         <div class="header">
-          <img width="65px" src="../../../assets/img/institution-logo.png" />
-          <div class="a-text__bold-title py-0">{{ institution.name }}</div>
+          <img width="65px" src="../../../assets/img/donator-logo.png" />
+          <div class="a-text__bold-title py-0">{{ donator.name }}</div>
         </div>
       </v-row>
       <v-row
@@ -17,24 +17,18 @@
       </v-row>
       <v-row>
         <v-col class="px-0 py-0">
-          Site
-          <v-btn icon v-bind:href="getUrlSite" target="_blank">
-            <v-icon>mdi-open-in-new</v-icon>
-          </v-btn>
-          <div class="">{{ institution.site }}</div>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col class="px-0 py-0">
           Endereço
           <v-btn icon v-bind:href="getUrlAddress" target="_blank">
             <v-icon>mdi-open-in-new</v-icon>
           </v-btn>
-          <div class="">{{ institution.address }}</div>
+          <div class="">{{ donator.address }}</div>
         </v-col>
       </v-row>
+      <DonationScore
+        :approved="donator.approvedDonations"
+        :refused="donator.refusedDonations"
+      />
     </v-container>
-
     <v-container class="align-self-end mb-8">
       <v-row class="justify-center">
         <Button
@@ -52,38 +46,41 @@
 
 <script>
 import Vue from "vue";
-import { getinstitution } from "../services/InstitutionService";
+import { getDonatorInformation } from "../services/DonatorService";
 import Button from "../../shared/components/Button.vue";
+import DonationScore from "../../shared/components/DonationScore.vue";
 
 export default Vue.extend({
   data: () => ({
-    institution: null,
+    donator: null,
   }),
   async mounted() {
-    this.$root.showToolbar("Perfil da instituição");
-    this.institution = await getinstitution(this.$route.params.id);
+    this.$root.showToolbar("DOADOR");
+    this.donator = await getDonatorInformation(this.$route.params.id);
   },
   components: {
     Button,
+    DonationScore,
   },
   computed: {
     attributes() {
       return [
         {
           key: "Telefone",
-          value: this.institution.phone,
+          value: this.donator.phone,
         },
         {
           key: "Email",
-          value: this.institution.email,
+          value: this.donator.email,
+        },
+        {
+          key: "CPF/CNPJ",
+          value: this.donator.document,
         },
       ];
     },
-    getUrlSite() {
-      return "https://" + this.institution.site;
-    },
     getUrlAddress() {
-      return "https://www.google.com/maps/search/" + this.institution.address;
+      return "https://www.google.com/maps/search/" + this.donator.address;
     },
   },
 });

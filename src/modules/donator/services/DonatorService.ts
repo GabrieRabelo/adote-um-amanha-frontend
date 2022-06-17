@@ -1,15 +1,15 @@
 import { UserRole } from "./../../shared/enums/UserRole";
 import { HTTP } from "./../../../api/http-common";
 import DonatorEntity from "../models/DonatorEntity";
+import { DonatorDetailDTO } from "../dtos/DonatorDetailDTO";
 
 export function createDonator(donator: DonatorEntity): Promise<void> {
   return HTTP.post("/public/usuario", {
     nome: donator.name,
     email: donator.email,
     senha: donator.password,
-    documento: donator.cpf_cnpj,
+    documento: donator.document,
     telefone: donator.phone,
-    site: donator.site,
     estado: donator.addressDTO.estado,
     cidade: donator.addressDTO.cidade,
     bairro: donator.addressDTO.bairro,
@@ -26,4 +26,23 @@ export function createDonator(donator: DonatorEntity): Promise<void> {
     .catch((error) => {
       return Promise.reject(error);
     });
+}
+
+export async function getDonatorInformation(
+  id: number
+): Promise<DonatorEntity> {
+  const response = await HTTP.get(`/usuario/${id}`);
+  const body: DonatorDetailDTO = response.data;
+  const donator = new DonatorEntity(
+    id,
+    body.nome,
+    body.email,
+    body.documento,
+    body.telefone,
+    body.perfil,
+    body.endereco,
+    body.doacoesAprovadas,
+    body.doacoesRecusadas
+  );
+  return Promise.resolve(donator);
 }

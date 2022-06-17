@@ -20,6 +20,27 @@ async function login(email: string, password: string): Promise<HTTPResponse> {
     });
 }
 
+async function recoverPassword(email: string): Promise<void> {
+  return new Promise(resolve => {
+    HTTP.post(`/public/resetar-senha/gerar-token?email=${email}`)
+      .finally(() => {
+        resolve();
+      })
+  })
+}
+
+async function changePassword({ email, password, token }: ChangePasswordRequestData): Promise<void> {
+  return new Promise((resolve, reject) => {
+    HTTP.post(`/public/resetar-senha?email=${email}&token=${token}`, { novaSenha: password })
+      .then(() => {
+        resolve()
+      })
+      .catch(() => {
+        reject();
+      })
+  })
+}
+
 type HTTPResponse = {
   status: number;
   data?: LoginResponseData;
@@ -32,4 +53,13 @@ type LoginResponseData = {
 
 export default {
   login,
+  recoverPassword,
+  changePassword,
 };
+
+
+interface ChangePasswordRequestData {
+  email: string,
+  password: string,
+  token: string
+}

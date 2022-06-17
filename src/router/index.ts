@@ -3,7 +3,6 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Login from "../modules/shared/views/Login.vue";
 import Necessity from "../modules/institution/views/Necessity.vue";
 import Institution from "../modules/institution/views/Institution.vue";
-import SplashScreen from "../modules/shared/views/SplashScreen.vue";
 import EditNecessity from "../modules/institution/views/EditNecessity.vue";
 import NecessityDescription from "../modules/donator/views/NecessityDescription.vue";
 import NecessityDescriptionAdmin from "../modules/admin/views/NecessityDescription.vue";
@@ -15,17 +14,24 @@ import RegisterDonator from "../modules/donator/views/RegisterDonator.vue";
 import Donation from "../modules/donator/views/Donation.vue";
 import EditDonation from "../modules/shared/views/EditDonation.vue";
 import Donations from "../modules/donator/views/Donations.vue";
+import Donator from "../modules/donator/views/Donator.vue";
 import Matches from "../modules/admin/views/matches/Matches.vue";
 import CreateMatch from "../modules/shared/views/CreateMatch.vue";
 import MatchDescription from "../modules/admin/views/MatchDescription.vue";
 import RegisterInstitution from "../modules/admin/views/RegisterInstitution.vue";
+import Donators from "../modules/admin/views/Donators.vue";
+import RecoverPassword from "../modules/shared/views/RecoverPassword.vue";
 
 Vue.use(VueRouter);
-
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    component: SplashScreen,
+    component: Home,
+  },
+  {
+    path: "/recover-password/",
+    name: "Recover Password",
+    component: RecoverPassword,
   },
   {
     path: "/auth",
@@ -128,6 +134,16 @@ const routes: Array<RouteConfig> = [
     name: "Register Institution",
     component: RegisterInstitution,
   },
+  {
+    path: "/admin/donators",
+    name: "Donators List",
+    component: Donators,
+  },
+  {
+    path: "/admin/donators/:id",
+    name: "Donator",
+    component: Donator,
+  },
 ];
 
 const router = new VueRouter({
@@ -135,8 +151,10 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const allowedRoutes = ["Login", "Register", "Recover Password"];
+
   const auth = isAuthenticated();
-  if (!auth && to.name !== "Login" && to.name !== "Register") {
+  if (!auth && !allowedRoutes.includes(to.name ?? "")) {
     next({ name: "Login" });
   }
   next();

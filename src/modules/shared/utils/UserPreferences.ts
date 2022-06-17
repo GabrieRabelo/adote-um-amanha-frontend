@@ -23,7 +23,8 @@ export function getNecessitiesFilters(): unknown {
     if (!strItems) {
       return defaultNecessitiesFilters;
     }
-    return JSON.parse(strItems);
+    const storedData = JSON.parse(strItems);
+    return { ...defaultNecessitiesFilters, ...storedData };
   } catch (err) {
     return defaultNecessitiesFilters;
   }
@@ -35,7 +36,8 @@ export function getDonationsFilters(): unknown {
     if (!strItems) {
       return defaultDonationsFilters;
     }
-    return JSON.parse(strItems);
+    const storedData = JSON.parse(strItems);
+    return { ...defaultDonationsFilters, ...storedData };
   } catch (err) {
     return defaultDonationsFilters;
   }
@@ -47,7 +49,8 @@ export function getMatchesFilters(): unknown {
     if (!strItems) {
       return defaultMatchesFilters;
     }
-    return JSON.parse(strItems);
+    const storedData = JSON.parse(strItems);
+    return { ...defaultMatchesFilters, ...storedData };
   } catch (err) {
     return defaultMatchesFilters;
   }

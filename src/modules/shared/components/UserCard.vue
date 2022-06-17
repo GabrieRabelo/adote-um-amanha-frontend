@@ -31,7 +31,7 @@ export default Vue.extend({
   methods: {
     onClick() {
       const route =
-        this.userRole === UserRole.donator ? "donator" : "institution";
+        this.userRole === UserRole.donator ? "admin/donators" : "institution";
       this.$router.push(`/${route}/${this.userId}`);
     },
   },

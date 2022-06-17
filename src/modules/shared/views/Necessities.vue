@@ -18,7 +18,7 @@ export default Vue.extend({
   components: { NecessitiesFilter, NecessitiesContent },
   data: () => ({
     filterActive: false,
-    filters: getNecessitiesFilters(),
+    filters: { ...getNecessitiesFilters(), page: 0 },
   }),
   methods: {
     onNecessityClick(necessity) {

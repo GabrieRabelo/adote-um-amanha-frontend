@@ -48,7 +48,7 @@
             title="Doadores"
             color="primary"
             outlined
-            @click="snackbar = true"
+            @click="onDonatorsClick"
           />
         </div>
         <div class="d-flex justify-center mb-4">
@@ -110,8 +110,7 @@ export default Vue.extend({
       this.$router.push("/admin/matches");
     },
     onDonatorsClick() {
-      // snackbar por agora
-      this.$router.push("/home");
+      this.$router.push("/admin/donators");
     },
     onLogoutButtonClick() {
       this.$router.push("/auth");

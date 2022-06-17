@@ -49,6 +49,7 @@
       elevation="4"
       @click="$router.push('/necessities/create')"
     />
+    <BottomLoader :value="isRequestLoading" />
   </v-container>
 </template>
 
@@ -70,10 +71,19 @@ import ToolbarNavigationMixin from "../mixins/ToolbarNavigationMixin";
 import InputChips from "./InputChips.vue";
 import lodash from "lodash";
 import EmptyListError from "./EmptyListError.vue";
+import InfiniteScrollMixin from "../mixins/InfiniteScrollMixin";
+import BottomLoader from "./Loaders/BottomLoader.vue";
 
 export default Vue.extend({
-  mixins: [ToolbarMenuMixin, ToolbarNavigationMixin],
-  components: { Input, NecessityCard, Button, InputChips, EmptyListError },
+  mixins: [ToolbarMenuMixin, ToolbarNavigationMixin, InfiniteScrollMixin],
+  components: {
+    Input,
+    NecessityCard,
+    Button,
+    InputChips,
+    EmptyListError,
+    BottomLoader,
+  },
   props: {
     filters: Object,
   },
@@ -89,6 +99,7 @@ export default Vue.extend({
     this.onInputChange = lodash.debounce(this.onInputChange, 500);
   },
   async mounted() {
+    this.filters.page = 0;
     this.$root.showToolbar("NECESSIDADES");
     this.necessities = await this.getNecessities();
     this.loaded = true;
@@ -110,6 +121,8 @@ export default Vue.extend({
       const params = {
         direcao: "DESC",
         ordenacao: "dataHora",
+        pagina: this.filters.page,
+        tamanho: 10,
         categorias: this.filters.categories.join(","),
         subcategorias: this.filters.subcategories.join(","),
         status: this.filters.status.join(","),
@@ -121,10 +134,18 @@ export default Vue.extend({
       return response;
     },
     async onInputChange() {
+      this.filters.page = 0;
       this.necessities = await this.getNecessities();
     },
     onToolbarNavButtonClick() {
       this.$router.push("/home");
+    },
+    async onBottomReached() {
+      this.filters.page = this.filters.page + 1;
+      this.isRequestLoading = true;
+      const newNecessities = await this.getNecessities();
+      this.isRequestLoading = false;
+      this.necessities = [...this.necessities, ...newNecessities];
     },
   },
   computed: {
