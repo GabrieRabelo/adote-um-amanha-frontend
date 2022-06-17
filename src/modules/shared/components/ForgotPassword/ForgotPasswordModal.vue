@@ -15,7 +15,7 @@
             label="E-mail"
             type="email"
             v-model="currentEmail"
-            :rules="[inputValidations.required]"
+            :rules="[inputValidations.required, inputValidations.email]"
           />
         </v-form>
       </div>
