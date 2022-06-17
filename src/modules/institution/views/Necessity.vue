@@ -12,6 +12,13 @@
         <div class="a-text">{{ attribute.key }}</div>
         <div class="a-text light">{{ attribute.value }}</div>
       </v-row>
+      <v-row class="justify-space-between mb-3">
+        <div class="a-text">Status</div>
+        <div>
+          <v-icon :color="statusIconColor">{{ statusIcon }}</v-icon>
+          <span class="a-text light ml-2">{{ statusText }}</span>
+        </div>
+      </v-row>
       <v-row>
         <div class="a-text">Descrição</div>
       </v-row>
@@ -85,6 +92,7 @@ import DonationDoneModal from "../../shared/components/DonationDoneModal.vue";
 import Button from "../../shared/components/Button.vue";
 import EmbeddedVideo from "../../shared/components/EmbeddedVideo.vue";
 import { Status } from "@/modules/shared/enums/Status";
+import StatusUtils from "../../shared/enums/Status";
 import { getUserData } from "@/modules/shared/utils/LoggedUserManager";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import ToolbarNavigationMixin from "@/modules/shared/mixins/ToolbarNavigationMixin";
@@ -125,6 +133,15 @@ export default Vue.extend({
     DonationDoneModal,
   },
   computed: {
+    statusText() {
+      return StatusUtils.toString(this.necessity.status);
+    },
+    statusIcon() {
+      return StatusUtils.getIcon(this.necessity.status);
+    },
+    statusIconColor() {
+      return StatusUtils.getIconColor(this.necessity.status);
+    },
     attributes() {
       return [
         {
