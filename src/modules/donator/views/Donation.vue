@@ -27,7 +27,7 @@
       </v-row>
 
       <v-row class="py-4">
-        <UserCard
+        <UserCard v-if="isAdmin"
           :userRole="donatorRole"
           :userName="donation.user.name"
           :userId="donation.user.id"
@@ -174,6 +174,9 @@ export default Vue.extend({
         getUserData().role == UserRole.admin
       );
     },
+    isAdmin() {
+      return getUserData().role == UserRole.admin
+    }
   },
   methods: {
     onRefusalConfirm() {
