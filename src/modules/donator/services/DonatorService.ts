@@ -19,12 +19,15 @@ export function createDonator(donator: DonatorEntity): Promise<void> {
     complemento: donator.addressDTO.complemento,
     perfil: UserRole.donator,
   })
-
     .then(() => {
       return Promise.resolve();
     })
-    .catch((error) => {
-      return Promise.reject(error);
+    .catch(({ response }) => {
+      if (!response) {
+        return Promise.reject("Erro Inesperado");
+      }
+      const data = response.data;
+      return Promise.reject((data && data.informacao) || "Erro Inesperado");
     });
 }
 

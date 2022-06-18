@@ -139,7 +139,6 @@ import InputValidations from "../../shared/utils/InputValidations";
 import { createInstitution } from "../../institution/services/InstitutionService";
 import InputStates from "../../shared/components/InputStates.vue";
 import VueTheMask from "vue-the-mask";
-import LoginService from "@/modules/institution/services/LoginService";
 import ToolbarNavigationMixin from "../../shared/mixins/ToolbarNavigationMixin";
 import ToolbarMenuMixin from "../../shared/mixins/ToolbarMenuMixin";
 
@@ -166,10 +165,9 @@ export default Vue.extend({
           this.$root.showSnackbar({ title: "Cadastro realizado com sucesso!" });
           this.$router.push("/home");
         })
-        .catch((e) => {
+        .catch((errorMessage) => {
           this.isLoading = false;
-          this.$root.showSnackbar({ title: "Erro inesperado", color: "error" });
-          console.error(e);
+          this.$root.showSnackbar({ title: errorMessage, color: "error" });
         })
         .finally(() => {
           this.signUpButtonLoading = false;

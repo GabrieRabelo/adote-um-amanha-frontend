@@ -18,7 +18,7 @@
               label="CPF/CNPJ"
               placeholder="123.456.789-01"
               v-mask="['###.###.###-##', '##.###.###/####-##']"
-              v-model="donator.cpf_cnpj"
+              v-model="donator.document"
               required
               :rules="[inputValidations.cpf_cnpj, inputValidations.required]"
             />
@@ -175,10 +175,9 @@ export default Vue.extend({
               this.signUpButtonLoading = false;
             });
         })
-        .catch((e) => {
+        .catch((errorMessage) => {
           this.isLoading = false;
-          this.$root.showSnackbar({ title: "Erro inesperado", color: "error" });
-          console.error(e);
+          this.$root.showSnackbar({ title: errorMessage, color: "error" });
         })
         .finally(() => {
           this.signUpButtonLoading = false;
