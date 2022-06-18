@@ -42,7 +42,10 @@
             @click="onMatchRequestsClick"
           />
         </div>
-        <div class="d-flex justify-center mb-4">
+        <div class="mx-12">
+          <v-divider inline />
+        </div>
+        <div class="d-flex justify-center mb-4 mt-4">
           <Button
             class="extended-button font-weight-medium"
             title="Doadores"
@@ -65,7 +68,7 @@
         <v-divider inline />
       </div>
       <div class="logout">
-        <div class="d-flex justify-center mt-6">
+        <div class="d-flex justify-center mt-4">
           <Button
             class="font-weight-medium"
             title="Sair"

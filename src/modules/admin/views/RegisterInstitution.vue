@@ -164,17 +164,7 @@ export default Vue.extend({
       createInstitution(this.institution)
         .then(() => {
           this.$root.showSnackbar({ title: "Cadastro realizado com sucesso!" });
-          LoginService.login(this.institution.email, this.institution.password)
-            .then(() => {
-              this.$router.push("/home");
-              this.isLoading = false;
-            })
-            .catch(() => {
-              this.$router.push("/auth");
-            })
-            .finally(() => {
-              this.signUpButtonLoading = false;
-            });
+          this.$router.push("/home");
         })
         .catch((e) => {
           this.isLoading = false;
