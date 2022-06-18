@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Login from "../modules/shared/views/Login.vue";
 import Necessity from "../modules/institution/views/Necessity.vue";
-import Instituition from "../modules/institution/views/Instituition.vue";
+import Institution from "../modules/institution/views/Institution.vue";
 import EditNecessity from "../modules/institution/views/EditNecessity.vue";
 import NecessityDescription from "../modules/donator/views/NecessityDescription.vue";
 import NecessityDescriptionAdmin from "../modules/admin/views/NecessityDescription.vue";
@@ -18,6 +18,7 @@ import Donator from "../modules/donator/views/Donator.vue";
 import Matches from "../modules/admin/views/matches/Matches.vue";
 import CreateMatch from "../modules/shared/views/CreateMatch.vue";
 import MatchDescription from "../modules/admin/views/MatchDescription.vue";
+import RegisterInstitution from "../modules/admin/views/RegisterInstitution.vue";
 import Donators from "../modules/admin/views/Donators.vue";
 import RecoverPassword from "../modules/shared/views/RecoverPassword.vue";
 
@@ -49,8 +50,8 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: "/institution/:id",
-    name: "Instituition instituition",
-    component: Instituition,
+    name: "Institution institution",
+    component: Institution,
   },
   {
     path: "/necessity/:id/edit",
@@ -61,11 +62,6 @@ const routes: Array<RouteConfig> = [
     path: "/necessities/create",
     name: "",
     component: RegisterRequest,
-  },
-  {
-    path: "/necessities",
-    name: "List necessities",
-    component: Necessities,
   },
   {
     path: "/admin/necessities",
@@ -108,11 +104,6 @@ const routes: Array<RouteConfig> = [
     component: RegisterDonator,
   },
   {
-    path: "/admin/matches/:id",
-    name: "Admin Match Description",
-    component: MatchDescription,
-  },
-  {
     path: "/admin/matches",
     name: "Matches",
     component: Matches,
@@ -139,6 +130,11 @@ const routes: Array<RouteConfig> = [
     component: MatchDescription,
   },
   {
+    path: "/admin/institution/create",
+    name: "Register Institution",
+    component: RegisterInstitution,
+  },
+  {
     path: "/admin/donators",
     name: "Donators List",
     component: Donators,
@@ -147,6 +143,11 @@ const routes: Array<RouteConfig> = [
     path: "/admin/donators/:id",
     name: "Donator",
     component: Donator,
+  },
+  {
+    path: "/necessities",
+    name: "List necessities",
+    component: Necessities,
   },
 ];
 
