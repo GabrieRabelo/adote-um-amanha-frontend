@@ -17,11 +17,6 @@ describe("Filter Necessity", () => {
     cy.contains('[class="a-button--title"]', "Necessidades das Casas", {
       timeout: Cypress.env("timeOut"),
     }).click();
-    cy.contains('[class="v-select__slot"]', "Data").click();
-    cy.contains('[class="v-list-item__title"]', "6 meses", {
-      timeout: Cypress.env("timeOut"),
-    }).click();
-    cy.contains('[class="a-button--title"]', "Aplicar Filtros").click();
     cy.contains('[class="card__title"]', "Consulta Nutricional").click();
     cy.contains('[class="a-button--title"]', "Doar").click();
     cy.contains('[class="a-button--title"]', "Cancelar").click();
