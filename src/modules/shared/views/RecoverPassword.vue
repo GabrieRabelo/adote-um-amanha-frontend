@@ -1,5 +1,5 @@
 <template>
-  <v-container class="px-0 d-flex" style="height: 100%">
+  <v-container class="px-0 d-flex justify-center" style="height: 100%">
     <div class="main" v-if="isPageReady">
       <div class="header mb-12">
         <div class="header__img d-flex justify-center pt-6">
@@ -26,6 +26,9 @@
               label="Nova Senha"
               :rules="[inputValidations.required]"
               v-model="password"
+              @keyup.enter="onConfirmClick"
+              tabindex="0"
+              autofocus
             />
           </div>
 
@@ -34,6 +37,8 @@
               label="Confirmar Senha"
               :rules="[inputValidations.required]"
               v-model="confirmPassword"
+              @keyup.enter="onConfirmClick"
+              tabindex="0"
             />
           </div>
         </v-form>
@@ -123,7 +128,6 @@ export default Vue.extend({
         token: this.token,
       })
         .then(() => {
-          this.$router.push("/auth");
           this.$root.showSnackbar({
             title: "Senha alterada com sucesso!",
           });

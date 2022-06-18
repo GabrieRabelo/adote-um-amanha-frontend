@@ -4,7 +4,6 @@ import { UserEntity } from "../../shared/models/UserEntity";
 import { UserRole } from "@/modules/shared/enums/UserRole";
 import institutionEntity from "@/modules/institution/models/InstitutionEntity";
 
-
 export async function getinstitution(id: number): Promise<UserEntity> {
   const response = await HTTP.get(`/public/casas/${id}`);
   const body: InstitutionDetailDTO = response.data;
@@ -15,12 +14,14 @@ export async function getinstitution(id: number): Promise<UserEntity> {
     body.email,
     body.endereco,
     UserRole.institution,
-    body.site,
+    body.site
   );
   return Promise.resolve(institution);
 }
 
-export function createInstitution(institution: institutionEntity): Promise<void> {
+export function createInstitution(
+  institution: institutionEntity
+): Promise<void> {
   return HTTP.post("/casa", {
     nome: institution.name,
     email: institution.email,
@@ -37,10 +38,14 @@ export function createInstitution(institution: institutionEntity): Promise<void>
     complemento: institution.addressDTO.complemento,
     perfil: UserRole.institution,
   })
-
     .then(() => {
       return Promise.resolve();
     })
-    .catch((error) => {
-      return Promise.reject(error);
-    })}
+    .catch(({ response }) => {
+      if (!response) {
+        return Promise.reject("Erro Inesperado");
+      }
+      const data = response.data;
+      return Promise.reject((data && data.informacao) || "Erro Inesperado");
+    });
+}
