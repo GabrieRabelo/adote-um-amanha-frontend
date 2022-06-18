@@ -1,8 +1,7 @@
 <template>
   <v-container fill-height class="align-start">
-    <v-container class="align-start">
-      <div class="a-text__title">Cadastro</div>
-    </v-container>
+    <!-- <v-container class="align-start"> -->
+    <!-- </v-container> -->
     <v-form v-model="isFormValid" class="fill-width">
       <v-col>
         <Input
@@ -141,11 +140,14 @@ import { createInstitution } from "../../institution/services/InstitutionService
 import InputStates from "../../shared/components/InputStates.vue";
 import VueTheMask from "vue-the-mask";
 import LoginService from "@/modules/institution/services/LoginService";
+import ToolbarNavigationMixin from "../../shared/mixins/ToolbarNavigationMixin";
+import ToolbarMenuMixin from "../../shared/mixins/ToolbarMenuMixin";
 
 Vue.use(VueTheMask);
 
 export default Vue.extend({
   components: { Button, Input, PasswordInput, InputStates },
+  mixins: [ToolbarNavigationMixin, ToolbarMenuMixin],
   data: () => ({
     isFormValid: false,
     signUpButtonLoading: false,
@@ -153,6 +155,9 @@ export default Vue.extend({
       addressDTO: {},
     },
   }),
+  mounted() {
+    this.$root.showToolbar("Cadastro de Instituição");
+  },
   methods: {
     onSignUpButtonClick() {
       this.signUpButtonLoading = true;
