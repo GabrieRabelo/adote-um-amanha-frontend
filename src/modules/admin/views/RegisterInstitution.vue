@@ -1,24 +1,23 @@
 <template>
   <v-container fill-height class="align-start">
-    <v-container class="align-start">
-      <div class="a-text__title">Cadastro</div>
-    </v-container>
+    <!-- <v-container class="align-start"> -->
+    <!-- </v-container> -->
     <v-form v-model="isFormValid" class="fill-width">
       <v-col>
         <Input
-          label="Nome Completo"
-          placeholder="Exemplo de Souza"
-          v-model="donator.name"
+          label="Nome da Instituição"
+          placeholder="Exemplo de Nome"
+          v-model="institution.name"
           required
           :rules="[inputValidations.required]"
         />
         <v-row>
           <v-col cols="6" class="mb-0 pb-0">
             <Input
-              label="CPF/CNPJ"
-              placeholder="123.456.789-01"
-              v-mask="['###.###.###-##', '##.###.###/####-##']"
-              v-model="donator.document"
+              label="CNPJ"
+              placeholder="12.345.678/9999-99"
+              v-mask="['##.###.###/####-##']"
+              v-model="institution.cpf_cnpj"
               required
               :rules="[inputValidations.cpf_cnpj, inputValidations.required]"
             />
@@ -28,7 +27,7 @@
               label="CEP"
               placeholder="98765-123"
               v-mask="['#####-###', '#####-##']"
-              v-model="donator.addressDTO.cep"
+              v-model="institution.addressDTO.cep"
               required
               :rules="[inputValidations.cep, inputValidations.required]"
             />
@@ -39,7 +38,7 @@
             <Input
               label="Cidade"
               placeholder="Porto Alegre"
-              v-model="donator.addressDTO.cidade"
+              v-model="institution.addressDTO.cidade"
               required
               :rules="[inputValidations.required]"
             />
@@ -47,7 +46,7 @@
           <v-col cols="4" class="mt-0 pt-0">
             <InputStates
               class="pa-0 mt-0"
-              v-model="donator.addressDTO.estado"
+              v-model="institution.addressDTO.estado"
               placeholder="SP"
             >
             </InputStates>
@@ -57,14 +56,14 @@
         <Input
           label="Bairro"
           placeholder="Partenon"
-          v-model="donator.addressDTO.bairro"
+          v-model="institution.addressDTO.bairro"
           required
           :rules="[inputValidations.required]"
         />
         <Input
           label="Rua"
           placeholder="Av. Ipiranga"
-          v-model="donator.addressDTO.rua"
+          v-model="institution.addressDTO.rua"
           required
           :rules="[inputValidations.required]"
         />
@@ -73,7 +72,7 @@
             <Input
               label="Nº"
               placeholder="100"
-              v-model="donator.addressDTO.numero"
+              v-model="institution.addressDTO.numero"
               required
               :rules="[inputValidations.numero, inputValidations.required]"
             />
@@ -82,7 +81,7 @@
             <Input
               label="Complemento"
               placeholder="Apto 101"
-              v-model="donator.addressDTO.complemento"
+              v-model="institution.addressDTO.complemento"
               required
             />
           </v-col>
@@ -90,7 +89,7 @@
         <Input
           label="E-mail"
           placeholder="exemplo@gmail.com"
-          v-model="donator.email"
+          v-model="institution.email"
           required
           :rules="[inputValidations.email, inputValidations.required]"
         />
@@ -98,13 +97,19 @@
           label="Telefone"
           placeholder="(51) 99720-0096"
           v-mask="['(##) ####-####', '(##) #####-####']"
-          v-model="donator.phone"
+          v-model="institution.phone"
           required
           :rules="[inputValidations.telefone, inputValidations.required]"
         />
+        <Input
+          prepend-inner-icon="mdi-link"
+          label="Vídeo da Instituição (URL)"
+          placeholder="youtube.com/watch"
+          v-model="institution.site"
+        />
         <PasswordInput
           label="Senha"
-          v-model="donator.password"
+          v-model="institution.password"
           required
           :rules="[inputValidations.required]"
         />
@@ -122,58 +127,43 @@
         />
       </div>
     </v-container>
-
-    <v-container class="align-end">
-      <v-col align-self="stretch">
-        <v-row class="d-flex justify-center">
-          <span>Já possuí uma conta?</span>&nbsp;
-          <Link url="/auth">Fazer login</Link>
-        </v-row>
-      </v-col>
-    </v-container>
   </v-container>
 </template>
 
 <script>
 import Vue from "vue";
 import Button from "../../shared/components/Button.vue";
-import Link from "../../shared/components/Link.vue";
 import Input from "../../shared/components/Input.vue";
 import PasswordInput from "../../shared/components/PasswordInput.vue";
 import InputValidations from "../../shared/utils/InputValidations";
-import { createDonator } from "../services/DonatorService";
+import { createInstitution } from "../../institution/services/InstitutionService";
 import InputStates from "../../shared/components/InputStates.vue";
 import VueTheMask from "vue-the-mask";
-import LoginService from "@/modules/institution/services/LoginService";
+import ToolbarNavigationMixin from "../../shared/mixins/ToolbarNavigationMixin";
+import ToolbarMenuMixin from "../../shared/mixins/ToolbarMenuMixin";
 
 Vue.use(VueTheMask);
 
 export default Vue.extend({
-  components: { Button, Link, Input, PasswordInput, InputStates },
+  components: { Button, Input, PasswordInput, InputStates },
+  mixins: [ToolbarNavigationMixin, ToolbarMenuMixin],
   data: () => ({
     isFormValid: false,
     signUpButtonLoading: false,
-    donator: {
+    institution: {
       addressDTO: {},
     },
   }),
+  mounted() {
+    this.$root.showToolbar("Cadastro de Instituição");
+  },
   methods: {
     onSignUpButtonClick() {
       this.signUpButtonLoading = true;
-      createDonator(this.donator)
+      createInstitution(this.institution)
         .then(() => {
           this.$root.showSnackbar({ title: "Cadastro realizado com sucesso!" });
-          LoginService.login(this.donator.email, this.donator.password)
-            .then(() => {
-              this.$router.push("/home");
-              this.isLoading = false;
-            })
-            .catch(() => {
-              this.$router.push("/auth");
-            })
-            .finally(() => {
-              this.signUpButtonLoading = false;
-            });
+          this.$router.push("/home");
         })
         .catch((errorMessage) => {
           this.isLoading = false;

@@ -42,7 +42,10 @@
             @click="onMatchRequestsClick"
           />
         </div>
-        <div class="d-flex justify-center mb-4">
+        <div class="mx-12">
+          <v-divider inline />
+        </div>
+        <div class="d-flex justify-center mb-4 mt-4">
           <Button
             class="extended-button font-weight-medium"
             title="Doadores"
@@ -51,12 +54,21 @@
             @click="onDonatorsClick"
           />
         </div>
+        <div class="d-flex justify-center mb-4">
+          <Button
+            class="extended-button font-weight-medium"
+            title="Registrar Instituição"
+            color="primary"
+            outlined
+            @click="onRegisterInstitutionsButtonClick"
+          />
+        </div>
       </div>
       <div class="mx-12">
         <v-divider inline />
       </div>
       <div class="logout">
-        <div class="d-flex justify-center mt-6">
+        <div class="d-flex justify-center mt-4">
           <Button
             class="font-weight-medium"
             title="Sair"
@@ -105,6 +117,9 @@ export default Vue.extend({
     },
     onLogoutButtonClick() {
       this.$router.push("/auth");
+    },
+    onRegisterInstitutionsButtonClick() {
+      this.$router.push("/admin/institution/create");
     },
   },
 });
