@@ -19,20 +19,28 @@
           <span class="a-text light ml-2">{{ statusText }}</span>
         </div>
       </v-row>
-
-      <v-row class="mt-10">
+      <div class="mb-5 mt-5" v-if="hasMotive">
+        <v-row>
+          <div class="a-text">Motivo</div>
+        </v-row>
+        <v-row>
+          <div class="a-text light">{{ necessity.refusalReason }}</div></v-row
+        >
+      </div>
+      <v-row class="mt-5">
         <div class="a-text">Descrição</div>
       </v-row>
       <v-row>
         <div class="a-text light mt-1">{{ necessity.description }}</div>
       </v-row>
+      <v-row class="mt-7">
+        <UserCard
+          :userRole="institutionRole"
+          :userName="necessity.user.name"
+          :userId="necessity.user.id"
+        />
+      </v-row>
     </v-container>
-
-    <UserCard
-      :userRole="institutionRole"
-      :userName="necessity.user.name"
-      :userId="necessity.user.id"
-    />
 
     <v-container v-if="isNecessityPending">
       <v-row class="justify-center mt-5">
@@ -154,6 +162,12 @@ export default Vue.extend({
     },
     isNecessityPending() {
       return this.necessity && this.necessity.status === Status.pending;
+    },
+    hasMotive() {
+      return (
+        this.necessity.status === Status.refused &&
+        getUserData().role !== UserRole.donator
+      );
     },
   },
   methods: {

@@ -20,6 +20,7 @@ export function fromBackendFormat(
     status: request.status as Status,
     user: { name: request.nomeUsuario, id: request.idUsuario },
     type: request.tipo,
+    refusalReason: request.motivoRecusa,
   };
 }
 
