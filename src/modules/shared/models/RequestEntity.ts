@@ -14,6 +14,7 @@ export type RequestEntity = {
   user?: Partial<UserEntity>;
   url?: string;
   type: RequestType;
+  refusalReason?: string;
 };
 
 export type RequestBackendEntity = {
@@ -28,6 +29,7 @@ export type RequestBackendEntity = {
   tipo: RequestType;
   nomeUsuario?: string;
   idUsuario?: number;
+  motivoRecusa?: string;
 };
 
 export enum RequestType {
