@@ -30,7 +30,6 @@ describe("Filter Necessity", () => {
       timeout: Cypress.env("timeOut"),
     }).click();
     cy.contains('[class="a-button--title"]', "Aplicar Filtros").click();
-    cy.contains('[class="card__title"]', "Consulta Nutricional").click();
   });
 
   it("Filtra por tipo", () => {
@@ -44,7 +43,6 @@ describe("Filter Necessity", () => {
       timeout: Cypress.env("timeOut"),
     }).click();
     cy.contains('[class="a-button--title"]', "Aplicar Filtros").click();
-    cy.contains('[class="card__title"]', "Leite em pó desnatado").click();
   });
 
   it("Filtra por data", () => {
@@ -59,10 +57,5 @@ describe("Filter Necessity", () => {
       timeout: Cypress.env("timeOut"),
     }).click();
     cy.contains('[class="a-button--title"]', "Aplicar Filtros").click();
-    cy.contains('[class="card__title"]', "Leite em pó desnatado").click();
-    cy.contains(
-      '[class="a-text ml-3 text-decoration-underline" ]',
-      "Lar Esperança"
-    ).click();
   });
 });

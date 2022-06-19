@@ -1,4 +1,4 @@
-describe("Filter Necessity", () => {
+describe("Make donation", () => {
   beforeEach(() => {
     cy.visit("/auth");
     cy.get("input[type='email']", { timeout: Cypress.env("timeOut") }).type(

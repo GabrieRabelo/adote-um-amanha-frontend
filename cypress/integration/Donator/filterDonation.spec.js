@@ -27,7 +27,6 @@ describe("Filter Donation", () => {
       timeout: Cypress.env("timeOut"),
     }).click();
     cy.contains('[class="a-button--title"]', "Aplicar Filtros").click();
-    cy.contains('[class="card__title"]', "Consulta Nutricional").click();
   });
 
   it("Filtra por tipo", () => {
@@ -44,7 +43,6 @@ describe("Filter Donation", () => {
       timeout: Cypress.env("timeOut"),
     }).click();
     cy.contains('[class="a-button--title"]', "Aplicar Filtros").click();
-    cy.contains('[class="card__title"]', "Consulta Nutricional").click();
   });
 
   it("Filtra por status", () => {
@@ -61,7 +59,6 @@ describe("Filter Donation", () => {
       timeout: Cypress.env("timeOut"),
     }).click();
     cy.contains('[class="a-button--title"]', "Aplicar Filtros").click();
-    cy.contains('[class="card__title"]', "Consulta Nutricional").click();
   });
 
   it("Filtra por data", () => {
@@ -79,6 +76,5 @@ describe("Filter Donation", () => {
       timeout: Cypress.env("timeOut"),
     }).click();
     cy.contains('[class="a-button--title"]', "Aplicar Filtros").click();
-    cy.contains('[class="card__title"]', "Consulta Nutricional").click();
   });
 });
