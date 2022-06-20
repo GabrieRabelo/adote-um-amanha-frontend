@@ -13,7 +13,7 @@ describe("Filter Donation", () => {
     ).click();
   });
 
-  it("Filtra por categoria", () => {
+  it("Filter by category", () => {
     cy.contains('[class="a-button--title"]', "Minhas doações", {
       timeout: Cypress.env("timeOut"),
     }).click();
@@ -29,7 +29,7 @@ describe("Filter Donation", () => {
     cy.contains('[class="a-button--title"]', "Aplicar Filtros").click();
   });
 
-  it("Filtra por tipo", () => {
+  it("Filter by type", () => {
     cy.contains('[class="a-button--title"]', "Minhas doações", {
       timeout: Cypress.env("timeOut"),
     }).click();
@@ -45,7 +45,7 @@ describe("Filter Donation", () => {
     cy.contains('[class="a-button--title"]', "Aplicar Filtros").click();
   });
 
-  it("Filtra por status", () => {
+  it("Filter by status", () => {
     cy.contains('[class="a-button--title"]', "Minhas doações", {
       timeout: Cypress.env("timeOut"),
     }).click();
@@ -61,7 +61,7 @@ describe("Filter Donation", () => {
     cy.contains('[class="a-button--title"]', "Aplicar Filtros").click();
   });
 
-  it("Filtra por data", () => {
+  it("Filter by date", () => {
     cy.contains('[class="a-button--title"]', "Minhas doações", {
       timeout: Cypress.env("timeOut"),
     }).click();

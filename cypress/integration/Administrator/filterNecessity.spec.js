@@ -19,7 +19,7 @@ describe("Filter Necessity", () => {
     });
   });
 
-  it("Filtra por categoria", () => {
+  it("Filter by category", () => {
     cy.get(
       "button[class='v-btn v-btn--is-elevated v-btn--fab v-btn--has-bg v-btn--round theme--light v-size--default primary']",
       {
@@ -32,7 +32,7 @@ describe("Filter Necessity", () => {
     cy.contains('[class="a-button--title"]', "Aplicar Filtros").click();
   });
 
-  it("Filtra por tipo", () => {
+  it("Filter by type", () => {
     cy.get(
       "button[class='v-btn v-btn--is-elevated v-btn--fab v-btn--has-bg v-btn--round theme--light v-size--default primary']",
       {
@@ -45,7 +45,7 @@ describe("Filter Necessity", () => {
     cy.contains('[class="a-button--title"]', "Aplicar Filtros").click();
   });
 
-  it("Filtra por data", () => {
+  it("Filter by date", () => {
     cy.get(
       "button[class='v-btn v-btn--is-elevated v-btn--fab v-btn--has-bg v-btn--round theme--light v-size--default primary']",
       {

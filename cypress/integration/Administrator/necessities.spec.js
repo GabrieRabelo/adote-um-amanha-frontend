@@ -15,7 +15,7 @@ describe("Necessity", () => {
     });
   });
 
-  it("Recusa necessidade e volta ao menu", () => {
+  it("Decline necessity and return to menu", () => {
     cy.contains('[class="a-button--title"]', "Necessidades", {
       timeout: Cypress.env("timeOut"),
     }).click();
@@ -27,7 +27,7 @@ describe("Necessity", () => {
     cy.contains('[class="a-button--title"]', "Confirmar").click();
   });
 
-  it("Vincula doador e volta ao menu", () => {
+  it("Link donator and return to menu", () => {
     cy.contains('[class="a-button--title"]', "Necessidades", {
       timeout: Cypress.env("timeOut"),
     }).click();
@@ -38,7 +38,9 @@ describe("Necessity", () => {
       {
         timeout: Cypress.env("timeOut"),
       }
-    ).click();
+    )
+      .first()
+      .click();
     cy.get(
       "button[class='v-app-bar__nav-icon v-btn v-btn--icon v-btn--round theme--light v-size--default']",
       {

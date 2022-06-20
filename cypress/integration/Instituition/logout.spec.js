@@ -1,5 +1,5 @@
 describe("Logout", () => {
-  it("Deslogar", () => {
+  it("Logout", () => {
     cy.visit("/auth");
     cy.get("input[type='email']", { timeout: Cypress.env("timeOut") }).type(
       Cypress.env("emailHouse")

@@ -1,5 +1,5 @@
 describe("Logout", () => {
-  it("Deslogar pelo canto superior direito", () => {
+  it("Logout 1", () => {
     cy.visit("/auth");
     cy.get("input[type='email']", { timeout: Cypress.env("timeOut") }).type(
       Cypress.env("emailDonator")
@@ -24,7 +24,7 @@ describe("Logout", () => {
     cy.url().should("include", "/auth");
   });
 
-  it("Deslogar pelo botão Sair do menu principal", () => {
+  it("Logout 2", () => {
     cy.visit("/auth");
     cy.get("input[type='email']", { timeout: Cypress.env("timeOut") }).type(
       Cypress.env("emailDonator")

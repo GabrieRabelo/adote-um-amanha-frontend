@@ -13,7 +13,7 @@ describe("Make donation", () => {
     ).click();
   });
 
-  it("Faz doação de necessidade e cancela", () => {
+  it("Make donation and cancel", () => {
     cy.contains('[class="a-button--title"]', "Necessidades das Casas", {
       timeout: Cypress.env("timeOut"),
     }).click();
@@ -22,7 +22,7 @@ describe("Make donation", () => {
     cy.contains('[class="a-button--title"]', "Cancelar").click();
   });
 
-  it("Faz doação de necessidade", () => {
+  it("Make a necessity donation", () => {
     cy.contains('[class="a-button--title"]', "Necessidades das Casas", {
       timeout: Cypress.env("timeOut"),
     }).click();
